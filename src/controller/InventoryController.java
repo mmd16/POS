@@ -1,10 +1,21 @@
 package controller;
 
-public class InventoryController implements Controller{
+import staff.Employee;
 
+public class InventoryController implements Controller, Staff{
+	
+	private Employee employee;
+	
 	@Override
 	public void execute() {
-		System.out.println("Welcome to Inventory System");
+		
+		
+	}
+
+	@Override
+	public void setStaff(Employee employee) {
+		this.employee = employee;
+		
 	}
 
 }

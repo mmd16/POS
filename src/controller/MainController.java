@@ -2,11 +2,25 @@ package controller;
 
 import java.util.Scanner;
 
-public class MainController implements Controller{
-	
+import staff.Employee;
+import user.User;
+
+public class MainController implements Controller, Staff, CurrentCustomer {
+	private User user;
+	private Employee employee;
 	public static void main(String[] args) 
 	{
-		new MainController().execute();
+		int temp, temp2;
+		MainController main = new MainController();
+		Scanner sc = new Scanner(System.in);  //manual input first, later create an arraylist
+		System.out.println("Please input your Worker ID for logging in the system...");
+		temp2 = sc.nextInt();
+		main.setStaff(Employee.searchEmployee(temp2)); //exception can be added later, eg invalid id sth else
+		System.out.println("Waiting for card Reader...");
+		temp = sc.nextInt(); // change this line later
+		sc.close();
+		main.setUser(User.searchUser(temp));
+		main.execute();	
 	}
 
 	@Override
@@ -31,13 +45,19 @@ public class MainController implements Controller{
 				switch(digit)
 				{
 					case 1:
-						new SalesController().execute();
+						SalesController sales = new SalesController();
+						sales.setUser(user);
+						sales.setStaff(employee);
+						sales.execute();
 						break;
 					case 2:
-						new InventoryController().execute();
+						InventoryController inventory = new InventoryController();
+						inventory.execute();
 						break;
 					case 3:
-						new UserManagementController().execute();
+						UserManagementController userManage = new UserManagementController();
+						userManage.setStaff(employee);
+						userManage.execute();
 						break;
 					case 4:
 						sc.close();
@@ -49,7 +69,16 @@ public class MainController implements Controller{
 		}
 		while(end == false);
 		
-		
+	}
+
+	@Override
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
+	@Override
+	public void setStaff(Employee employee) 
+	{
+		this.employee = employee;
+	}
 }
