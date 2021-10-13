@@ -5,8 +5,7 @@ import java.util.Scanner;
 import staff.Employee;
 import user.User;
 
-public class MainController implements Controller, Staff, CurrentCustomer {
-	private User user;
+public class MainController implements Controller, Staff{
 	private Employee employee;
 	public static void main(String[] args) 
 	{
@@ -16,10 +15,7 @@ public class MainController implements Controller, Staff, CurrentCustomer {
 		System.out.println("Please input your Worker ID for logging in the system...");
 		temp2 = sc.nextInt();
 		main.setStaff(Employee.searchEmployee(temp2)); //exception can be added later, eg invalid id sth else
-		System.out.println("Waiting for card Reader...");
-		temp = sc.nextInt(); // change this line later
 		sc.close();
-		main.setUser(User.searchUser(temp));
 		main.execute();	
 	}
 
@@ -46,7 +42,6 @@ public class MainController implements Controller, Staff, CurrentCustomer {
 				{
 					case 1:
 						SalesController sales = new SalesController();
-						sales.setUser(user);
 						sales.setStaff(employee);
 						sales.execute();
 						break;
@@ -71,10 +66,6 @@ public class MainController implements Controller, Staff, CurrentCustomer {
 		
 	}
 
-	@Override
-	public void setUser(User user) {
-		this.user = user;
-	}
 	
 	@Override
 	public void setStaff(Employee employee) 

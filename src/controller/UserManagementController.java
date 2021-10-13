@@ -26,13 +26,13 @@ public class UserManagementController implements Controller, CurrentCustomer, St
 			digit = sc.nextInt();
 			switch (digit) {
 			case 1:
-				System.out.printf("Customer owns a %s membership", user.getMembershipGrade());
+				System.out.printf("Customer owns a %s membership\n", user.getMembership().getName());
 				break;
 			case 2:
 				user.printOrders();
 				break;
 			case 3:
-				System.out.printf("The current points in the account is", user.getPoints());
+				System.out.printf("The current points in the account is %d", user.getPoints());
 				break;
 			case 4:
 				sc.close();

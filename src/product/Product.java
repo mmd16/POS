@@ -1,18 +1,23 @@
 package product;
 
+import java.util.ArrayList;
+
+import random.productCodeGenerator;
+
 public class Product {
 	private String name;
 	private String description;
-	private String type;
+	private String type;	
+	private String productCode;
 	private double price;
-	private double discount;
-
-	public Product(String name, String description, String type, double price, double discount) {
+	protected static ArrayList<Product> productList = new ArrayList<>();
+	
+	public Product(String name, String description, String type, double price) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
 		this.price = price;
-		this.discount = discount;
+		this.productCode = productCodeGenerator.generateProductCode(type);
 	}
 
 	public String getName() {
@@ -35,6 +40,10 @@ public class Product {
 		return type;
 	}
 
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public double getPrice() {
 		return price;
 	}
@@ -43,16 +52,14 @@ public class Product {
 		this.price = price;
 	}
 
-	public double getDiscount() {
-		return discount;
+	public String getProductCode() {
+		return productCode;
 	}
 
-	public void setDiscount(double currentDiscount) {
-		this.discount = currentDiscount;
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
 	}
 
-	public double getDiscountedPrice() {
-		return this.price * this.discount;
-	}
 
+	
 }

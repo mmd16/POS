@@ -1,8 +1,7 @@
 package staff;
 
 import java.util.ArrayList;
-
-import random.idGenerator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Employee {
 	private String name;
@@ -10,6 +9,7 @@ public class Employee {
 	private String email;
 	private String phonenum;
 	private int workerid;
+	private static AtomicInteger uniqueId =new AtomicInteger();
 	private static ArrayList<Employee> EmployeeList = new ArrayList<Employee>();
 	
 	public Employee(String name, String sex, String email, String phonenum) 
@@ -17,7 +17,7 @@ public class Employee {
 		this.name = name;
 		this.sex = sex;
 		this.phonenum = phonenum;
-		this.workerid = idGenerator.IDgeneratorStaff();
+		this.workerid = uniqueId.getAndIncrement();
 		EmployeeList.add(this);
 	}
 
