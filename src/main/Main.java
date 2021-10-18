@@ -4,6 +4,7 @@ import java.util.*;
 
 import command.CmdCreateCustomer;
 import command.CmdCreateOrder;
+import command.CmdCreateProduct;
 import command.CmdSuggestMsgSentToCustomer;
 import exception.ExWrongCommand;
 
@@ -29,6 +30,9 @@ public class Main {
                 }
                 else if (cmdParts[0].equals("suggestOrder")) {
                 	(new CmdSuggestMsgSentToCustomer()).execute(cmdParts);
+                }
+                else if (cmdParts[0].equals("createProduct")) {
+                	(new CmdCreateProduct()).execute(cmdParts);
                 }
                 else {
                     throw new ExWrongCommand();
