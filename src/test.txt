@@ -1,0 +1,4 @@
+createCustomer Andy M basic
+createProduct food 129.29 Empty 10/08/2021 26
+createOrder Andy 15/08/2021 5
+suggestOrder
