@@ -2,8 +2,6 @@ package commodity;
 
 //import java.util.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-
 
 public abstract class Commodity {
 
@@ -13,28 +11,16 @@ public abstract class Commodity {
 	private LocalDate dispatchDate;
 	private double fee;
 	private double discountRate;
-	private int inventory; //preset inventory when create products
-	private static ArrayList<Commodity> commodityList = new ArrayList<Commodity>();
 
-	public Commodity(String productName, String detail, String category, LocalDate dispatchDate, double fee, double discountRate, int inventory) {
+	public Commodity(String productName, String detail, String category, LocalDate dispatchDate, double fee, double discountRate) {
 		this.productName = productName;
 		this.detail = detail;
 		this.category = category;
 		this.dispatchDate = dispatchDate;
 		this.fee = fee;
-		this.discountRate = discountRate;	
-		this.inventory = inventory;
-		commodityList.add(this);
+		this.discountRate = discountRate;		
 	}
 	
-	public int getInventory() {
-		return inventory;
-	}
-
-	public void setInventory(int inventory) {
-		this.inventory = inventory;
-	}
-
 	public LocalDate getDispatchDate() {
 		return dispatchDate;
 	}
@@ -81,24 +67,6 @@ public abstract class Commodity {
 	
 	public double getDiscountedFee() {
 		return this.fee * this.discountRate;
-	}
-	
-	public static Commodity searchCommodity(String name) {
-		for (Commodity commodity : commodityList) {
-			if (commodity.productName.equals(name)) {
-				return commodity;
-			}
-		}
-		return null;
-	}
-	
-	public static boolean checkDuplicateName(String name) { //cannot create product with same name
-		for (Commodity commodity : commodityList) {
-			if (commodity.productName.equals(name)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 }
