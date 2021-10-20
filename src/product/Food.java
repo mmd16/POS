@@ -6,8 +6,8 @@ public class Food extends Product {
 	private Date expireDate;
 	private String brand;
 	
-	public Food (String name, String description, String brand, String productCode, Date expireDate, double price) {
-		super(name, description, "Food", price);
+	public Food (String name, String brand, String productCode, Date expireDate, double price, int inventory) {
+		super(name, "Food", price, inventory);
 		this.expireDate = expireDate;
 		this.brand = brand;
 		productList.add(this);

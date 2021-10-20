@@ -7,8 +7,8 @@ public class Equipment extends Product{
 	private Date warrantyPeriod;
 
 
-	public Equipment (String name, String description, String brand, String productCode, Date warrantyPeriod, double price) {
-		super(name, description, "Equipment", price);
+	public Equipment (String name, String brand, String productCode, Date warrantyPeriod, double price, int inventory) {
+		super(name, "Equipment", price, inventory);
 		this.warrantyPeriod = warrantyPeriod;
 		this.brand = brand;
 		productList.add(this);
