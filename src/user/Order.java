@@ -1,7 +1,5 @@
 package user;
 
-import commodity.Commodity;
-
 //import java.text.DateFormat;
 import java.text.ParseException;
 //import java.text.SimpleDateFormat;
@@ -9,21 +7,23 @@ import java.time.LocalDate;
 //import java.util.Date;
 import java.time.format.DateTimeFormatter;
 
+import product.Product;
+
 public class Order {
 	private String productName;
 	private String category;
 	private LocalDate orderDate;
 	private double price;
 
-	public Order (Commodity commodity, double membershipDiscount){
-		this.productName = commodity.getProductName();
-		this.category = commodity.getCategory();
+	public Order (Product commodity, double membershipDiscount){
+		this.productName = commodity.getName();
+		this.category = commodity.getDescription();
 		this.orderDate = null;
 		
-		if (membershipDiscount < commodity.getDiscountRate())
-			this.price = commodity.getFee()*membershipDiscount;
-		else
-			this.price = commodity.getDiscountedFee();
+//		if (membershipDiscount < commodity.getDiscountRate())
+//			this.price = commodity.getFee()*membershipDiscount;
+//		else
+//			this.price = commodity.getDiscountedFee();
 	}
 
 	public void setOrderDate(LocalDate orderDate) {
