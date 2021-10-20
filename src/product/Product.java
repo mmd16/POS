@@ -7,12 +7,12 @@ import user.User;
 
 public class Product {
 	private String name;
-	private String type;	
+	private String type;
 	private String productCode;
 	private double price;
 	private int inventory = 0;
 	protected static ArrayList<Product> productList = new ArrayList<>();
-	
+
 	public Product(String name, String type, double price, int inventory) {
 		this.name = name;
 		this.type = type;
@@ -61,7 +61,7 @@ public class Product {
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
 	}
-	
+
 	public static Product searchProduct(String name) {
 		for (Product product : productList) {
 			if (product.getName().equals(name)) {
@@ -70,8 +70,8 @@ public class Product {
 		}
 		return null;
 	}
-	
-	//product name should not be the same
+
+	// product name should not be the same
 	public static boolean checkExistingProduct(String name) {
 		for (Product product : productList) {
 			if (product.getName().equals(name)) {
@@ -81,6 +81,18 @@ public class Product {
 		return false;
 	}
 
+	public static int countProduct() {
+		return productList.size();
+	}
 
-	
+	public static void removeProduct(String name) {
+		for (Product product : productList) {
+			if (product.getName().equals(name)) {
+				productList.remove(product);
+				break;
+			}
+		}
+		// throw exception when product not found
+	}
+
 }
