@@ -6,27 +6,32 @@ import staff.Employee;
 import user.User;
 
 public class MainController implements Controller, Staff{
-	private Employee employee;
+	private static Employee employee;
+	private static User user;
+	public final static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args) 
 	{
-		int temp, temp2;
-		MainController main = new MainController();
-		Scanner sc = new Scanner(System.in);  //manual input first, later create an arraylist
+		Employee e = new Employee("ON9", "M", "null", "123123123", "1");
+		User u = new User("ON9", "000", "M", "7HEAD", "123");
+		MainController mains = new MainController();
 		System.out.println("Please input your Worker ID for logging in the system...");
-		temp2 = sc.nextInt();
-		main.setStaff(Employee.searchEmployee(temp2)); //exception can be added later, eg invalid id sth else
-		sc.close();
-		main.execute();	
+		String temp = sc.next();
+		employee = Employee.searchEmployee(temp);
+		mains.execute();	
 	}
 
 	@Override
 	public void execute() {
 		boolean end = false;
-		int digit = 0;
+		int digit = 0;  
 		do 
 		{
-			Scanner sc = new Scanner(System.in);  
+			System.out.printf("hi %s\n", employee.getName());
+			 //exception can be added later, eg invalid id sth else
 			System.out.println("Welcome to XXX supermarket");
+			System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
+			String anothertemp = sc.next();
+			user = User.searchUser(anothertemp);
 			System.out.println("To continue, please proceed your actions");
 			System.out.println("Input (1) for accessing Sales System");
 			System.out.println("Input (2) for accessing Inventory System");
@@ -43,6 +48,7 @@ public class MainController implements Controller, Staff{
 					case 1:
 						SalesController sales = new SalesController();
 						sales.setStaff(employee);
+						sales.setUser(user);
 						sales.execute();
 						break;
 					case 2:
@@ -52,6 +58,7 @@ public class MainController implements Controller, Staff{
 					case 3:
 						UserManagementController userManage = new UserManagementController();
 						userManage.setStaff(employee);
+						userManage.setUser(user);
 						userManage.execute();
 						break;
 					case 4:
@@ -72,4 +79,5 @@ public class MainController implements Controller, Staff{
 	{
 		this.employee = employee;
 	}
+
 }

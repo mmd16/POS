@@ -8,7 +8,7 @@ public class Employee {
 	private String sex;
 	private String email;
 	private String phonenum;
-	private int workerid;
+	private String workerid;
 	private static AtomicInteger uniqueId =new AtomicInteger();
 	private static ArrayList<Employee> EmployeeList = new ArrayList<Employee>();
 	
@@ -17,7 +17,15 @@ public class Employee {
 		this.name = name;
 		this.sex = sex;
 		this.phonenum = phonenum;
-		this.workerid = uniqueId.getAndIncrement();
+		this.workerid = String.valueOf(uniqueId.getAndIncrement());
+		EmployeeList.add(this);
+	}
+	public Employee(String name, String sex, String email, String phonenum, String test) 
+	{
+		this.name = name;
+		this.sex = sex;
+		this.phonenum = phonenum;
+		this.workerid = test;
 		EmployeeList.add(this);
 	}
 
@@ -53,15 +61,15 @@ public class Employee {
 		this.phonenum = phonenum;
 	}
 
-	public int getWorkerid() {
+	public String getWorkerid() {
 		return workerid;
 	}
 	
-	public static Employee searchEmployee(int uid) 
-	{
+	public static Employee searchEmployee(String uid) 
+	{ 
 		for(Employee employee: EmployeeList) 
 		{
-			if(employee.workerid == uid) 
+			if(employee.getWorkerid().equals(uid)) 
 			{
 				return employee;
 			}

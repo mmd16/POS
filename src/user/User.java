@@ -16,23 +16,32 @@ public class User {
 	private String username;
 	private String sex;
 	private String email;
-	private int userid;
+	private String userid;
 	private int points = 0;
 	private Membership membership;
 	private ArrayList<Order> orderList;
 	private static AtomicInteger uniqueId =new AtomicInteger();
 	private static ArrayList<User> UserList = new ArrayList<User>();
 
-	public User(String username, String password, String sex, String email, LocalDate orderDate) {
+	public User(String username, String password, String sex, String email) {
 		this.username = username;
 		this.sex = sex;
 		this.email = email;
-		this.userid = uniqueId.getAndIncrement();
+		this.userid = String.valueOf(uniqueId.getAndIncrement());
 		this.membership = new NonMembership();
 		this.orderList = new ArrayList<Order>();
 		UserList.add(this);
 	}
-
+	
+	public User(String username, String password, String sex, String email, String uid) {
+		this.username = username;
+		this.sex = sex;
+		this.email = email;
+		this.userid = uid;
+		this.membership = new NonMembership();
+		this.orderList = new ArrayList<Order>();
+		UserList.add(this);
+	}
 
 	public String getUsername() {
 		return username;
@@ -64,12 +73,12 @@ public class User {
 	}
 
 
-	public int getUserid() {
+	public String getUserid() {
 		return userid;
 	}
 
 
-	public void setUserid(int userid) {
+	public void setUserid(String userid) {
 		this.userid = userid;
 	}
 
@@ -108,9 +117,9 @@ public class User {
 	}
 
 
-	public static User searchUser(int uid) {
+	public static User searchUser(String uid) {
 		for (User user : UserList) {
-			if (user.userid == uid) {
+			if (user.getUserid().equals(uid)) {
 				return user;
 			}
 		}

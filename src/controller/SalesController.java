@@ -7,24 +7,22 @@ import staff.Manager;
 import transactions.Sales;
 import user.User;
 
-public class SalesController implements Controller, Staff{
+public class SalesController implements Controller, Staff, CurrentCustomer{
 	private User user;
 	private Employee employee;
-	private int uid = 0;
+	private String uid = "-1";
 	@Override
-	public void execute() {
+	public void execute() {		
 		boolean end = false;
-		System.out.println("Welcome to Sales System");
 		do 
 		{
-			inputofUID();
-			Scanner sc = new Scanner(System.in);
+			System.out.println(user.getUsername());
 			System.out.println("Input (1) for checkout");
 			System.out.println("Input (2) for refund");
 			System.out.println("Input (3) for checking Total Revenue");
 			System.out.println("Input (4) to leave");
-			int digit = sc.nextInt();
-			switch (digit) {
+			int digits = MainController.sc.nextInt();
+			switch (digits) {
 			case 1:
 				user.printOrders();
 				//not yet implemented
@@ -36,7 +34,6 @@ public class SalesController implements Controller, Staff{
 				Sales.getTotalRevenue();
 				break;
 			case 4:
-				sc.close();
 				System.out.println("Leaving Sales System...");
 				end = true;
 				break;
@@ -45,14 +42,15 @@ public class SalesController implements Controller, Staff{
 		}while(end == false);
 	}
 	
-	public void inputofUID() 
+	public void inputofUID() // on9 function
 	{
-		if(uid == 0) 
+		if(uid == "-1") 
 		{
-			Scanner sc = new Scanner(System.in);
+			Scanner d = new Scanner(System.in);
 			System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
-			uid = sc.nextInt();
-			sc.close();
+			uid = d.next();
+			user = User.searchUser(uid);
+			d.close();
 		}
 	}
 	
@@ -78,6 +76,11 @@ public class SalesController implements Controller, Staff{
 		this.employee = employee;
 		
 	}
-
+	
+	@Override
+	public void setUser(User user) {
+		this.user = user;
+		
+	}
 	
 }
