@@ -17,7 +17,7 @@ public class Order {
 
 	public Order (Product commodity, double membershipDiscount){
 		this.productName = commodity.getName();
-		this.category = commodity.getDescription();
+//		this.category = commodity.getDescription(); // no need desc qaq (karina
 		this.orderDate = null;
 		
 //		if (membershipDiscount < commodity.getDiscountRate())
