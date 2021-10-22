@@ -133,4 +133,14 @@ public class User {
 					Double.toString(o.getPrice()), o.getStrDate());
 		}
 	}
+	
+	// new method 
+	public String distinguishSex() {
+		String title = "";
+		if (sex.equals("M"))
+			title = "Mr.";
+		else if (sex.equals("F"))
+			title = "Ms.";
+		return title;
+	}
 }
