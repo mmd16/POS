@@ -64,6 +64,8 @@ public class Order {
 	//This is a new add function, it will calculate the suitable response message to customer 
 	//by the predicted order's delivery day and the product's produce date
 	//And it should separate with printOrder function, so make another digit or another controller to handle it.
+	
+	//Also I want to let the staff input produce date freely rather than only setting it from the beginning.
 	public void suggestMsgToSend(User u, Order o, LocalDate produceDate) {
         LocalDate deliveryPeriod = produceDate.plusDays(this.deliveryDays);  // this is the date after the product is produced and deliver to the customer
         long daysOfEarly = DAYS.between(deliveryPeriod, o.orderDate);  // this calculate how many days it is earlier than the order date
