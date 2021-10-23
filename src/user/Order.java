@@ -18,7 +18,6 @@ public class Order {
 	private double price;
 
 	private int deliveryDays;
-	private String message;
 	
 	public Order (Product commodity, double membershipDiscount, int deliveryDays){
 		this.productName = commodity.getName();
@@ -28,7 +27,6 @@ public class Order {
 		
 		// add new parameters
 		this.deliveryDays = deliveryDays;
-		this.message = null;
 		
 //		if (membershipDiscount < commodity.getDiscountRate())
 //			this.price = commodity.getFee()*membershipDiscount;
@@ -66,7 +64,7 @@ public class Order {
 	//And it should separate with printOrder function, so make another digit or another controller to handle it.
 	
 	//Also I want to let the staff input produce date freely rather than only setting it from the beginning.
-	public void suggestMsgToSend(User u, Order o, LocalDate produceDate) {
+	public void suggestMsgToSend(User u, Order o, LocalDate produceDate) { // User is for getting their names
         LocalDate deliveryPeriod = produceDate.plusDays(this.deliveryDays);  // this is the date after the product is produced and deliver to the customer
         long daysOfEarly = DAYS.between(deliveryPeriod, o.orderDate);  // this calculate how many days it is earlier than the order date
         long daysOfDelay = DAYS.between(o.orderDate, deliveryPeriod);   // this calculate how many days it is later than the order date     
@@ -74,12 +72,12 @@ public class Order {
         
         // check the date with the orderDate
         if (deliveryPeriod.equals(o.orderDate)) //equals
-        	this.message = String.format("Hello %s%s! Your package will arrive exactly in the order date.", u.distinguishSex(), u.getUsername());
+        	System.out.printf("Hello %s%s! Your package will arrive exactly in the order date.", u.distinguishSex(), u.getUsername());
         else if (deliveryPeriod.isBefore(o.orderDate)) //earlier case
-        	this.message = String.format("Hello %s%s! Congratulate that your package will arrive %d days earlier than the orignal date."
+        	System.out.printf("Hello %s%s! Congratulate that your package will arrive %d days earlier than the orignal date."
         			, u.distinguishSex(), u.getUsername(), daysOfEarly, getStrDate()); 
         else if (deliveryPeriod.isAfter(o.orderDate)) // late case
-        	this.message = String.format("Hello %s%s! Sorry, your package will be delayed for %d days. You will get $%d as compensation."
+        	System.out.printf("Hello %s%s! Sorry, your package will be delayed for %d days. You will get $%d as compensation."
         			, u.distinguishSex(), u.getUsername(), daysOfDelay, refund);
 	}
 }
