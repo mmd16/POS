@@ -22,9 +22,11 @@ public class MainController implements Controller, Staff{
 		MainController mains = new MainController();
 		System.out.println("Please input your Worker ID for logging in the system...");
 		String temp = sc.next();
+		// Here maybe add a date input for marking the payment date later
 		employee = Employee.searchEmployee(temp);
 		
 		// For creating the product part, I think you should allow staff to input the product data himself rather than setting a default one
+		// So for marking a sales payment, it should also allow the staff to input the product code or name to mark down the record with his name and date
 		
 		// -- test new product -- //
 		String s1 = "2021-10-20";
