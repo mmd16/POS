@@ -44,7 +44,8 @@ public class MainController {
 			// So for marking a sales payment, it should also allow the staff to input the
 			// product code or name to mark down the record with his name and date
 
-			// -- test new product -- //
+
+			// -- karina: test new product -- //
 			String s1 = "2021-10-20";
 			Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(s1);
 
@@ -72,7 +73,7 @@ public class MainController {
 				System.out.println("Input (3) for accessing User Management System");
 				digit = sc.nextInt();
 				if (digit > 4) {
-					System.out.println("Please Input valid number");// exception
+					System.out.println("Please Input valid number"); // exception
 				} else {
 					switch (digit) {
 					case 1:
@@ -104,6 +105,7 @@ public class MainController {
 	}
 
 	static void setAllInstance() {
+		// karina:
 		// 1. employee won't change
 		// 2. since we need to calculate all sales data and inventory number,
 		//    i think we should create only one instance of controllers
