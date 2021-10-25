@@ -12,16 +12,6 @@ public class Equipment extends Product {
 		this.brand = brand;
 	}
 
-	public static Equipment createEquipment(String name, String brand, Date warrantyPeriod, double price,
-			int inventory) {
-		Product product = searchProduct(name);
-		if (product == null)
-			return new Equipment(name, brand, warrantyPeriod, price, inventory);
-		else
-			return null;
-			// throw exception
-	}
-
 	public String getBrand() {
 		return brand;
 	}

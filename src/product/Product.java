@@ -1,6 +1,7 @@
 package product;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import random.productCodeGenerator;
 import user.User;
@@ -21,6 +22,7 @@ public class Product {
 		this.productCode = productCodeGenerator.generateProductCode(type);
 		productList.add(this);
 	}
+
 
 	public String getName() {
 		return name;

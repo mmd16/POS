@@ -5,9 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-import product.Equipment;
-import product.Food;
+
 import product.Product;
+import product.ProductFactory;
 import staff.Employee;
 import user.User;
 
@@ -33,13 +33,15 @@ public class MainController implements Controller, Staff{
 		// -- test new product -- //
 		String s1 = "2021-10-20";
 		Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(s1);
-		Product p1 = Food.createFood("f1", "sakurazaka", d1, 30.0, 3);
-		Product p2 = Equipment.createEquipment("e1", "abc", d1, 1000, 50);
-		//System.out.println(Product.countProduct());
-		Product p3 = Equipment.createEquipment("e1", "abc", d1, 1000, 50);
-		//System.out.println(Product.countProduct());
+		
+		ProductFactory productFactory = new ProductFactory();
+		Product p1 = productFactory.createProduct("Food", "f1", "sakurazaka", d1, 30.0, 3);
+		Product p2 = productFactory.createProduct("Equipment","e1", "abc", d1, 1000, 50);
+		System.out.println(Product.countProduct());
+		Product p3 = productFactory.createProduct("Equipment","e1", "abc", d1, 1000, 50);
+		System.out.println(Product.countProduct());
 		Product.removeProduct("e1");
-		//System.out.println(Product.countProduct());
+		System.out.println(Product.countProduct());
 		// -- end of test new product -- //
 		
 		mains.execute();	
