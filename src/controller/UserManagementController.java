@@ -5,9 +5,26 @@ import java.util.Scanner;
 import staff.Employee;
 import user.User;
 
-public class UserManagementController implements Controller, CurrentCustomer, Staff {
-	private User user;
+public class UserManagementController implements Controller {
+	private static User user;
 	private Employee employee; // thinking of separate general staff apart from manager
+	private static UserManagementController instance;
+	
+	private UserManagementController (Employee employee) {
+		this.employee = employee;
+	}
+
+	public static void setInstance(Employee employee) {
+		if (instance == null)
+			instance = new UserManagementController (employee);
+		else {
+			// throw exception
+		}
+	}
+	
+	public static Controller getInstance() {
+		return instance;
+	}
 
 	@Override
 	public void execute() {
@@ -40,14 +57,10 @@ public class UserManagementController implements Controller, CurrentCustomer, St
 		} while (end == false);
 	}
 
-	@Override
-	public void setUser(User user) {
-		this.user = user;
-	}
 
-	@Override
-	public void setStaff(Employee employee) {
-		this.employee = employee;
+	public static void setUser(User u) {
+		user = u;
+		
 	}
 
 }

@@ -7,15 +7,32 @@ import staff.Manager;
 import transactions.Sales;
 import user.User;
 
-public class SalesController implements Controller, Staff, CurrentCustomer{
-	private User user;
+public class SalesController implements Controller {
+	private static User user;
 	private Employee employee;
 	private String uid = "-1";
+	private static SalesController instance;
+
+	private SalesController(Employee employee) {
+		this.employee = employee;
+	}
+
+	public static void setInstance(Employee employee) {
+		if (instance == null)
+			instance = new SalesController(employee);
+		else {
+			// throw exception
+		}
+	}
+
+	public static Controller getInstance() {
+		return instance;
+	}
+
 	@Override
-	public void execute() {		
+	public void execute() {
 		boolean end = false;
-		do 
-		{
+		do {
 			System.out.println(user.getUsername());
 			System.out.println("Input (1) for checkout");
 			System.out.println("Input (2) for refund");
@@ -25,7 +42,7 @@ public class SalesController implements Controller, Staff, CurrentCustomer{
 			switch (digits) {
 			case 1:
 				user.printOrders();
-				//not yet implemented
+				// not yet implemented
 				break;
 			case 2:
 				refund();
@@ -38,14 +55,13 @@ public class SalesController implements Controller, Staff, CurrentCustomer{
 				end = true;
 				break;
 			}
-			
-		}while(end == false);
+
+		} while (end == false);
 	}
-	
+
 	public void inputofUID() // on9 function
 	{
-		if(uid == "-1") 
-		{
+		if (uid == "-1") {
 			Scanner d = new Scanner(System.in);
 			System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
 			uid = d.next();
@@ -53,34 +69,25 @@ public class SalesController implements Controller, Staff, CurrentCustomer{
 			d.close();
 		}
 	}
-	
-	public boolean validator() 
-	{
-		if(employee instanceof Manager)
-		{
+
+	public boolean validator() {
+		if (employee instanceof Manager) {
 			return true;
 		}
 		return false;
 	}
-	
-	public void refund() 
-	{
-		if(validator()) 
-		{
+
+	public void refund() {
+		if (validator()) {
 //			tobeimplemented
 		}
 		System.out.println("Please ask for your managers for help.");
 	}
-	@Override
-	public void setStaff(Employee employee) {
-		this.employee = employee;
+
+
+	public static void setUser(User u) {
+		user = u;
 		
 	}
-	
-	@Override
-	public void setUser(User user) {
-		this.user = user;
-		
-	}
-	
+
 }

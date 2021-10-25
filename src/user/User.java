@@ -125,6 +125,10 @@ public class User {
 		}
 		return null;
 	}
+	
+	public static int countUser() {
+		return UserList.size();
+	}
 
 	public void printOrders() {
 		System.out.printf("%-10s%-10s%-10s%-10s\n", "Category", "Product Name", "Price($)", "OrderDate");
