@@ -18,6 +18,8 @@ public class MainController implements Controller, Staff{
 	public static void main(String[] args) throws ParseException 
 	{
 		Employee e = new Employee("ON9", "M", "null", "123123123", "1");
+		//Here I think we can change the parameter password("000") into membershipID, so that when the ID start with 0, it is a non-member, 
+		//if it start with 1, it is a silver member and so on.
 		User u = new User("ON9", "000", "M", "7HEAD", "123");
 		MainController mains = new MainController();
 		System.out.println("Please input your Worker ID for logging in the system...");
