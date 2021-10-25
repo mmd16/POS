@@ -43,6 +43,7 @@ public class SalesController implements Controller {
 			case 1:
                                 // Here is wrong, you should make a markPayment method to store customer's bought product and its number to calculate its total fee for one payment.
 				// You don't need to consider to combine multiple product together, only one product name and its bought number will use for the payment.
+                                // order is for online and this Sales Controller should only mark physical payment, so no printorder here.
                                 user.printOrders();
 				// not yet implemented
 				break;
