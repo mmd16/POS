@@ -23,6 +23,9 @@ public class MainController implements Controller, Staff{
 		System.out.println("Please input your Worker ID for logging in the system...");
 		String temp = sc.next();
 		employee = Employee.searchEmployee(temp);
+		
+		// For creating the product part, I think you should allow staff to input the product data himself rather than setting a default one
+		
 		// -- test new product -- //
 		String s1 = "2021-10-20";
 		Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(s1);
