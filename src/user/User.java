@@ -125,10 +125,10 @@ public class User {
 		}
 		return null;
 	}
-	
-	public static int countUser() {
-		return UserList.size();
-	}
+
+
+        
+        // Here doesn't need category, instead It should be the customer's name.
 
 	public void printOrders() {
 		System.out.printf("%-10s%-10s%-10s%-10s\n", "Category", "Product Name", "Price($)", "OrderDate");

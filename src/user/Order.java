@@ -61,7 +61,9 @@ public class Order {
 	
 	//This is a new add function, it will calculate the suitable response message to customer 
 	//by the predicted order's delivery day and the product's produce date
-	//Here I think that this part can connect with product class' inventory status, when the inputted product' inventory number = 0, an order will automatically created
+	//Here I think that this part can connect with product class' inventory status, when the inputted product' inventory number = 0, 
+        //Then, the staff can create an order for the customer, 
+        //Also, after making many sales payments, if the inventory has reduced to 0, then that product can similarly be created as an order by the staff.
 	//Although it maybe weird in reality, however the project needs to have different inputs and outputs 
 	
 	//Also I want to let the staff input produce date freely rather than only setting it from the beginning.

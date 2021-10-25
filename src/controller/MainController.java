@@ -26,7 +26,7 @@ public class MainController {
 		User user = new User("ON9", "000", "M", "7HEAD", "123");
 		User user2 = new User("karina", "001", "F", "7HEAD", "1234");
 
-		System.out.println("uuuuuuu ------" + user.countUser());
+
 
 		System.out.println("Please input your Worker ID for logging in the system...");
 		String temp = sc.next();
