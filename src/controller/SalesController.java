@@ -41,10 +41,13 @@ public class SalesController implements Controller {
 			int digits = MainController.sc.nextInt();
 			switch (digits) {
 			case 1:
-				user.printOrders();
+                                // Here is wrong, you should make a markPayment method to store customer's bought product and its number to calculate its total fee for one payment.
+				// You don't need to consider to combine multiple product together, only one product name and its bought number will use for the payment.
+                                user.printOrders();
 				// not yet implemented
 				break;
 			case 2:
+                                // I didn't plan to make a refund method for Sales, so maybe delete this part.
 				refund();
 				break;
 			case 3:
