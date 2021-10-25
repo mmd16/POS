@@ -62,7 +62,7 @@ public class Order {
 	//This is a new add function, it will calculate the suitable response message to customer 
 	//by the predicted order's delivery day and the product's produce date
 	//Here I think that this part can connect with product class' inventory status, when the inputted product' inventory number = 0, an order will automatically created
-	//But remember the product should be inputted not by default setting, although I knew that maybe weird in reality, however the project needs to have different inputs other than default settings
+	//Although it maybe weird in reality, however the project needs to have different inputs and outputs 
 	
 	//Also I want to let the staff input produce date freely rather than only setting it from the beginning.
 	public void suggestMsgToSend(User u, Order o, LocalDate produceDate) { // User is for getting their names
