@@ -13,6 +13,8 @@ public class Product {
 	private double price;
 	private int inventory = 0;
 	protected static ArrayList<Product> productList = new ArrayList<>();
+	//test for order search product name
+	public static ArrayList<Product> copyList = new ArrayList<>();
 
 	public Product(String name, String type, double price, int inventory) {
 		this.name = name;
@@ -21,6 +23,8 @@ public class Product {
 		this.inventory = inventory;
 		this.productCode = productCodeGenerator.generateProductCode(type);
 		productList.add(this);
+		//test
+		copyList.add(this);
 	}
 
 
@@ -95,6 +99,11 @@ public class Product {
 			}
 		}
 		// throw exception when product not found
+	}
+	
+	// for order to search
+	public static ArrayList<Product> getCopyList() {
+		return copyList;
 	}
 
 }
