@@ -37,25 +37,23 @@ public class UserManagementController implements Controller {
 //			System.out.println("Waiting the Card Reader to response...");
 			System.out.println("To continue, please proceed your actions");
 			System.out.println("Input (1) for Membership enquires");
-			System.out.println("Input (2) for Creating orders"); // added this part for the staff to input orders
-			System.out.println("Input (3) for Points Enquires");
-			System.out.println("Input (4) to leave");
+			System.out.println("Input (2) for Respond orders prediction"); 
+			System.out.println("Input (3) for listing the order records"); 
+			System.out.println("Input (4) for Points Enquires");
+			System.out.println("Input (5) to leave");
 			digit = MainController.sc.nextInt();
 			switch (digit) {
 			case 1:
 				System.out.printf("Customer owns a %s membership\n", user.getMembership().getName());
 				break;
-			case 2:				
-				String cName = MainController.sc.next();
-				String pName = MainController.sc.next();
-				String oDate = MainController.sc.next();
-				int days = MainController.sc.nextInt();           
-				//r = Record.getInstance();           
-				user.createOrder(cName, pName, user.ConvertStrToDate(oDate), days);            
-				System.out.println("Order has been made.");
+			case 2:	
+				System.out.println("Please input client's name and the product produced date.");
+				String name = MainController.sc.next();
+				String pDate = MainController.sc.next();                
+				order.suggestMsgToSend(name, user.ConvertStrToDate(pDate));            
 				break;
 			case 3: 
-				order.printOrder();
+				User.listOrder();
 				break;
 			case 4:
 				System.out.printf("The current points in the account is %d\n", user.getPoints());
