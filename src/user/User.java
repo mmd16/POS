@@ -36,16 +36,6 @@ public class User {
 		UserList.add(this);
 	}
 	
-	
-	// new added constructor.
-	public User(String userName, char sex, String membershipID) {		
-		this.userName = userName;		
-		this.sex = sex;		
-		this.membershipID = membershipID;
-		this.orderList = new ArrayList<Order>();
-		UserList.add(this);
-	}
-	
 	public User(String username, String password, String sex, String email, String uid) {
 		this.username = username;
 		this.sex = sex;
@@ -58,17 +48,19 @@ public class User {
 	
 	
 	// added
-	    public static User searchCustomer(ArrayList<User> customerList, String userName)  {
-		for (User u : customerList) {
-		    if(u.getUsername().equals(userName))
-			return u;
-		}
-		    return null;
-	    }
+	public static Order searchOrder(String name) {        
+		for (User u : UserList) {        	
+			for (Order o : orderList) {               
+				if (o.getUserName().equals(name))                    
+					return o;           
+			}        
+		}        
+		return null;    
+	}
 	
 	// added	
-    public Order createOrder(String userName, String productName, LocalDate orderDate, int deliveryDays) {
-    	User u = User.searchCustomer(UserList, userName);
+    public Order createOrder(String ProductName, LocalDate orderDate, int deliveryDays) {
+    	User u = User.searchCustomer(UserList, this.getUsername());
         Product p = Product.searchProduct(Product.getCopyList(), productName);
 	Order o = new Order(u, p, orderDate, deliveryDays);
         OrderList.add(o);
@@ -79,10 +71,6 @@ public class User {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate result = LocalDate.parse(date, formatter);
 		return result;
-	}
-	
-	public String getUsername() {
-		return username;
 	}
 
 
@@ -166,15 +154,23 @@ public class User {
 
 
         
-        // Here doesn't need category, instead It should be the customer's name.
-
 	public void printOrders() {
-		System.out.printf("%-10s%-10s%-10s%-10s\n", "Customer Name", "Product Name", "Price($)", "OrderDate");
+		System.out.printf("%-10s%-10s%-10s%-10s\n", "Category", "Product Name", "Price($)", "OrderDate");
 		for (Order o : orderList) {
-			System.out.printf("%-10s%-10s%-10s%-10s\n", o.getUserName(), o.getProductName(),
+			System.out.printf("%-10s%-10s%-10s%-10s\n", o.getCategory(), o.getProductName(),
 					Double.toString(o.getPrice()), o.getStrDate());
 		}
 	}
+	
+	// added
+	// encounter bug: "%-9s%-14s%-9s%-26s%\n", the last % causes conversion bug.
+    public static void listOrder() {
+        System.out.printf("%-14s%-14s%-13s%-13s\n", "Customer Name", "Product Name", "Order Date", "Days");
+        for (Order o : orderList) {
+            System.out.printf("%-9s%-14s%-13s%-13s\n", o.getUserName(), o.getProductName(), o.getStrDate(),
+                    String.valueOf(o.getDeliveryDays()));
+        }
+    }	
 	
 	// new method 
 	public String distinguishSex() {
