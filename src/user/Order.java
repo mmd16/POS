@@ -36,9 +36,9 @@ public class Order {
 	
 	    // encounter bug: "%-9s%-14s%-9s%-26s%\n", the last % causes conversion bug.
     public static void listOrder(ArrayList<Order> orderList) {
-        System.out.printf("%-14s%-14s%-13s%-13s\n", "Customer Name", "Product Name" "Order Date", "Days");
+        System.out.printf("%-14s%-14s%-13s%-13s\n", "Customer Name", "Product Name", "Order Date", "Days");
         for (Order o : orderList) {
-            System.out.printf("%-9s%-14s%-13s%-13s\n", o.getUserName(), o.getStrDate(),
+            System.out.printf("%-9s%-14s%-13s%-13s\n", o.getUserName(), o.getProductName(), o.getStrDate(),
                     String.valueOf(o.getDeliveryDays()));
         }
     }	
@@ -62,6 +62,10 @@ public class Order {
 	
 	public String getUserName() {
 		return userName;
+	}
+	
+	public String getProductName() {
+		return productName;
 	}
 	
 	//This is a new add function, it will calculate the suitable response message to customer 
