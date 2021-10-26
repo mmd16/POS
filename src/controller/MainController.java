@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.Date;
+import java.time.LocalDate;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -61,6 +62,10 @@ public class MainController {
 			
 			// test order function
 			Product p4 = productFactory.createProduct("Food", "fries", "wrt", d1, 30.0, 0);
+			String s2 = "2021-10-25";
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate d2 = LocalDate.parse(s2, formatter);
+			user.createOrder(p4.getName(), d2, 3);
 			// end
 			
 			do {
