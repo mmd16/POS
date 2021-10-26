@@ -70,7 +70,7 @@ public class User {
     public Order createOrder(String userName, String productName, LocalDate orderDate, int deliveryDays) {
     	User u = User.searchCustomer(UserList, userName);
     	Order o = new Order(u, orderDate, deliveryDays);
-        Product p = Product.searchProduct(allProducts, productName);
+        Product p = Product.searchProduct(Product.getCopyList(), productName);
         OrderList.add(o);
         return o;
     }
