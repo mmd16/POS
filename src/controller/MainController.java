@@ -58,7 +58,11 @@ public class MainController {
 			Product.removeProduct("e1");
 			System.out.println(Product.countProduct());
 			// -- end of test new product -- //
-
+			
+			// test order function
+			Product p4 = productFactory.createProduct("Food", "fries", "wrt", d1, 30.0, 0);
+			// end
+			
 			do {
 				System.out.printf("hi %s\n", employee.getName());
 				// exception can be added later, eg invalid id sth else
@@ -110,6 +114,8 @@ public class MainController {
 		// 2. since we need to calculate all sales data and inventory number,
 		//    i think we should create only one instance of controllers
 		// 3. but i don't know how to handle user wuwu
+		
+		// For 3. I think we can ignore the inventory number in order list as i only want to show the customer name and product name and date, etc.
 		SalesController.setInstance(employee);
 		InventoryController.setInstance(employee);
 		UserManagementController.setInstance(employee);
