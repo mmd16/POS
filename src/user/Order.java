@@ -15,9 +15,10 @@ public class Order {
 	private double price;
 	private int deliveryDays;
 	
-	public Order (User user, LocalDate orderDate, int deliveryDays){
+	public Order (User user, Product product, LocalDate orderDate, int deliveryDays){
 		// add new parameters
 		this.userName = user.getUsername();	
+		this.productName = product.getName();
 		this.orderDate = orderDate;				
 		this.deliveryDays = deliveryDays;
 		this.user = user;		
@@ -31,6 +32,19 @@ public class Order {
 			}        
 		}        
 		return null;    
+	}
+	
+	    // encounter bug: "%-9s%-14s%-9s%-26s%\n", the last % causes conversion bug.
+    public static void listOrder(ArrayList<Order> orderList) {
+        System.out.printf("%-14s%-14s%-13s%-13s\n", "Customer Name", "Product Name" "Order Date", "Days");
+        for (Order o : orderList) {
+            System.out.printf("%-9s%-14s%-13s%-13s\n", o.getUserName(), o.getStrDate(),
+                    String.valueOf(o.getDeliveryDays()));
+        }
+    }	
+
+	public int getDeliveryDays() {		
+		return deliveryDays;	
 	}
 
 	public LocalDate getOrderDate() throws ParseException {
