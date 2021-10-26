@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import staff.Employee;
@@ -41,11 +42,14 @@ public class SalesController implements Controller {
 			int digits = MainController.sc.nextInt();
 			switch (digits) {
 			case 1:
-                                // Here is wrong, you should make a markPayment method to store customer's bought product and its number to calculate its total fee for one payment.
-				// You don't need to consider to combine multiple product together, only one product name and its bought number will use for the payment.
-                                // order is for online and this Sales Controller should only mark physical payment, so no printorder here.
-                                user.printOrders();
-				// not yet implemented
+				if(user.getBag().checkifEmpty()) 
+				{
+					System.out.println("Sorry, you haven't picked up any products");
+				}
+				else 
+				{
+					checkout();
+				}
 				break;
 			case 2:
                                 // I didn't plan to make a refund method for Sales, so maybe delete this part.
@@ -63,6 +67,16 @@ public class SalesController implements Controller {
 		} while (end == false);
 	}
 
+	public void checkout() 
+	{
+		user.checkout(employee, LocalDate.now());
+		System.out.println("Do you have any problems about the total?");
+		boolean reply = MainController.sc.nextBoolean();
+		if(reply) 
+		{
+			user.confirmSale(employee, LocalDate.now());
+		}
+	}
 	public void inputofUID() // on9 function
 	{
 		if (uid == "-1") {

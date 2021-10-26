@@ -2,6 +2,7 @@ package user;
 
 import membership.*;
 import product.Product;
+import staff.Employee;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -15,9 +16,10 @@ public class User {
 	private String sex;
 	private String email;
 	private String userid;
+	private Trolley bag;
 	private int points = 0;
 	private Membership membership;
-	
+
 	private ArrayList<Order> orderList;
 	private static AtomicInteger uniqueId =new AtomicInteger();
 	private static ArrayList<User> UserList = new ArrayList<User>();
@@ -30,6 +32,7 @@ public class User {
 		this.membership = new NonMembership();
 		this.orderList = new ArrayList<Order>();
 		UserList.add(this);
+		this.bag = new Trolley(this, LocalDate.now());
 	}
 	
 	public User(String username, String password, String sex, String email, String uid) {
@@ -40,12 +43,18 @@ public class User {
 		this.membership = new NonMembership();
 		this.orderList = new ArrayList<Order>();
 		UserList.add(this);
+		this.bag = new Trolley(this, LocalDate.now());
 	}
 	
 	
 	public static ArrayList<User> getUserList() {
 		return UserList;
 	}
+	
+	public Trolley createTrolley(User user, ArrayList<Product> productList, LocalDate Date) // exception handle later
+	{
+		return new Trolley(user,productList,Date);
+	};
 	
     public Order createOrder(User user, Product product, LocalDate orderDate, int deliveryDays) {
     	Order o = new Order(user, product, orderDate, deliveryDays);
@@ -181,6 +190,30 @@ public class User {
 		}
 	}
 	
+	public void checkout(Employee e, LocalDate date) 
+	{
+		double total = this.getBag().calculateTotal(this.getBag().getProductList());
+		System.out.printf("The total is $%d", total);
+	}
+	
+	public void confirmSale(Employee e, LocalDate date) 
+	{
+		this.getBag().createSales(this.getBag().getProductList(), e, date);
+		System.out.println("Thank you for your patience, Wish you have a good day.");
+	}
+	
+	public Trolley getBag() {
+		return bag;
+	}
+
+	public static AtomicInteger getUniqueId() {
+		return uniqueId;
+	}
+
+	public static void setUniqueId(AtomicInteger uniqueId) {
+		User.uniqueId = uniqueId;
+	}
+
 	// added
 	// encounter bug: "%-9s%-14s%-9s%-26s%\n", the last % causes conversion bug.
     public void listOrder() {
