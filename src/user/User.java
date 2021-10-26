@@ -74,6 +74,12 @@ public class User {
         OrderList.add(o);
         return o;
     }
+	// added
+	public LocalDate ConvertStrToDate(String date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate result = LocalDate.parse(date, formatter);
+		return result;
+	}
 	
 	public String getUsername() {
 		return username;
