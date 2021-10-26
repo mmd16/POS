@@ -2,48 +2,35 @@ package user;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-//import java.text.DateFormat;
 import java.text.ParseException;
-//import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-//import java.util.Date;
 import java.time.format.DateTimeFormatter;
 
 import product.Product;
 
 public class Order {
 	private String productName;
-	private String category;
 	private LocalDate orderDate;
+	private User user;
 	private double price;
-
 	private int deliveryDays;
 	
-	public Order (Product commodity, double membershipDiscount, int deliveryDays){
-		this.productName = commodity.getName();
-//		this.category = commodity.getDescription(); // no need desc qaq (karina
-		this.orderDate = null;
-		
-		
+	public Order (User user, LocalDate orderDate, int deliveryDays){
 		// add new parameters
+		this.userName = user.getUsername();	
+		this.orderDate = orderDate;				
 		this.deliveryDays = deliveryDays;
-		
-//		if (membershipDiscount < commodity.getDiscountRate())
-//			this.price = commodity.getFee()*membershipDiscount;
-//		else
-//			this.price = commodity.getDiscountedFee();
-	}
+		this.user = user;		
+	}		
 
-	public void setOrderDate(LocalDate orderDate) {
-		this.orderDate = orderDate;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public String getProductName() {
-		return productName;
+	public static Order searchOrder(ArrayList<User> customerList, ArrayList<Order> orderList) {        
+		for (User u : customerList) {        	
+			for (Order o : orderList) {               
+				if (o.getUserName().equals(c.getUserName()))                    
+					return o;           
+			}        
+		}        
+		return null;    
 	}
 
 	public LocalDate getOrderDate() throws ParseException {
