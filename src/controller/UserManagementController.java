@@ -29,7 +29,7 @@ public class UserManagementController implements Controller {
 	}
 
 	@Override
-	public void execute(String[] cmdParts) {
+	public void execute() {
 		int digit = -1;
 		boolean end = false;
 		System.out.println("Welcome to User Management System");
@@ -46,12 +46,13 @@ public class UserManagementController implements Controller {
 				System.out.printf("Customer owns a %s membership\n", user.getMembership().getName());
 				break;
 			case 2:				
-        			if(cmdParts.length != 4)            
-					return null; // exception               
-				int days = Integer.parseInt(cmdParts[3]);            
+				String cName = MainController.sc.next();
+				String pName = MainController.sc.next();
+				String oDate = MainController.sc.next();
+				int days = MainController.sc.nextInt();           
 				//r = Record.getInstance();           
-				user.createOrder(cmdParts[0], cmdParts[1], user.ConvertStrToDate(cmdParts[3]), days);            
-				System.out.println("Done.");
+				user.createOrder(cName, pName, user.ConvertStrToDate(oDate), days);            
+				System.out.println("Order has been made.");
 				break;
 			case 3: 
 				order.printOrder();
