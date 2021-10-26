@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
@@ -9,6 +10,7 @@ import java.util.Scanner;
 import product.Product;
 import product.ProductFactory;
 import staff.Employee;
+import user.Order;
 import user.User;
 
 public class MainController {
@@ -62,10 +64,10 @@ public class MainController {
 			
 			// test order function
 			Product p4 = productFactory.createProduct("Food", "fries", "wrt", d1, 30.0, 0);
-			String s2 = "2021-10-25";
+			String s2 = "25/10/2021";
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDate d2 = LocalDate.parse(s2, formatter);
-			user.createOrder(p4.getName(), d2, 3);
+			user.createOrder(user, p4, d2, 3);
 			// end
 			
 			do {
@@ -75,7 +77,7 @@ public class MainController {
 				System.out.println(
 						"Please ask our customer to input their id, leave it as 0 if they are not the members.");
 				String anothertemp = sc.next();
-				user = User.searchUser(anothertemp);
+				user = User.searchUserID(anothertemp);
 				System.out.println("To continue, please proceed your actions");
 				System.out.println("Input (1) for accessing Sales System");
 				System.out.println("Input (2) for accessing Inventory System");

@@ -33,7 +33,7 @@ public class SalesController implements Controller {
 	public void execute() {
 		boolean end = false;
 		do {
-			System.out.println(user.getUsername());
+			System.out.println(user.getUserName());
 			System.out.println("Input (1) for checkout");
 			System.out.println("Input (2) for refund");
 			System.out.println("Input (3) for checking Total Revenue");
@@ -69,7 +69,7 @@ public class SalesController implements Controller {
 			Scanner d = new Scanner(System.in);
 			System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
 			uid = d.next();
-			user = User.searchUser(uid);
+			user = User.searchUserID(uid);
 			d.close();
 		}
 	}

@@ -1,5 +1,7 @@
 package controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import staff.Employee;
@@ -49,11 +51,13 @@ public class UserManagementController implements Controller {
 			case 2:	
 				System.out.println("Please input client's name and the product produced date.");
 				String name = MainController.sc.next();
-				String pDate = MainController.sc.next();                
-				order.suggestMsgToSend(name, user.ConvertStrToDate(pDate));            
+				String pDate = MainController.sc.next(); 
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDate d1 = LocalDate.parse(pDate, formatter);
+				User.suggestMsgToSend(name, d1);            
 				break;
 			case 3: 
-				User.listOrder();
+				user.listOrder();
 				break;
 			case 4:
 				System.out.printf("The current points in the account is %d\n", user.getPoints());
