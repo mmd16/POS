@@ -46,6 +46,10 @@ public class Order {
 		return price;
 	}
 	
+	public String getUserName() {
+		return userName;
+	}
+	
 	//This is a new add function, it will calculate the suitable response message to customer 
 	//by the predicted order's delivery day and the product's produce date
 	//Here I think that this part can connect with product class' inventory status, when the inputted product' inventory number = 0, 
