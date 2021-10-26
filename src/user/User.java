@@ -19,6 +19,9 @@ public class User {
 	private String userid;
 	private int points = 0;
 	private Membership membership;
+	
+	private String membershipID;
+	
 	private ArrayList<Order> orderList;
 	private static AtomicInteger uniqueId =new AtomicInteger();
 	private static ArrayList<User> UserList = new ArrayList<User>();
@@ -33,6 +36,16 @@ public class User {
 		UserList.add(this);
 	}
 	
+	
+	// new added constructor.
+	public User(String userName, char sex, String membershipID) {		
+		this.userName = userName;		
+		this.sex = sex;		
+		this.membershipID = membershipID;
+		this.orderList = new ArrayList<Order>();
+		UserList.add(this);
+	}
+	
 	public User(String username, String password, String sex, String email, String uid) {
 		this.username = username;
 		this.sex = sex;
@@ -42,7 +55,26 @@ public class User {
 		this.orderList = new ArrayList<Order>();
 		UserList.add(this);
 	}
-
+	
+	
+	// added
+	    public static User searchCustomer(ArrayList<User> customerList, String userName)  {
+		for (User u : customerList) {
+		    if(u.getUsername().equals(userName))
+			return u;
+		}
+		    return null;
+	    }
+	
+	// added	
+    public Order createOrder(String userName, String productName, LocalDate orderDate, int deliveryDays) {
+    	User u = User.searchCustomer(UserList, userName);
+    	Order o = new Order(u, orderDate, deliveryDays);
+        Product p = Product.searchProduct(allProducts, productName);
+        OrderList.add(o);
+        return o;
+    }
+	
 	public String getUsername() {
 		return username;
 	}
@@ -131,9 +163,9 @@ public class User {
         // Here doesn't need category, instead It should be the customer's name.
 
 	public void printOrders() {
-		System.out.printf("%-10s%-10s%-10s%-10s\n", "Category", "Product Name", "Price($)", "OrderDate");
+		System.out.printf("%-10s%-10s%-10s%-10s\n", "Customer Name", "Product Name", "Price($)", "OrderDate");
 		for (Order o : orderList) {
-			System.out.printf("%-10s%-10s%-10s%-10s\n", o.getCategory(), o.getProductName(),
+			System.out.printf("%-10s%-10s%-10s%-10s\n", o.getUserName(), o.getProductName(),
 					Double.toString(o.getPrice()), o.getStrDate());
 		}
 	}
