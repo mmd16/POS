@@ -24,3 +24,5 @@ Product Name   Selling Numbers     Selling Price($)    Date                Sales
 candies        9                   270.0               25/10/2021          You            
 noodles        25                  750.0               25/10/2021          You            
 cellPhone      2                   500.0               25/10/2021          You   
+
+Remarks: I didn't add exceptions so it may have bugs.
