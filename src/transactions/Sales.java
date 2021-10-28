@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import product.Product;
 import staff.Employee;
+import user.Trolley;
 
 
 public class Sales {
@@ -14,15 +15,57 @@ public class Sales {
 	private Employee employee;
 	private Product product;
 	private double price;
+	private String productName;
+	private int sellNum;
 	protected static ArrayList<Sales> salesList = new ArrayList<>();
 
-	public Sales(LocalDate Date, Employee employee, Product product) 
+	public Sales(String productName, int sellNum, LocalDate Date, Employee employee, double price) 
 	{
 		this.date = Date;
 		this.employee = employee;
-		this.product = product;
-		this.price = product.getPrice();
+		this.productName = productName;
+		this.sellNum = sellNum;
+		this.price = price;
 		salesList.add(this);
+	}
+	
+	public static Sales searchSales(String name) {
+		for (Sales s : salesList) {
+			if (s.getProductName().equals(name)) {
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	
+	public static boolean checkSales(String name) {
+		for (Sales s : salesList) {
+			if (s.getProductName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void clearSales() {
+		salesList.clear();
+	}
+	
+	public String getProductName() {
+		return productName;
+	}
+	
+	public void setSellNum(int sellNum) {
+		this.sellNum += sellNum;
+	}
+	
+	public void setPrice(double price) {
+		this.price += price;
+	}
+	
+	public int getSellNum() {
+		return sellNum;
 	}
 
 	public LocalDate getDate() throws ParseException {
@@ -57,17 +100,13 @@ public class Sales {
 	public double getPrice() {
 		return price;
 	}
-
-	public void setPrice(double price) {
-		this.price = price;
-	}
 	
 	public static void printList() 
 	{
-		System.out.printf("%-10s%-10s%-10s%-10s%-10s%-10s\n", "ProductType", "ProductCode", "Product Name", "Selling Price($)", "Date", "SalesPerson");
+		System.out.printf("%-15s%-20s%-20s%-20s%-15s\n", "Product Name", "Selling Numbers",  "Selling Price($)", "Date", "SalesPerson");
 		for(Sales sale : salesList) 
 		{
-			System.out.printf("%-10s%-10s%-10s%-10s%-10s%-10s\n", sale.getProduct().getType(), sale.getProduct().getProductCode(), sale.getProduct().getName(), Double.toString(sale.getProduct().getPrice()), sale.getStrDate(), sale.getEmployee().getName());
+			System.out.printf("%-15s%-20s%-20s%-20s%-15s\n",  sale.getProductName(), sale.getSellNum(), sale.getPrice(), sale.getStrDate(), sale.getEmployee().getName());
 		}
 	}
 	

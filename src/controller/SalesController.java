@@ -1,12 +1,15 @@
 package controller;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import staff.Employee;
 import staff.Manager;
 import transactions.Sales;
+import user.Trolley;
 import user.User;
+import product.Product;
 
 public class SalesController implements Controller {
 	private static User user;
@@ -33,32 +36,52 @@ public class SalesController implements Controller {
 	@Override
 	public void execute() {
 		boolean end = false;
+		//System.out.println(user.getUserName());				
 		do {
-			System.out.println(user.getUserName());
-			System.out.println("Input (1) for checkout");
-			System.out.println("Input (2) for refund");
-			System.out.println("Input (3) for checking Total Revenue");
-			System.out.println("Input (4) to leave");
-			int digits = MainController.sc.nextInt();
-			switch (digits) {
-			case 1:
-				if(user.getBag().checkifEmpty()) 
-				{
-					System.out.println("Sorry, you haven't picked up any products");
+			System.out.println("Input commands for further sales management (ex. addTrolley, checkout, markSales, listSales)");
+			
+			String cmd = MainController.sc.next();
+			switch (cmd) {
+			case "addTrolley":
+				String pName = MainController.sc.next(); 
+				String cName = MainController.sc.next(); 
+				int items = MainController.sc.nextInt();
+				
+				// testing date, later will set date input, it is an advance function
+				String s2 = "25/10/2021";
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDate d2 = LocalDate.parse(s2, formatter);
+				// end
+				
+				Product p = Product.searchProduct(pName);
+				User u = User.searchUserName(cName);
+				
+				if (Trolley.checkInventory(p, items))
+					System.out.println("Customer's product numbers should not larger than its inventory numbers, please input the correct item numbers.");
+				else {
+					Trolley t = u.createTrolley(p, items, d2);
+					t.deductInventory(p);
 				}
+				break;
+			case "checkout":				
+				if(Trolley.checkTrolley()) 
+					System.out.println("Sorry, you haven't picked up any products");
 				else 
 				{
-					checkout();
+					User.checkout();
+					
+					// testing employee, later will set date input, it is an advance function
+					Employee e = new Employee("You","You","You","You");
+					// end
+					
+					User.markSales(Product.getCopyList(), Trolley.getTrolleyList(), e);
+					Trolley.clearTrolley();
 				}
 				break;
-			case 2:
-                                // I didn't plan to make a refund method for Sales, so maybe delete this part.
-				refund();
+			case "listSales":
+				Sales.printList();
 				break;
-			case 3:
-				Sales.getTotalRevenue();
-				break;
-			case 4:
+			case "Exit":
 				System.out.println("Leaving Sales System...");
 				end = true;
 				break;
@@ -69,7 +92,7 @@ public class SalesController implements Controller {
 
 	public void checkout() 
 	{
-		user.checkout(employee, LocalDate.now());
+		//user.checkout(employee, LocalDate.now());
 		System.out.println("Do you have any problems about the total?");
 		boolean reply = MainController.sc.nextBoolean();
 		if(reply) 

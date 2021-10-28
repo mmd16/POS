@@ -8,78 +8,81 @@ import staff.Employee;
 import transactions.Sales;
 
 public class Trolley {
-	private User user;
-	private ArrayList<Product> productList;
+	private String productName;
+	private int itemNum;
+	private double allPrice;
+	private static ArrayList<Trolley> trolleyList = new ArrayList<>();
 	private LocalDate Date;
 	
-	public Trolley(User user, ArrayList<Product> productList, LocalDate Date) //for testing use;
+	public Trolley(Product product, int itemNum, LocalDate Date) //Improving
 	{
-		this.user = user;
-		this.productList = productList;
+		this.productName = product.getName();
+		this.itemNum = itemNum;
 		this.Date = Date;
+		this.allPrice = product.getPrice() * itemNum;
 	}
 	
 	public Trolley(User user,  LocalDate Date) 
 	{
-		this.user = user;
-		this.productList = new ArrayList<Product>();
+		//this.user = user;
+		//this.productList = new ArrayList<Product>();
 		this.Date = Date;
 	}
-	
 
-	public double calculateTotal(ArrayList<Product> product) 
+	public static double calculateTotal(ArrayList<Trolley> trolleyList) 
 	{
 		double rslt = 0;
-		for(Product p: product) 
+		for(Trolley t: trolleyList) 
 		{
-			rslt += p.getPrice();
+			rslt += t.getAllPrice();
 		}
 		return rslt;
 	}
 	
-	public void createSales(ArrayList<Product> product, Employee e, LocalDate date) 
-	{
-		for(Product p: product) 
-		{
-			new Sales(date, e, p);
-		}
+	public static ArrayList<Trolley> getTrolleyList() {
+		return trolleyList;
 	}
 	
-	public User getUser() {
-		return user;
+	public static void clearTrolley() {
+		trolleyList.clear();
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	public void addProduct(Trolley t) {
+		trolleyList.add(t);
 	}
 	
-	public ArrayList<Product> getProductList() {
-		return productList;
+	public String getProductName() {
+		return productName;
 	}
 	
-	public void setProductList(ArrayList<Product> productList) {
-		this.productList = productList;
-	}
-	
-	public void addProduct(Product p) {
-		this.productList.add(p);
-	}
-	
-	public void removeProduct(Product p) {
-		this.productList.remove(p);
+	public int getItemNum() {
+		return itemNum;
 	}
 	
 	public LocalDate getDate() {
 		return Date;
 	}
 	
-	public void setDate(LocalDate date) {
-		Date = date;
+	public double getAllPrice() {
+		return allPrice;
+	}
+	
+	public void deductInventory(Product product) {
+		int result = product.getInventory() - this.getItemNum();
+		product.setInventory(result);
 	}
 
-	public boolean checkifEmpty() 
+	public static boolean checkInventory(Product product, int items) 
 	{
-		if(productList.isEmpty())
+		if(product.getInventory() < items)
+			return true;
+		else
+			return false;
+	}
+	
+	public static boolean checkTrolley() 
+	{
+		if(trolleyList.isEmpty())
 			return true;
 		else
 			return false;

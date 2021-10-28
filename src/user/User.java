@@ -1,17 +1,19 @@
 package user;
 
-import membership.*;
-import product.Product;
-import staff.Employee;
-
-import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import membership.Membership;
+import membership.NonMembership;
+import product.Product;
+import staff.Employee;
+import transactions.Sales;
 
 public class User {
-
 	private String username;
 	private String sex;
 	private String email;
@@ -51,10 +53,46 @@ public class User {
 		return UserList;
 	}
 	
-	public Trolley createTrolley(User user, ArrayList<Product> productList, LocalDate Date) // exception handle later
+	public static void checkout() 
 	{
-		return new Trolley(user,productList,Date);
-	};
+		double total = Trolley.calculateTotal(Trolley.getTrolleyList());
+		System.out.printf("The total is $%.2f, Thank you for your buying!\n", total);
+	}
+	
+	public static void markSales(ArrayList<Product> productList, ArrayList<Trolley> trolleyList, Employee e) {
+		for (Product p: productList) {
+			int totalSellNum = 0;
+			int totalPrice = 0;
+			String s2 = "25/10/2021";
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate d2 = LocalDate.parse(s2, formatter);
+			for (Trolley t: trolleyList) {
+				if (p.getName().equals(t.getProductName())) {
+					totalSellNum += t.getItemNum();
+					totalPrice += t.getAllPrice();
+				}
+			}
+			if (totalSellNum > 0 && totalPrice > 0 && !Sales.checkSales(p.getName())) {
+				createSales(p.getName(), totalSellNum, d2, e, totalPrice);
+			}
+			else if (totalSellNum > 0 && totalPrice > 0 && Sales.checkSales(p.getName())) {
+				Sales s = Sales.searchSales(p.getName());
+				s.setSellNum(totalSellNum);
+				s.setPrice(totalPrice);
+			}
+		}
+	}
+	
+	public static Sales createSales(String productName, int totalNum, LocalDate d, Employee e, int totalPrice) {
+		return new Sales(productName, totalNum, d, e, totalPrice);
+	}
+	
+	public Trolley createTrolley(Product product, int itemNum, LocalDate Date) // exception handle later
+	{
+		Trolley t = new Trolley(product, itemNum, Date);
+		t.addProduct(t);
+		return t;
+	}
 	
     public Order createOrder(User user, Product product, LocalDate orderDate, int deliveryDays) {
     	Order o = new Order(user, product, orderDate, deliveryDays);
@@ -179,8 +217,6 @@ public class User {
 		}
 		return null;
 	}
-
-
         
 	public void printOrders() {
 		System.out.printf("%-10s%-10s%-10s%-10s\n", "Category", "Product Name", "Price($)", "OrderDate");
@@ -190,15 +226,9 @@ public class User {
 		}
 	}
 	
-	public void checkout(Employee e, LocalDate date) 
-	{
-		double total = this.getBag().calculateTotal(this.getBag().getProductList());
-		System.out.printf("The total is $%d", total);
-	}
-	
 	public void confirmSale(Employee e, LocalDate date) 
 	{
-		this.getBag().createSales(this.getBag().getProductList(), e, date);
+		markSales(Product.getCopyList(), Trolley.getTrolleyList(), e);
 		System.out.println("Thank you for your patience, Wish you have a good day.");
 	}
 	

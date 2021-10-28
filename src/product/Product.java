@@ -12,6 +12,7 @@ public class Product {
 	private String productCode;
 	private double price;
 	private int inventory = 0;
+	private boolean salesExist;
 	protected static ArrayList<Product> productList = new ArrayList<>();
 	//test for order search product name
 	public static ArrayList<Product> copyList = new ArrayList<>();
@@ -21,10 +22,19 @@ public class Product {
 		this.type = type;
 		this.price = price;
 		this.inventory = inventory;
+		salesExist = false;
 		this.productCode = productCodeGenerator.generateProductCode(type);
 		productList.add(this);
 		//test
 		copyList.add(this);
+	}
+	
+	public boolean getSalesExist() {
+		return salesExist;
+	}
+	
+	public void setSalesExist() {
+		salesExist = true;
 	}
 
 

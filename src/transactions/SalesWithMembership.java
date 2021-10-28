@@ -10,8 +10,8 @@ public class SalesWithMembership extends Sales {
 
 	private User user;
 
-	public SalesWithMembership(LocalDate Date, Employee employee, User user, Product product) {
-		super(Date, employee, product);
+	public SalesWithMembership(LocalDate Date, Employee employee, User user, Product product, int sellNum, double price) {
+		super(product.getName(), sellNum, Date, employee, price);
 		this.user = user;
 		addpoints(product.getPrice(), user);
 		salesList.add(this);

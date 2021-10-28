@@ -42,18 +42,14 @@ public class MainController {
 
 			setAllInstance();
 
-			// For creating the product part, I think you should allow staff to input the
-			// product data himself rather than setting a default one
-			// So for marking a sales payment, it should also allow the staff to input the
-			// product code or name to mark down the record with his name and date
-
+			// no need to input the product information to create, default set is also ok.
 
 			// -- karina: test new product -- //
 			String s1 = "2021-10-20";
 			Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(s1);
 
 			ProductFactory productFactory = new ProductFactory();
-			Product p1 = productFactory.createProduct("Food", "f1", "sakurazaka", d1, 30.0, 3);
+			Product p1 = productFactory.createProduct("Food", "candies", "sakurazaka", d1, 30.0, 10);
 			Product p2 = productFactory.createProduct("Equipment", "e1", "abc", d1, 1000, 50);
 			System.out.println(Product.countProduct());
 			Product p3 = productFactory.createProduct("Equipment", "e1", "abc", d1, 1000, 50);
@@ -62,12 +58,18 @@ public class MainController {
 			System.out.println(Product.countProduct());
 			// -- end of test new product -- //
 			
+			// test sales function
+			Product p4 = productFactory.createProduct("Food", "noodles", "Food Panda", d1, 30.0, 30);
+			Product p5 = productFactory.createProduct("Equipment", "cellPhone", "Apple", d1, 250.0, 10);
+			// end
+			
+			
 			// test order function
-			Product p4 = productFactory.createProduct("Food", "fries", "wrt", d1, 30.0, 0);
+			Product p6 = productFactory.createProduct("Food", "fries", "wrt", d1, 30.0, 0);
 			String s2 = "25/10/2021";
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDate d2 = LocalDate.parse(s2, formatter);
-			user.createOrder(user, p4, d2, 3);
+			user.createOrder(user, p6, d2, 3);
 			// end
 			
 			do {
