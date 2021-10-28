@@ -1,0 +1,26 @@
+Input for sales controller:
+
+addTrolley candies ON9 9
+addTrolley noodles ON9 10
+addTrolley cellPhone ON9 2
+checkout
+listSales
+addTrolley noodles ON9 15
+checkout
+listSales
+
+
+Outputs:
+The total is $1070.00, Thank you for your buying!
+
+Product Name   Selling Numbers     Selling Price($)    Date                SalesPerson    
+candies        9                   270.0               25/10/2021          You            
+noodles        10                  300.0               25/10/2021          You            
+cellPhone      2                   500.0               25/10/2021          You   
+
+The total is $450.00, Thank you for your buying!    
+
+Product Name   Selling Numbers     Selling Price($)    Date                SalesPerson    
+candies        9                   270.0               25/10/2021          You            
+noodles        25                  750.0               25/10/2021          You            
+cellPhone      2                   500.0               25/10/2021          You   
