@@ -35,7 +35,7 @@ public class MainController {
 
 			employee = checkEmployee;
 
-			//setAllInstance();
+			setAllInstance();
 
 			// no need to input the product information to create, default set is also ok.
 
@@ -85,7 +85,7 @@ public class MainController {
 						user = User.searchUserID(anothertemp);
 						if (user != null)
 							// change place and fix the null user bug.
-							setAllInstance();					
+							CheckoutController.setInstance(employee, user);				
 						else {
 							System.out.println("Sorry the inputted customer ID is wrong! Please input again!");
 							continue;
@@ -121,7 +121,7 @@ public class MainController {
 		// 2. since we need to calculate all sales data and inventory number,
 		//    i think we should create only one instance of controllers
 		// 3. but i don't know how to handle user wuwu
-		CheckoutController.setInstance(employee, user);
+		
 		SalesController.setInstance(employee);		
 		UserManagementController.setInstance(employee);
 	}
