@@ -24,7 +24,7 @@ public class MainController {
 
 	public static void main(String[] args) throws ParseException {
 		Employee e = new Employee("ON9", "M", "null", "123123123", "1");
-		User user3 = new User("ON9", "000", "M", "7HEAD", "123");
+		User user3 = new User("aero", "000", "M", "7HEAD", "123");
 		User user2 = new User("karina", "001", "F", "7HEAD", "1234");
 
 		System.out.println("Please input your Worker ID for logging in the system...");
@@ -62,7 +62,10 @@ public class MainController {
 			String s2 = "25/10/2021";
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			LocalDate d2 = LocalDate.parse(s2, formatter);
-			//user.createOrder(user, p6, d2, 3);
+			user3.createOrder(user3, p6, d2, 3);
+			OrderController.setInstance(user3);
+			user2.createOrder(user2, p4, d2, 5);
+			OrderController.setInstance(user2);
 			// end
 						
 			System.out.printf("hi %s\n", employee.getName());
@@ -74,13 +77,15 @@ public class MainController {
 				System.out.println("To continue, please proceed your actions");
 				System.out.println("Input (1) for accessing Checkout System");
 				System.out.println("Input (2) for accessing Sales System");
-				System.out.println("Input (3) for accessing User Management System");
+				System.out.println("Input (3) for accessing Order System");
+				System.out.println("Input (4) for accessing Membership System");
 				digit = sc.nextInt();
 				if (digit > 4) {
 					System.out.println("Please Input valid number"); // exception
 				} else {
 					switch (digit) {
 					case 1:
+						// input 1234
 						String anothertemp = sc.next();
 						user = User.searchUserID(anothertemp);
 						if (user != null)
@@ -98,12 +103,24 @@ public class MainController {
 						sales.execute();
 						break;
 					case 3:
-						UserManagementController userManage = (UserManagementController) UserManagementController
-								.getInstance();
-						UserManagementController.setUser(user);
+						OrderController userManage = (OrderController) OrderController.getInstance();
 						userManage.execute();
 						break;
 					case 4:
+						// input 1234
+						anothertemp = sc.next();
+						user = User.searchUserID(anothertemp);
+						if (user != null)
+							// change place and fix the null user bug.
+							MembershipController.setInstance(user);				
+						else {
+							System.out.println("Sorry the inputted customer ID is wrong! Please input again!");
+							continue;
+						}		
+						MembershipController member = (MembershipController) MembershipController.getInstance();
+						member.execute();
+						break;
+					case 5:
 						sc.close();
 						System.out.println("Bye");
 						end = true;
@@ -123,7 +140,7 @@ public class MainController {
 		// 3. but i don't know how to handle user wuwu
 		
 		SalesController.setInstance(employee);		
-		UserManagementController.setInstance(employee);
+		//UserManagementController.setInstance(employee);
 	}
 
 }
