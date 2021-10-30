@@ -1,6 +1,5 @@
 package transactions;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -8,12 +7,12 @@ import java.util.ArrayList;
 import product.Product;
 import staff.Employee;
 import user.Trolley;
+import user.User;
 
 
 public class Sales {
 	private LocalDate date;
 	private Employee employee;
-	private Product product;
 	private double price;
 	private String productName;
 	private int sellNum;
@@ -38,6 +37,9 @@ public class Sales {
 		return null;
 	}
 	
+	public static ArrayList<Sales> getSalesList() {
+		return salesList;
+	}
 	
 	public static boolean checkSales(String name) {
 		for (Sales s : salesList) {
@@ -56,11 +58,11 @@ public class Sales {
 		return productName;
 	}
 	
-	public void setSellNum(int sellNum) {
+	public void addSellNum(int sellNum) {
 		this.sellNum += sellNum;
 	}
 	
-	public void setPrice(double price) {
+	public void addPrice(double price) {
 		this.price += price;
 	}
 	
@@ -68,17 +70,13 @@ public class Sales {
 		return sellNum;
 	}
 
-	public LocalDate getDate() throws ParseException {
+	public LocalDate getDate() {
 		return date;
 	}
 
 	public String getStrDate() {
 		DateTimeFormatter datestr = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 		return datestr.format(this.date);
-	}
-	
-	public void setDate(LocalDate date) {
-		this.date = date;
 	}
 
 	public Employee getEmployee() {
@@ -89,21 +87,13 @@ public class Sales {
 		this.employee = employee;
 	}
 
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProductCode(Product product) {
-		this.product = product;
-	}
-
 	public double getPrice() {
 		return price;
 	}
 	
 	public static void printList() 
 	{
-		System.out.printf("%-15s%-20s%-20s%-20s%-15s\n", "Product Name", "Selling Numbers",  "Selling Price($)", "Date", "SalesPerson");
+		System.out.printf("%-15s%-20s%-20s%-20s%-15s\n", "Product Name", "Selling Numbers",  "Selling Price($)", "Recent Date", "SalesPerson");
 		for(Sales sale : salesList) 
 		{
 			System.out.printf("%-15s%-20s%-20s%-20s%-15s\n",  sale.getProductName(), sale.getSellNum(), sale.getPrice(), sale.getStrDate(), sale.getEmployee().getName());
@@ -118,6 +108,51 @@ public class Sales {
 			temp += sale.getPrice();
 		}
 		return temp;
+	}
+	
+	public static void markSales(ArrayList<Product> productList, ArrayList<Trolley> trolleyList, Employee e) {
+		for (Product p: productList) {
+			int totalSellNum = 0;
+			int totalPrice = 0;
+
+			LocalDate tempDate = null;
+			LocalDate latestDate = null;
+			
+			for (Trolley t: trolleyList) {
+				if (p.getName().equals(t.getProductName())) {
+					totalSellNum += t.getItemNum();
+					totalPrice += t.getAllPrice();
+					// check latest date of trolley
+					if (latestDate == null || t.getDate().isAfter(latestDate)) {
+						latestDate = t.getDate();
+						tempDate = latestDate;
+					}
+					else if (t.getDate().isBefore(latestDate)) {
+						latestDate = tempDate;
+						tempDate = latestDate;
+					}
+				}
+				
+				// change sales latest date
+				for (Sales s: salesList) {
+					if (s.productName.equals(t.getProductName())) {
+						if (t.getDate().isAfter(s.date)) {
+							s.date = t.getDate();
+							latestDate = s.date;
+						}
+					}
+				}
+			}
+			
+			if (totalSellNum > 0 && totalPrice > 0 && !Sales.checkSales(p.getName())) {
+				User.createSales(p.getName(), totalSellNum, latestDate, e, totalPrice);
+			}
+			else if (totalSellNum > 0 && totalPrice > 0 && Sales.checkSales(p.getName())) {
+				Sales s = Sales.searchSales(p.getName());
+				s.addSellNum(totalSellNum);
+				s.addPrice(totalPrice);
+			}
+		}
 	}
 	
 }

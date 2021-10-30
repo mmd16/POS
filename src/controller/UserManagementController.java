@@ -54,7 +54,7 @@ public class UserManagementController implements Controller {
 				String pDate = MainController.sc.next(); 
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				LocalDate d1 = LocalDate.parse(pDate, formatter);
-				User.suggestMsgToSend(name, d1);            
+				Order.suggestMsgToSend(name, d1);            
 				break;
 			case 3: 
 				user.listOrder();

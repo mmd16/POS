@@ -21,13 +21,6 @@ public class Trolley {
 		this.Date = Date;
 		this.allPrice = product.getPrice() * itemNum;
 	}
-	
-	public Trolley(User user,  LocalDate Date) 
-	{
-		//this.user = user;
-		//this.productList = new ArrayList<Product>();
-		this.Date = Date;
-	}
 
 	public static double calculateTotal(ArrayList<Trolley> trolleyList) 
 	{
