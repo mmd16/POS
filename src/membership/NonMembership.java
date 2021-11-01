@@ -3,8 +3,7 @@ package membership;
 public class NonMembership extends Membership {
 
 	public NonMembership() {
-		super("Non", 1.0, 1000.0);
+		super(0, 0, "Non-member");
 	}
 
 }
-//Is it really needed?

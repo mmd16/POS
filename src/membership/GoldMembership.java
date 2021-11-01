@@ -1,11 +1,15 @@
 package membership;
 
-public class GoldMembership extends Membership {
-
-	public GoldMembership() {
-		super("Gold", 0.80, 3000.0);
+public class GoldMembership extends Membership
+{
+	public GoldMembership(double discountRate, double upgradeRequirement, String level)
+	{
+		super(discountRate, upgradeRequirement, level);
 	}
-	public GoldMembership(Membership previousMembership) {
-		super("Gold", 0.80, 3000.0, previousMembership);
+	
+	@Override
+	public Membership upgradeMembership()
+	{
+		return new PlatinumMembership(0.75, 18000, "Platinum");
 	}
 }

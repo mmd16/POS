@@ -4,38 +4,53 @@ package user;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import product.Product;
 
 public class Order {
 	private String productName;
+	private String orderCode;
+	private String userName;	
 	private LocalDate orderDate;
-	private String userName;
-	private User user;
+	private Member member;
 	private double price;
 	private int deliveryDays;
+	private static AtomicInteger uniqueId =new AtomicInteger();
 	
-	public Order (User user, Product product, LocalDate orderDate, int deliveryDays){
+	public Order (Member user, Product product, LocalDate orderDate, int deliveryDays){
 		// add new parameters
 		this.userName = user.getUserName();	
 		this.productName = product.getName();
 		this.orderDate = orderDate;				
 		this.deliveryDays = deliveryDays;
-		this.user = user;		
+		this.member = user;		
+		this.orderCode = String.valueOf(uniqueId.getAndIncrement());
 	}		
 	
 	// added
-	public static Order searchOrder(String name) {        
-		for (User u : User.getUserList()) {        	
-			for (Order o : u.getOrderList()) {               
-				if (o.getUserName().equals(name))                    
-					return o;           
-			}        
-		}        
-		return null;    
+	/**
+	 * 
+	 * @param member for specific member, if you are wanna loop for all members, you should generate a static orderList instead.
+	 * @param orderCode
+	 * @return
+	 */
+	public static Order searchOrder(ArrayList<Order> orderList, String orderCode) {        
+		for(Order o : orderList) {
+			if(o.getOrderCode().equals(orderCode))
+				return o;
+		}
+		return null;
+	}
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
 	}
 
 	public int getDeliveryDays() {		
@@ -64,9 +79,9 @@ public class Order {
 	}
 	
 	
-	public static void suggestMsgToSend(String userName, LocalDate produceDate) { // User is for getting their names
-		Order o = Order.searchOrder(userName);
-		User u = User.searchUserName(userName);
+	public static void suggestMsgToSend(ArrayList<Order> orderList, String orderCode, Member member, LocalDate produceDate) { // User is for getting their names
+		Order o = Order.searchOrder(orderList, orderCode);
+		Member u = member;
 		LocalDate deliveryPeriod = produceDate.plusDays(o.getDeliveryDays());  // this is the date after the product is produced and deliver to the customer
 		long daysOfEarly = DAYS.between(deliveryPeriod, o.getOrderDate());  // this calculate how many days it is earlier than the order date
 		long daysOfDelay = DAYS.between(o.getOrderDate(), deliveryPeriod);   // this calculate how many days it is later than the order date     

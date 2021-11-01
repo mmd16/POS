@@ -1,10 +1,11 @@
 package product;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
-import random.productCodeGenerator;
-import user.User;
+import random.ProductCodeGenerator;
+import user.Member;
 
 public class Product {
 	private String name;
@@ -23,7 +24,7 @@ public class Product {
 		this.price = price;
 		this.inventory = inventory;
 		salesExist = false;
-		this.productCode = productCodeGenerator.generateProductCode(type);
+		this.productCode = ProductCodeGenerator.generateProductCode(type);
 		productList.add(this);
 		//test
 		copyList.add(this);
@@ -87,6 +88,48 @@ public class Product {
 		return null;
 	}
 
+	public int getNumofProduct() 
+	{
+		int temp = 0;
+		for(Product p: productList) 
+		{
+			if(p.getName().equals(this.getName()) && p.getType().equals(this.getType()))
+					temp++;
+		}
+		return temp;
+	}
+	
+	public boolean checkinventory(int quantity) 
+	{
+		if(getNumofProduct()>=quantity)
+			return true;
+		else
+			return false;
+	}
+	
+	public static void sortProduct() 
+	{
+		Collections.sort(productList, (x, y) -> x.type.compareTo(y.type));
+	}
+	public static void listInventory() 
+	{
+		sortProduct();
+		System.out.printf("%-10s%-10s%-10s%-10f\n","Type","Product Name","Quantity","Marked Price($)/unit");
+		for(Product p: productList) 
+		{
+			System.out.printf("%-10s%-10s%-10s%-10f\n", p.getType(),p.getName(), p.getInventory(), p.getPrice());
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// product name should not be the same
 	public static boolean checkExistingProduct(String name) {
 		for (Product product : productList) {

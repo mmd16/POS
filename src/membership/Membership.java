@@ -1,69 +1,85 @@
 package membership;
 
-public abstract class Membership {
-	private String name;
-	private double discountRate = 1.0;
-	private double accumulatedSpending = 0;
-	private double upgradeThreshold;
-	private boolean qualifiedForUpgrade = false;
+import java.util.HashMap;
+import java.util.Map;
 
-	public Membership(String name, double discountRate, double upgradeThreshold) {
-		this.setName(name);
-		this.setDiscountRate(discountRate);
-		this.setUpgradeThreshold(upgradeThreshold);
+import user.Member;
+
+public abstract class Membership
+{
+	private String membershipLevel;
+	private double discountRate;
+	private double accumulatedSpending = 0;
+	private double upgradeRequirement;
+	
+	public Membership(double discountRate, double upgradeRequirement, String level)
+	{
+		this.membershipLevel = level;
+		this.discountRate = discountRate;
+		this.upgradeRequirement = upgradeRequirement;
 	}
-	public Membership(String name, double discountRate, double upgradeThreshold,Membership previousMembership) {
-		this.setName(name);
-		this.setDiscountRate(discountRate);
-		this.setUpgradeThreshold(upgradeThreshold);
-		this.addSpending(previousMembership.getAccumulatedSpending()-previousMembership.getUpgradeThreshold());
+	
+	public Membership()
+	{
+		membershipLevel = "bronze";
+		discountRate = 1;
+		upgradeRequirement = 2000;
 	}
+	
+	public String getMembershipLevel() {
+		return membershipLevel;
+	}
+
+	public void setMembershipLevel(String membershipLevel) {
+		this.membershipLevel = membershipLevel;
+	}
+
 	public double getDiscountRate() {
 		return discountRate;
 	}
 
-	private void setDiscountRate(double discountRate) {
+	public void setDiscountRate(double discountRate) {
 		this.discountRate = discountRate;
 	}
 
-	public String getName() {
-		return name;
+	public double getAccumulatedSpending() {
+		return accumulatedSpending;
 	}
 
-	private void setName(String name) {
-		this.name = name;
+	public void addAccumulatedSpending(double spding) {
+		this.accumulatedSpending += spding;
+	}
+
+	public void deductAccumulatedSpending(double spding) {
+		this.accumulatedSpending -= spding;
 	}
 	
-	public double getAccumulatedSpending() {
-		return this.accumulatedSpending;
+	public double getUpgradeRequirement() {
+		return upgradeRequirement;
 	}
 
-	public void addSpending(double spending) {
+	public void setUpgradeRequirement(double upgradeRequirement) {
+		this.upgradeRequirement = upgradeRequirement;
+	}
+
+	public void setaccumulatedSpending(double spending)
+	{
 		this.accumulatedSpending += spending;
-		if (this.accumulatedSpending >= this.upgradeThreshold) {
-			this.setQualifiedForUpgrade(true);
+	}
+	
+	public double checkRemainProgress(){
+		return upgradeRequirement - accumulatedSpending;
+	}
+	
+	public boolean checkQualified(){
+		if(accumulatedSpending>=upgradeRequirement)
+		{
+			return true;
 		}
-	}
-
-	public double sepndingToUpgrade() {
-		double spendingToUpgrade=this.upgradeThreshold - this.accumulatedSpending;
-		if(spendingToUpgrade<0.0) {spendingToUpgrade=0.0;}
-		return spendingToUpgrade;
-	}
-
-	public double getUpgradeThreshold() {
-		return this.upgradeThreshold;
-	}
-
-	private void setUpgradeThreshold(double upgradeThreshold) {
-		this.upgradeThreshold = upgradeThreshold;
-	}
-
-	public boolean isQualifiedForUpgrade() {
-		return qualifiedForUpgrade;
-	}
-
-	private void setQualifiedForUpgrade(boolean qualifiedForUpgrade) {
-		this.qualifiedForUpgrade = qualifiedForUpgrade;
+		return false;
+	}	
+	
+	public Membership upgradeMembership() {
+		return this;
 	}
 }

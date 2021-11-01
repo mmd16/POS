@@ -1,7 +1,12 @@
 package staff;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import transactions.Sales;
+import user.Cart;
+import user.Member;
 
 public class Employee {
 	private String name;
@@ -29,6 +34,12 @@ public class Employee {
 		EmployeeList.add(this);
 	}
 
+	public Sales confirmSales(Cart c, Member member, String orderRefNo){
+		Sales s = new Sales(c.getProductName(), c.getProductCode(), c.getQuantity(), LocalDate.now(), this, c.getAllPrice(), member.applyDiscount(c.getAllPrice()));
+		member.addProductToCompletedCart(c, orderRefNo , s.getSalesCode());
+		return s;
+	}
+	
 	public String getName() {
 		return name;
 	}
