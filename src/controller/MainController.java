@@ -1,16 +1,13 @@
 package controller;
 
-import java.util.Date;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 import product.Product;
 import product.ProductFactory;
 import staff.Employee;
-import user.Order;
 import user.Member;
 
 public class MainController implements Controller {
@@ -50,6 +47,7 @@ public class MainController implements Controller {
 			System.out.println(Product.countProduct());
 			Product.removeProduct("e1");
 			System.out.println(Product.countProduct());
+			new MainController().execute();
 		}
 	}
 			// -- end of test new product -- //
@@ -94,10 +92,11 @@ public class MainController implements Controller {
 	{
 		System.out.printf("hi %s\n", employee.getName());
 		// exception can be added later, eg invalid id sth else
-		System.out.println("Welcome to XXX supermarket");
-		System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
-		
+		System.out.println("Welcome to XXX supermarket");		
 		do {								
+			System.out.println("Please ask our customer to input their id, leave it as 0 if they are not the members.");
+			String uid = sc.next();
+			member = Member.getMember(uid);// handle exception later
 			System.out.println("To continue, please proceed your actions");
 			System.out.println("Input (1) for accessing Inventory System");
 			System.out.println("Input (2) for accessing Sales System");
@@ -109,7 +108,20 @@ public class MainController implements Controller {
 			} else {
 				switch (digit) {
 				case 1:
-					
+					InventoryController inventory = new InventoryController(employee);
+					inventory.setUser(member);
+					inventory.execute();
+					break;
+				case 2:
+					SalesController sales = new SalesController(employee);
+					sales.setUser(member);
+					sales.execute();
+					break;
+				case 4:
+					MembershipController members = new MembershipController(employee);
+					members.setUser(member);
+					members.execute();
+					break;
 				case 5:
 					sc.close();
 					System.out.println("Bye");

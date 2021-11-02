@@ -12,7 +12,7 @@ public class SalesController implements Controller {
 	private Member member;
 	private static SalesController instance;
 
-	private SalesController(Employee employee) {
+	SalesController(Employee employee) {
 		this.employee = employee;
 	}
 	
@@ -43,7 +43,7 @@ public class SalesController implements Controller {
 			int input = MainController.sc.nextInt();
 			switch(input) {
 			case 1:
-				checkout();
+				checkout(member);
 				break;
 			case 2:
 				refund();
@@ -98,57 +98,60 @@ public class SalesController implements Controller {
 	}
 	
 	
-	public void checkout() 
+	public void checkout(Member member) 
 	{
-		boolean isCompleted = false;
-		do {
-			boolean complete = false;
-			member.listCart();
-			System.out.print("Please input (0) for proceed to checkout");
-			System.out.print("Please input (1) for remove products");
-			System.out.print("Please input (2) for modify quantities of products");
-			System.out.print("Please input (3) to cancel the checkout process");
-			int input = MainController.sc.nextInt();
-			switch(input) {
-			case 0:
-				member.checkout(employee);
-				member.countFinalPrice();
-				isCompleted = true;
-				break;
-			case 1:
-				do 
-				{
-					System.out.println("Please input which products customers would like to remove from their cart.");
-					int input2 = MainController.sc.nextInt() - 1;
-					member.removeProductInCart(input2);
-					System.out.println("Task Completed.");
-					System.out.println("Do you have any other actions to continue ?");
-					System.out.print("Please input (0) to continue");
-					System.out.print("Please input (1) to exit");
-					complete = continuationValidator(MainController.sc.nextInt());
-				}while(complete == false);
-				break;
-			case 2:
-				do 
-				{
-					System.out.println("Please input which products customers would like to modify from their cart.");
-					int input2 = MainController.sc.nextInt() - 1;
-					System.out.println("Please input the quantity that they would like to change.");
-					int input3 = MainController.sc.nextInt();
-					member.modifyNumofProductInCart(input2, input3);
-					System.out.println("Task Completed.");
-					System.out.println("Do you have any other actions to continue ?");
-					System.out.print("Please input (0) to continue");
-					System.out.print("Please input (1) to exit");
-					complete = continuationValidator(MainController.sc.nextInt());
-				}while(complete == false);
-				break;
-			case 3:
-				System.out.println("Exiting the checkout process...");
-				isCompleted = true;
-				break;
-			}
-		}while(isCompleted == false);
+		if(member.isEmpty()==false) 
+		{
+			boolean isCompleted = false;
+			do {
+				boolean complete = false;
+				member.listCart();
+				System.out.print("Please input (0) for proceed to checkout");
+				System.out.print("Please input (1) for remove products");
+				System.out.print("Please input (2) for modify quantities of products");
+				System.out.print("Please input (3) to cancel the checkout process");
+				int input = MainController.sc.nextInt();
+				switch(input) {
+				case 0:
+					member.checkout(employee);
+					member.countFinalPrice();
+					isCompleted = true;
+					break;
+				case 1:
+					do 
+					{
+						System.out.println("Please input which products customers would like to remove from their cart.");
+						int input2 = MainController.sc.nextInt() - 1;
+						member.removeProductInCart(input2);
+						System.out.println("Task Completed.");
+						System.out.println("Do you have any other actions to continue ?");
+						System.out.print("Please input (0) to continue");
+						System.out.print("Please input (1) to exit");
+						complete = continuationValidator(MainController.sc.nextInt());
+					}while(complete == false);
+					break;
+				case 2:
+					do 
+					{
+						System.out.println("Please input which products customers would like to modify from their cart.");
+						int input2 = MainController.sc.nextInt() - 1;
+						System.out.println("Please input the quantity that they would like to change.");
+						int input3 = MainController.sc.nextInt();
+						member.modifyNumofProductInCart(input2, input3);
+						System.out.println("Task Completed.");
+						System.out.println("Do you have any other actions to continue ?");
+						System.out.print("Please input (0) to continue");
+						System.out.print("Please input (1) to exit");
+						complete = continuationValidator(MainController.sc.nextInt());
+					}while(complete == false);
+					break;
+				case 3:
+					System.out.println("Exiting the checkout process...");
+					isCompleted = true;
+					break;
+				}
+			}while(isCompleted == false);
+		}
 	}
 
 	public boolean continuationValidator(int digit) 

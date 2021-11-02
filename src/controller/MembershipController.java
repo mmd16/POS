@@ -14,7 +14,7 @@ public class MembershipController implements Controller {
 	private String uid = "-1";
 	private Employee employee;
 	
-	private MembershipController(Employee employee) {
+	MembershipController(Employee employee) {
 		this.employee = employee;
 	}
 	public static void setInstance(Employee employee) {

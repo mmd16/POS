@@ -9,7 +9,7 @@ public class InventoryController implements Controller {
 	private Member member;
 	private static InventoryController instance;
 
-	private InventoryController(Employee employee) {
+	InventoryController(Employee employee) {
 		this.employee = employee;
 	}
 	

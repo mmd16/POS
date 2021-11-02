@@ -114,10 +114,10 @@ public class Product {
 	public static void listInventory() 
 	{
 		sortProduct();
-		System.out.printf("%-10s%-10s%-10s%-10f\n","Type","Product Name","Quantity","Marked Price($)/unit");
+		System.out.printf("%-10s%-20s%-10s%-10s\n","Type","Product Name","Quantity","Marked Price($)/unit");
 		for(Product p: productList) 
 		{
-			System.out.printf("%-10s%-10s%-10s%-10f\n", p.getType(),p.getName(), p.getInventory(), p.getPrice());
+			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(),p.getName(), p.getInventory(), p.getPrice());
 		}
 	}
 	

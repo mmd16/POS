@@ -48,6 +48,8 @@ public class Member {
 		this.userid = uid;
 		this.membership = new NonMembership();
 		this.orderList = new ArrayList<Order>();
+		this.cart = new ArrayList<Cart>();
+		this.completedCart = new ArrayList<CompletedCart>();
 		this.isCheckout = false;
 		addMember(userid, this);
 	}
@@ -104,14 +106,24 @@ public class Member {
 	
 	public void addAccumulatedspending(double spending) 
 	{
-		this.getMembership().addAccumulatedSpending(spending);
+		if(checkMembership() )
+			this.getMembership().addAccumulatedSpending(spending);
 	}
 
+	public boolean checkMembership() 
+	{
+		if(this.getMembership() instanceof NonMembership)
+			return false;;
+		return true;
+	}
 	public void checkQualifiedForUpgrade() 
 	{
-		Membership m = this.getMembership();
-		if(m.checkQualified())
-			this.setMembership(m.upgradeMembership());
+		if(checkMembership() ) 
+		{
+			Membership m = this.getMembership();
+			if(m.checkQualified())
+				this.setMembership(m.upgradeMembership());
+		}
 	}
 	
 	public double applyDiscount(double total) 
@@ -249,7 +261,10 @@ public class Member {
 				manager.refund(c, quantity, this);
 		}
 	} 
-
+	public boolean isEmpty() 
+	{
+		return cart.isEmpty();
+	}
 	/**
 	 * @author Andy
 	 * 
