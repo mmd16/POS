@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import staff.Employee;
+import tool.Tools;
 import user.Order;
 import user.Member;
 
@@ -14,12 +15,14 @@ public class MembershipController implements Controller {
 	private String uid = "-1";
 	private Employee employee;
 	
-	MembershipController(Employee employee) {
-		this.employee = employee;
+	
+	// private function because it is singleton
+	private MembershipController() {
 	}
-	public static void setInstance(Employee employee) {
+	
+	public static void setInstance() {
 		if (instance == null) {
-			instance = new MembershipController(employee);
+			instance = new MembershipController();
 		}
 		else {
 			// throw exception
@@ -28,7 +31,7 @@ public class MembershipController implements Controller {
 	
 
 	
-	public static Controller getInstance() {
+	public static MembershipController getInstance() {
 		return instance;
 	}
 
@@ -41,7 +44,7 @@ public class MembershipController implements Controller {
 			System.out.println("Input (2) for checking the Customer's points");
 			System.out.println("Input (3) for checking the status to another level of Membership");
 			System.out.println("Input (4) for exit");
-			int cmd = MainController.sc.nextInt();
+			int cmd = Tools.sc.nextInt();
 			switch (cmd) {
 			case 1:
 				System.out.printf("The customer owns a %s Membership.\n", member.getMembership().getMembershipLevel());
@@ -61,7 +64,8 @@ public class MembershipController implements Controller {
 	}
 
 	@Override
-	public void setUser(Member member) {
+	public void setMemberAndEmployee(Employee employee,Member member) {
+		this.employee = employee;
 		this.member = member;
 		
 	}
