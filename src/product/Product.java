@@ -1,7 +1,5 @@
 package product;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 import random.ProductCodeGenerator;
