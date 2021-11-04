@@ -21,7 +21,8 @@ public class ProductFactory {
 
 	}
 
-	public Product createProduct(String type, String name, String brand, String date, double price, int inventory) throws ParseException {
+	public Product createProduct(String type, String name, String brand, String date, double price, int inventory)
+			throws ParseException {
 		try {
 			// -- exception -- //
 			// 1. check if the date is valid and after today
@@ -29,19 +30,18 @@ public class ProductFactory {
 			// 3. inventory is non negative
 			// 4. type is not in food / equipment (done)
 			// 5. product name exists (done)
-			
-			
+
 			// 1.
 			Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-			
-			// 2. 
-			if (price<=0) 
+
+			// 2.
+			if (price <= 0)
 				throw new ExZeroOrNegative();
-			
+
 			// 3.
-			if(inventory<=0)
+			if (inventory <= 0)
 				throw new ExZeroOrNegative();
-		
+
 			// 4.
 			switch (type) {
 			case "Food":
@@ -67,13 +67,31 @@ public class ProductFactory {
 			}
 		} catch (ExZeroOrNegative e) {
 			System.out.println(e.getMessage());
-		}catch (ExProductTypeNotExists e) {
+		} catch (ExProductTypeNotExists e) {
 			System.out.println(e.getMessage());
 		} catch (ExProductNameExists e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
 
+	}
+
+	public void removeProduct(String name) {
+		Product temp = null;
+		try {
+			for (Product product : productList) {
+				if (product.getName().equals(name)) {
+					temp = product;
+					productList.remove(product);
+					break;
+				}
+			}
+			if (temp == null) // didn't get result in the above for loop
+				throw new ExProductNameNotExists();
+			
+		} catch (ExProductNameNotExists e) {
+			System.out.println(e.getMessage());
+		}
 	}
 
 	public static Product searchProduct(String name) {
@@ -101,11 +119,11 @@ public class ProductFactory {
 			return false;
 	}
 
-	public static void sortProduct() {
+	public void sortProduct() {
 		Collections.sort(productList, (x, y) -> x.getType().compareTo(y.getType()));
 	}
 
-	public static void listInventory() {
+	public void listInventory() {
 		sortProduct();
 		System.out.printf("%-10s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
 		for (Product p : productList) {
@@ -114,7 +132,7 @@ public class ProductFactory {
 	}
 
 	// product name should not be the same
-	public static boolean checkExistingProduct(String name) {
+	public boolean checkExistingProduct(String name) {
 		for (Product product : productList) {
 			if (product.getName().equals(name)) {
 				return true;
@@ -123,18 +141,8 @@ public class ProductFactory {
 		return false;
 	}
 
-	public static int countProduct() {
+	public int countProduct() {
 		return productList.size();
-	}
-
-	public static void removeProduct(String name) {
-		for (Product product : productList) {
-			if (product.getName().equals(name)) {
-				productList.remove(product);
-				break;
-			}
-		}
-		// throw exception when product not found
 	}
 
 	// for order to search

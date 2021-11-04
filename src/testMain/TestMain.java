@@ -44,8 +44,8 @@ public class TestMain {
 			ProductFactory productFactory = ProductFactory.getInstance();
 			Product p1 = productFactory.createProduct("Food", "candies", "sakurazaka", s1, 30.0, 10);
 			Product p2 = productFactory.createProduct("Equipment", "e1", "abc", s1, 1000, 50);
-			ProductFactory.removeProduct("e1");
-			System.out.println(ProductFactory.countProduct());
+			productFactory.removeProduct("e1");
+			System.out.println(productFactory.countProduct());
 
 
 			

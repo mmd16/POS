@@ -14,6 +14,7 @@ public class InventoryController implements Controller {
 	private Employee employee;
 	private Member member;
 	private static InventoryController instance;
+	ProductFactory productFactory = ProductFactory.getInstance();
 
 	// private function because it is singleton
 	private InventoryController() {
@@ -36,17 +37,21 @@ public class InventoryController implements Controller {
 		do {
 			System.out.println("Input commands for further sales management:");
 			System.out.println("Input (1) for addProducts");
-			System.out.println("Input (2) for check inventory");
-			System.out.println("Input (3) for exit");
+			System.out.println("Input (2) for deleteProducts");
+			System.out.println("Input (3) for check inventory");
+			System.out.println("Input (4) for exit");
 			int input = Tools.sc.nextInt();
 			switch (input) {
 			case 1:
 				addProducts();
 				break;
 			case 2:
-				ProductFactory.listInventory();
+				deleteProduct();
 				break;
 			case 3:
+				productFactory.listInventory();
+				break;
+			case 4:
 				end = true;
 				break;
 			}
@@ -58,7 +63,7 @@ public class InventoryController implements Controller {
 		boolean isFalse = false;
 		do {
 			try {
-			ProductFactory productFactory = ProductFactory.getInstance();
+			
 			System.out.println("Please input the name for the new product:");
 			String productName = Tools.sc.next();
 			System.out.println("Please input the category of the new product: Food/Equipment");
@@ -83,6 +88,13 @@ public class InventoryController implements Controller {
 				continue;
 			}
 		} while (isFalse == false);
+	}
+	
+	public void deleteProduct() {
+		System.out.println("Please input the name for the product you want to delete:");
+		String productName = Tools.sc.next();
+		productFactory.removeProduct(productName);
+		
 	}
 
 	public boolean continuationValidator(int digit) {
