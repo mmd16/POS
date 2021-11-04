@@ -20,19 +20,13 @@ public class MembershipController implements Controller {
 	private MembershipController() {
 	}
 	
-	public static void setInstance() {
+	public static MembershipController getInstance() {
 		if (instance == null) {
 			instance = new MembershipController();
+			return instance;
+		} else {
+			return instance;
 		}
-		else {
-			// throw exception
-		}
-	}
-	
-
-	
-	public static MembershipController getInstance() {
-		return instance;
 	}
 
 	@Override

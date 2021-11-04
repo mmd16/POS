@@ -20,16 +20,13 @@ public class InventoryController implements Controller {
 
 	}
 
-	public static void setInstance() {
+	public static InventoryController getInstance() {
 		if (instance == null) {
 			instance = new InventoryController();
+			return instance;
 		} else {
-			// throw exception
+			return instance;
 		}
-	}
-
-	public static InventoryController getInstance() {
-		return instance;
 	}
 
 	@Override

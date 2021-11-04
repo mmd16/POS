@@ -35,7 +35,7 @@ public class TestMain {
 
 			employee = checkEmployee;
 
-			setAllInstance();
+
 
 			// no need to input the product information to create, default set is also ok.
 
@@ -111,16 +111,7 @@ public class TestMain {
 ////			OrderController.setInstance(user2);
 			// end
 
-	static void setAllInstance() {
-		// karina:
-		// 1. employee won't change
-		// 2. since we need to calculate all sales data and inventory number,
-		//    i think we should create only one instance of controllers
-		
-		SalesController.setInstance();	
-		InventoryController.setInstance();
-		MembershipController.setInstance();
-	}
+
 
 	
 

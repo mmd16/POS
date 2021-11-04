@@ -13,6 +13,7 @@ public class ProductFactory {
 	public Product createProduct(String type, String name, String brand, Date date, double price, int inventory) {
 		switch (type) {
 		case "Food":
+		case "food":
 			if (searchProduct(name) == null) {
 				Product f = new Food(name, brand, date, price, inventory);
 				productList.add(f);
@@ -22,6 +23,7 @@ public class ProductFactory {
 				return null;
 			// throw exception
 		case "Equipment":
+		case "equipment":	
 			if (searchProduct(name) == null) {
 				Product e = new Equipment(name, brand, date, price, inventory);
 				productList.add(e);

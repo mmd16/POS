@@ -15,20 +15,17 @@ public class SalesController implements Controller {
 
 	// private function because it is singleton
 	private SalesController() {
-		;
+		
 	}
 	
-	public static void setInstance() {
-		if (instance == null) {
-			instance = new SalesController();
-		}
-		else {
-			// throw exception
-		}
-	}
 
 	public static SalesController getInstance() {
-		return instance;
+		if (instance == null) {
+			instance = new SalesController();
+			return instance;
+		} else {
+			return instance;
+		}
 	}
 
 	@Override
