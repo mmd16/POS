@@ -41,10 +41,9 @@ public class TestMain {
 
 			// -- karina: test new product -- //
 			String s1 = "2021-10-20";
-			Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse(s1);
-			ProductFactory productFactory = new ProductFactory();
-			Product p1 = productFactory.createProduct("Food", "candies", "sakurazaka", d1, 30.0, 10);
-			Product p2 = productFactory.createProduct("Equipment", "e1", "abc", d1, 1000, 50);
+			ProductFactory productFactory = ProductFactory.getInstance();
+			Product p1 = productFactory.createProduct("Food", "candies", "sakurazaka", s1, 30.0, 10);
+			Product p2 = productFactory.createProduct("Equipment", "e1", "abc", s1, 1000, 50);
 			ProductFactory.removeProduct("e1");
 			System.out.println(ProductFactory.countProduct());
 

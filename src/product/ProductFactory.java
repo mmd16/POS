@@ -1,41 +1,79 @@
 package product;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import exception.*;
 
 public class ProductFactory {
-
+	public static ProductFactory instance = new ProductFactory();
 	public static ArrayList<Product> productList = new ArrayList<>();
 	// test for order search product name
 	public static ArrayList<Product> copyList = new ArrayList<>();
 
-	public Product createProduct(String type, String name, String brand, Date date, double price, int inventory) {
-		switch (type) {
-		case "Food":
-		case "food":
-			if (searchProduct(name) == null) {
-				Product f = new Food(name, brand, date, price, inventory);
-				productList.add(f);
-				copyList.add(f);
-				return f;
-			} else
-				return null;
-			// throw exception
-		case "Equipment":
-		case "equipment":	
-			if (searchProduct(name) == null) {
-				Product e = new Equipment(name, brand, date, price, inventory);
-				productList.add(e);
-				copyList.add(e);
-				return e;
-			} else
-				return null;
-			// throw exception
-		default:
-			return null;
-		// don't know what type
+	public static ProductFactory getInstance() {
+		return instance;
+	}
+
+	private ProductFactory() {
+
+	}
+
+	public Product createProduct(String type, String name, String brand, String date, double price, int inventory) throws ParseException {
+		try {
+			// -- exception -- //
+			// 1. check if the date is valid and after today
+			// 2. price is non negative
+			// 3. inventory is non negative
+			// 4. type is not in food / equipment (done)
+			// 5. product name exists (done)
+			
+			
+			// 1.
+			Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			
+			// 2. 
+			if (price<=0) 
+				throw new ExZeroOrNegative();
+			
+			// 3.
+			if(inventory<=0)
+				throw new ExZeroOrNegative();
+		
+			// 4.
+			switch (type) {
+			case "Food":
+			case "food":
+				if (searchProduct(name) == null) {
+					Product f = new Food(name, brand, d, price, inventory);
+					productList.add(f);
+					copyList.add(f);
+					return f;
+				} else
+					throw new ExProductNameExists(); // 5. product name exists
+			case "Equipment":
+			case "equipment":
+				if (searchProduct(name) == null) {
+					Product e = new Equipment(name, brand, d, price, inventory);
+					productList.add(e);
+					copyList.add(e);
+					return e;
+				} else
+					throw new ExProductNameExists(); // 5. product name exists
+			default:
+				throw new ExProductTypeNotExists(); // 4. type is not in food / equipment (done)
+			}
+		} catch (ExZeroOrNegative e) {
+			System.out.println(e.getMessage());
+		}catch (ExProductTypeNotExists e) {
+			System.out.println(e.getMessage());
+		} catch (ExProductNameExists e) {
+			System.out.println(e.getMessage());
 		}
+		return null;
+
 	}
 
 	public static Product searchProduct(String name) {
@@ -74,33 +112,33 @@ public class ProductFactory {
 			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
 		}
 	}
-	
+
 	// product name should not be the same
-		public static boolean checkExistingProduct(String name) {
-			for (Product product : productList) {
-				if (product.getName().equals(name)) {
-					return true;
-				}
+	public static boolean checkExistingProduct(String name) {
+		for (Product product : productList) {
+			if (product.getName().equals(name)) {
+				return true;
 			}
-			return false;
 		}
+		return false;
+	}
 
-		public static int countProduct() {
-			return productList.size();
-		}
+	public static int countProduct() {
+		return productList.size();
+	}
 
-		public static void removeProduct(String name) {
-			for (Product product : productList) {
-				if (product.getName().equals(name)) {
-					productList.remove(product);
-					break;
-				}
+	public static void removeProduct(String name) {
+		for (Product product : productList) {
+			if (product.getName().equals(name)) {
+				productList.remove(product);
+				break;
 			}
-			// throw exception when product not found
 		}
-		
-		// for order to search
-		public static ArrayList<Product> getCopyList() {
-			return copyList;
-		}
+		// throw exception when product not found
+	}
+
+	// for order to search
+	public static ArrayList<Product> getCopyList() {
+		return copyList;
+	}
 }
