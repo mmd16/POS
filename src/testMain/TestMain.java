@@ -63,7 +63,7 @@ public class TestMain {
 				System.out.println("Input (3) for accessing Order System");
 				System.out.println("Input (4) for accessing Membership System");
 				digit = Tools.sc.nextInt();
-				if (digit > 4) {
+				if (digit > 5) {
 					System.out.println("Please Input valid number"); // exception
 				} else {
 					switch (digit) {

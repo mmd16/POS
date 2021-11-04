@@ -14,9 +14,7 @@ public class Product {
 	private double price;
 	private int inventory = 0;
 	private boolean salesExist;
-	protected static ArrayList<Product> productList = new ArrayList<>();
-	//test for order search product name
-	public static ArrayList<Product> copyList = new ArrayList<>();
+
 
 	public Product(String name, String type, double price, int inventory) {
 		this.name = name;
@@ -25,9 +23,7 @@ public class Product {
 		this.inventory = inventory;
 		salesExist = false;
 		this.productCode = ProductCodeGenerator.generateProductCode(type);
-		productList.add(this);
-		//test
-		copyList.add(this);
+		
 	}
 	
 	public boolean getSalesExist() {
@@ -79,47 +75,7 @@ public class Product {
 		this.productCode = productCode;
 	}
 
-	public static Product searchProduct(String name) {
-		for (Product product : productList) {
-			if (product.getName().equals(name)) {
-				return product;
-			}
-		}
-		return null;
-	}
-
-	public int getNumofProduct() 
-	{
-		int temp = 0;
-		for(Product p: productList) 
-		{
-			if(p.getName().equals(this.getName()) && p.getType().equals(this.getType()))
-					temp++;
-		}
-		return temp;
-	}
 	
-	public boolean checkinventory(int quantity) 
-	{
-		if(getNumofProduct()>=quantity)
-			return true;
-		else
-			return false;
-	}
-	
-	public static void sortProduct() 
-	{
-		Collections.sort(productList, (x, y) -> x.type.compareTo(y.type));
-	}
-	public static void listInventory() 
-	{
-		sortProduct();
-		System.out.printf("%-10s%-20s%-10s%-10s\n","Type","Product Name","Quantity","Marked Price($)/unit");
-		for(Product p: productList) 
-		{
-			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(),p.getName(), p.getInventory(), p.getPrice());
-		}
-	}
 	
 	
 	
