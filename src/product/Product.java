@@ -86,33 +86,6 @@ public class Product {
 	
 	
 	
-	// product name should not be the same
-	public static boolean checkExistingProduct(String name) {
-		for (Product product : productList) {
-			if (product.getName().equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static int countProduct() {
-		return productList.size();
-	}
-
-	public static void removeProduct(String name) {
-		for (Product product : productList) {
-			if (product.getName().equals(name)) {
-				productList.remove(product);
-				break;
-			}
-		}
-		// throw exception when product not found
-	}
 	
-	// for order to search
-	public static ArrayList<Product> getCopyList() {
-		return copyList;
-	}
 
 }
