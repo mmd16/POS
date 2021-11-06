@@ -75,7 +75,6 @@ public class Member {
 	 * @author noah
 	 */
 
-	
 	public static Map<String, Member> getMembers() {
 		return members;
 	}
@@ -87,7 +86,7 @@ public class Member {
 	public void setAgeGroup(AgeGroup ageGroup) {
 		this.ageGroup = ageGroup;
 	}
-	
+
 	public double getAccumulatedSpending() {
 		return accumulatedSpending;
 	}
@@ -152,7 +151,14 @@ public class Member {
 	public void countFinalPrice() {
 		double total = applyDiscount(Cart.countTotal(cart));
 		countPoints(total);
+		removeCartAfterTransaction();
 		System.out.printf("The total payment is $%.2f, Thank you for your buying!\n", total);
+	}
+
+	public void removeCartAfterTransaction() {
+		for (CompletedCart c : this.getCompletedCart()) {
+			this.removeProductInCart(c.getCart());
+		}
 	}
 
 	public boolean checkMembership() {
@@ -266,6 +272,10 @@ public class Member {
 
 	public void removeProductInCart(int digit) {
 		cart.remove(digit);
+	}
+
+	public void removeProductInCart(Cart c) {
+		cart.remove(c);
 	}
 
 	public void removePurchaseHistory(CompletedCart c) {

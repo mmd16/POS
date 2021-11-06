@@ -26,7 +26,7 @@ public class CheckoutSystem implements Controller {
 
 	@Override
 	public void execute() {
-		System.out.printf("Welcome to Checkout System, %s.\n", member.getUserName());
+		System.out.printf("Welcome to Checkout System, %s.\n", employee.getName());
 		boolean end = false;
 		do {
 			System.out.println("Input commands for further management:");
