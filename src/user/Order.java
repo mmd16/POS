@@ -1,7 +1,4 @@
 package user;
-
-
-
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import java.time.LocalDate;

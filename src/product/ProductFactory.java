@@ -1,11 +1,14 @@
 package product;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-import exception.*;
+
+import exception.ExInvalidInput;
+import exception.ExProductNameNotExists;
+import exception.ExProductTypeNotExists;
+import exception.ExZeroOrNegative;
 
 public class ProductFactory {
 	public static ProductFactory instance = new ProductFactory();
@@ -21,8 +24,8 @@ public class ProductFactory {
 
 	}
 
-	public Product createProduct(String type, String name, String brand, String date, double price, int inventory)
-			throws ParseException {
+	public Product createProduct(String name, String type, double price, int inventory,
+			LocalDate expireDate, String brand) throws ParseException {
 		try {
 			// -- exception -- //
 			// 1. check if the date is valid and after today
@@ -32,7 +35,7 @@ public class ProductFactory {
 			// 5. product name exists (done)
 
 			// 1.
-			Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+			LocalDate d = LocalDate.now();// change the Date object to LocalDate object
 
 			// 2.
 			if (price <= 0)
@@ -47,29 +50,71 @@ public class ProductFactory {
 			case "Food":
 			case "food":
 				if (searchProduct(name) == null) {
-					Product f = new Food(name, brand, d, price, inventory);
+					Product f = new Food(name, type, price, inventory, expireDate, brand);
 					productList.add(f);
 					copyList.add(f);
+					f.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
 					return f;
-				} else
-					throw new ExProductNameExists(); // 5. product name exists
-			case "Equipment":
-			case "equipment":
+				} else 
+				{
+					Product product = searchProductCodeByNameAndType(name, type);
+					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+					product.addInventory(inventory);
+					break;
+				}
+			case "CookingIngredients":
+			case "cookingIngredients":
 				if (searchProduct(name) == null) {
-					Product e = new Equipment(name, brand, d, price, inventory);
-					productList.add(e);
-					copyList.add(e);
-					return e;
-				} else
-					throw new ExProductNameExists(); // 5. product name exists
+					Product f = new CookingIngredients(name, type, price, inventory, expireDate, brand);
+					productList.add(f);
+					copyList.add(f);
+					f.addProductToQueue(new CookingIngredients(name, type, price, inventory, expireDate, brand));
+					return f;
+				} else 
+				{
+					Product product = searchProductCodeByNameAndType(name, type);
+					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+					product.addInventory(inventory);
+					break;
+				}
+			case "Drinks":
+			case "drinks":
+				if (searchProduct(name) == null) {
+					Product f = new Drinks(name, type, price, inventory, expireDate, brand);
+					productList.add(f);
+					copyList.add(f);
+					f.addProductToQueue(new Drinks(name, type, price, inventory, expireDate, brand));
+					return f;
+				} else 
+				{
+					Product product = searchProductCodeByNameAndType(name, type);
+					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+					product.addInventory(inventory);
+					break;
+				}
+			case "Pharamacy":
+			case "pharamacy":
+				if (searchProduct(name) == null) {
+					Product f = new Pharamacy(name, type, price, inventory, expireDate, brand);
+					productList.add(f);
+					copyList.add(f);
+					f.addProductToQueue(new Pharamacy(name, type, price, inventory, expireDate, brand));
+					return f;
+				} else 
+				{
+					Product product = searchProductCodeByNameAndType(name, type);
+					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+					product.addInventory(inventory);
+					break;
+				}
+//					throw new ExProductNameExists(); // 5. product name exists
+
 			default:
 				throw new ExProductTypeNotExists(); // 4. type is not in food / equipment (done)
 			}
 		} catch (ExZeroOrNegative e) {
 			System.out.println(e.getMessage());
 		} catch (ExProductTypeNotExists e) {
-			System.out.println(e.getMessage());
-		} catch (ExProductNameExists e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
@@ -88,7 +133,7 @@ public class ProductFactory {
 			}
 			if (temp == null) // didn't get result in the above for loop
 				throw new ExProductNameNotExists();
-			
+
 		} catch (ExProductNameNotExists e) {
 			System.out.println(e.getMessage());
 		}
@@ -128,19 +173,77 @@ public class ProductFactory {
 		System.out.printf("%-10s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
 		for (Product p : productList) {
 			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
+//			p.printElementsinQueue();  debug use
 		}
 	}
 
 	// product name should not be the same
-	public boolean checkExistingProduct(String name) {
+	public static boolean checkExistingProduct(String name, String type) {
 		for (Product product : productList) {
-			if (product.getName().equals(name)) {
+			if (product.getName().equals(name) && product.getType().equals(type)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
+	public static Product searchProductCodeByNameAndType(String name, String type) {
+		for (Product product : productList) {
+			if (product.getName().equals(name) && product.getType().equals(type)) {
+				return product;
+			}
+		}
+		return null; /// exception
+	}
+
+	public static void printHighestSalesProduct(int digit) 
+	{
+		try 
+		{
+			Product productTemp = null;
+			int temp = 0;
+			switch(digit) 
+			{
+			case 1:
+				temp = 0;
+				for (Product product : productList) {
+					if(temp < product.countSalesForToday(LocalDate.now())) 
+					{
+						temp = product.countSalesForToday(LocalDate.now());
+						productTemp = product;
+					}
+				}
+				System.out.printf("The most popular product is %s\n", productTemp.getName());
+				break;
+			case 2:
+				temp = 0;
+				for (Product product : productList) {
+					if(temp < product.countSalesForthisMonth(LocalDate.now())) 
+					{
+						temp = product.countSalesForthisMonth(LocalDate.now());
+						productTemp = product;
+					}
+				}
+				System.out.printf("The most popular product is %s\n", productTemp.getName());
+				break;
+			case 3:
+				temp = 0;
+				for (Product product : productList) {
+					if(temp < product.countSalesForthisYear(LocalDate.now())) 
+					{
+						temp = product.countSalesForthisYear(LocalDate.now());
+						productTemp = product;
+					}
+				}
+				System.out.printf("The most popular product is %s\n", productTemp.getName());
+				break;
+			default:
+				throw new ExInvalidInput();
+			}
+		}catch (ExInvalidInput e) {
+			System.out.println(e.getMessage());
+		}
+	}
 	public int countProduct() {
 		return productList.size();
 	}

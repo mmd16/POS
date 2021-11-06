@@ -12,15 +12,24 @@ public class Cart {
 	private int quantity;
 	private double allPrice;
 	private LocalDate Date;
+	private double unitPrice;
 	
-	public Cart(Product product, int quantity, LocalDate Date) 
-	{
+	public Cart(Product product, int quantity, LocalDate Date) {
 		this.product = product;
 		this.productName = product.getName();
 		this.productCode = product.getProductCode();
 		this.quantity = quantity;
 		this.Date = Date;
 		this.allPrice = product.getPrice() * quantity;
+		this.unitPrice = product.getPrice();
+	}
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 	public Product getProduct() {
@@ -55,6 +64,10 @@ public class Cart {
 		this.quantity = quantity;
 	}
 
+	public void deductQuantity(int quantity) {
+		this.quantity -= quantity;
+	}
+
 	public double getAllPrice() {
 		return allPrice;
 	}
@@ -70,15 +83,13 @@ public class Cart {
 	public void setDate(LocalDate date) {
 		Date = date;
 	}
-	
-	public static double countTotal(ArrayList<Cart> cartList) 
-	{
+
+	public static double countTotal(ArrayList<Cart> cartList) {
 		double rslt = 0;
-		for(Cart cart : cartList) 
-		{
+		for (Cart cart : cartList) {
 			rslt += cart.getAllPrice();
 		}
 		return rslt;
 	}
-	
+
 }

@@ -1,15 +1,9 @@
 package membership;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import user.Member;
-
 public abstract class Membership
 {
 	private String membershipLevel;
 	private double discountRate;
-	private double accumulatedSpending = 0;
 	private double upgradeRequirement;
 	
 	public Membership(double discountRate, double upgradeRequirement, String level)
@@ -42,18 +36,6 @@ public abstract class Membership
 		this.discountRate = discountRate;
 	}
 
-	public double getAccumulatedSpending() {
-		return accumulatedSpending;
-	}
-
-	public void addAccumulatedSpending(double spding) {
-		this.accumulatedSpending += spding;
-	}
-
-	public void deductAccumulatedSpending(double spding) {
-		this.accumulatedSpending -= spding;
-	}
-	
 	public double getUpgradeRequirement() {
 		return upgradeRequirement;
 	}
@@ -61,24 +43,11 @@ public abstract class Membership
 	public void setUpgradeRequirement(double upgradeRequirement) {
 		this.upgradeRequirement = upgradeRequirement;
 	}
-
-	public void setaccumulatedSpending(double spending)
-	{
-		this.accumulatedSpending += spending;
-	}
 	
-	public double checkRemainProgress(){
+	public double checkRemainProgress(double accumulatedSpending){
 		return upgradeRequirement - accumulatedSpending;
 	}
-	
-	public boolean checkQualified(){
-		if(accumulatedSpending>=upgradeRequirement)
-		{
-			return true;
-		}
-		return false;
-	}	
-	
+
 	public Membership upgradeMembership() {
 		return this;
 	}

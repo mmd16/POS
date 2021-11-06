@@ -9,7 +9,7 @@ import staff.Employee;
 import user.Member;
 import user.Order;
 
-public class OrderController{
+public class OrderSystem{
 //	private Member user;
 //	private Employee employee; // thinking of separate general staff apart from manager
 //	private static OrderController instance;

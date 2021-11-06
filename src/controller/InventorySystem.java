@@ -1,29 +1,26 @@
 package controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import product.Product;
 import product.ProductFactory;
 import staff.Employee;
 import tool.Tools;
 import user.Member;
 
-public class InventoryController implements Controller {
+public class InventorySystem implements Controller {
 	private Employee employee;
+	@SuppressWarnings("unused")
 	private Member member;
-	private static InventoryController instance;
+	private static InventorySystem instance;
 	ProductFactory productFactory = ProductFactory.getInstance();
 
 	// private function because it is singleton
-	private InventoryController() {
+	private InventorySystem() {
 
 	}
 
-	public static InventoryController getInstance() {
+	public static InventorySystem getInstance() {
 		if (instance == null) {
-			instance = new InventoryController();
+			instance = new InventorySystem();
 			return instance;
 		} else {
 			return instance;
@@ -32,7 +29,7 @@ public class InventoryController implements Controller {
 
 	@Override
 	public void execute() throws ParseException {
-		System.out.println("Welcome to Inventory Management System.");
+		System.out.printf("Hi %s, Welcome to Inventory Management System.\n", employee.getName());
 		boolean end = false;
 		do {
 			System.out.println("Input commands for further sales management:");
@@ -41,6 +38,8 @@ public class InventoryController implements Controller {
 			System.out.println("Input (3) for check inventory");
 			System.out.println("Input (4) for exit");
 			int input = Tools.sc.nextInt();
+			if(!Tools.inputValidator(1, 4, input))
+				continue;
 			switch (input) {
 			case 1:
 				addProducts();
@@ -76,8 +75,7 @@ public class InventoryController implements Controller {
 			double markedPrice = Tools.sc.nextDouble();
 			System.out.println("Please input the quantity of the new product:");
 			int quantity = Tools.sc.nextInt();
-			productFactory.createProduct(productType, productName, productBrand, productDate, markedPrice, quantity);
-
+			productFactory.createProduct(productName, productType, markedPrice, quantity, Tools.localDateFormatter(productDate), productBrand);
 			System.out.println("Do you have any other actions to continue ?");
 			System.out.print("Please input (1) to continue / (0) to exit");
 			isFalse = continuationValidator(Tools.sc.nextInt());

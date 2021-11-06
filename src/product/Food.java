@@ -1,24 +1,13 @@
 package product;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Food extends Product {
-	private Date expireDate;
 	private String brand;
-	
-	public Food (String name, String brand, Date expireDate, double price, int inventory) {
-		super(name, "Food", price, inventory);
-		this.expireDate = expireDate;
+
+	public Food(String name, String type, double price, int inventory, LocalDate expireDate, String brand) {
+		super(name, "Food", price, inventory, expireDate);
 		this.brand = brand;
-	}
-
-
-	public Date getExpireDate() {
-		return expireDate;
-	}
-
-	public void setExpireDate(Date expireDate) {
-		this.expireDate = expireDate;
 	}
 
 	public String getBrand() {
@@ -28,10 +17,5 @@ public class Food extends Product {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-
-
-
-
-
 
 }

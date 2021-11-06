@@ -4,14 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import exception.ExInvalidInput;
 import product.Product;
 import staff.Employee;
-import user.Cart;
-import user.Member;
-
 
 public class Sales {
 	private LocalDate date;
@@ -20,112 +17,145 @@ public class Sales {
 	private double sellingPrice;
 	private String productName;
 	private String productCode;
+	private String productType;
 	private String salesCode;
+	private String orderRefNo;
 	private int quantity;
 	protected static ArrayList<Sales> salesList = new ArrayList<>();
-	private static AtomicInteger uniqueId =new AtomicInteger();
-	public Sales(String productName, String productCode, int quantity, LocalDate Date, Employee employee, double markedprice, double sellingPrice) 
-	{
-		this.date = Date;
+	private static AtomicInteger uniqueId = new AtomicInteger();
+
+	public Sales(Product p, int quantity, LocalDate date, Employee employee, double markedprice, double sellingPrice,
+			String orderRefNo) {
+		this.date = date;
 		this.employee = employee;
-		this.productName = productName;
-		this.productCode = productCode;
+		this.productName = p.getName();
+		this.productCode = p.getProductCode();
+		this.productType = p.getType();
 		this.quantity = quantity;
 		this.markedprice = markedprice;
 		this.sellingPrice = sellingPrice;
+		this.orderRefNo = orderRefNo;
 		this.salesCode = String.valueOf(uniqueId.getAndIncrement());
 		salesList.add(this);
 	}
-	
-	public String getProductCode() {
-		return productCode;
+
+	/**
+	 * this is for salesList modification
+	 * 
+	 * @param s
+	 */
+	public static void addSales(Sales s) {
+		salesList.add(s);
 	}
 
-
-	public void setProductCode(String productCode) {
-		this.productCode = productCode;
-	}
-
-
-	public void setProductName(String productName) {
-		this.productName = productName;
-	}
-
-
-	public static void removeSales(Sales s) 
-	{
+	/**
+	 * this is for salesList modification
+	 * 
+	 * @param s
+	 */
+	public static void removeSales(Sales s) {
 		salesList.remove(s);
 	}
-	
+
+	public static Sales getSalesByOrderRefNo(String orderRefNo) {
+		for (Sales s : salesList) {
+			if (s.getOrderRefNo().equals(orderRefNo))
+				return s;
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param salesCode
+	 * @return sales
+	 */
 	public static Sales searchSales(String salesCode) {
-		for(Sales s: salesList) 
-		{
-			if(salesCode.equals(s.getSalesCode()));
+		for (Sales s : salesList) {
+			if (salesCode.equals(s.getSalesCode()))
+				;
 			return s;
 		}
 		return null;
 	}
-	
-	public static ArrayList<Sales> getSalesList() {
-		return salesList;
-	}
-	
+
+	/**
+	 * for sorting sales according to their dates
+	 */
 	public static void sortSales() {
 		Collections.sort(salesList, (x, y) -> x.date.compareTo(y.date));
 	}
-	
+
 	public static void listSales() {
 		sortSales();
 		int index = 1;
-		System.out.printf("%-10s%-10s%-10s%-10s%-10s%-10s%-10s\n", "No.", "Product Code", "Product Name", "Quantity", "Marked Price($)", "Selling Price($)", "Employee");
-		for(Sales s: salesList) 
-		{
-			System.out.printf("%-10d%-10s%-10s%-10s%-10.2f%-10.2f%-10s\n", index, s.getProductCode(), s.getProductName(), s.getQuantity(), s.getMarkedprice(), s.getSellingPrice(), s.getEmployee().getName());
-		}
-	}
-	
-	public static boolean checkSales(String name) {
+		System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", "No.", "Product Code", "Product Name", "Quantity",
+				"Marked Price($)", "Selling Price($)", "Employee");
 		for (Sales s : salesList) {
-			if (s.getProductName().equals(name)) {
-				return true;
-			}
+			System.out.printf("%-20d%-20s%-20s%-20s%-20.2f%-20.2f%-20s\n", index, s.getProductCode(),
+					s.getProductName(), s.getQuantity(), s.getMarkedprice(), s.getSellingPrice(),
+					s.getEmployee().getName());
 		}
-		return false;
-	}
-	
-	public String getSalesCode() {
-		return salesCode;
 	}
 
-	public void setSalesCode(String salesCode) {
-		this.salesCode = salesCode;
+	/**
+	 * 
+	 * @return formatted String date
+	 */
+	public String getStrDate() {
+		DateTimeFormatter datestr = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		return datestr.format(this.date);
 	}
 
-	public static void clearSales() {
-		salesList.clear();
-	}
-	
-	public String getProductName() {
-		return productName;
-	}
-	
-	public int getQuantity() {
-		return quantity;
-	}
+	/**
+	 * 
+	 * @param date
+	 * @return total revenue
+	 * @throws ExInvalidInput
+	 */
 
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
+	public static void getTotalRevenue(LocalDate date, int digit) {
+		try {
+			double total = 0;
+			switch (digit) {
+			case 1:
+				total = 0;
+				for (Sales s : salesList) {
+					if (s.getDate().isEqual(date))
+						total += s.getSellingPrice();
+				}
+				System.out.printf("The total revenue for today is $%.2f\n", total);
+				break;
+			case 2:
+				total = 0;
+				for (Sales s : salesList) {
+					if (s.getDate().getMonthValue() == (date.getMonthValue()))
+						total += s.getSellingPrice();
+				}
+				System.out.printf("The total revenue for this month is $%.2f\n", total);
+				break;
+			case 3:
+				total = 0;
+				for (Sales s : salesList) {
+					if (s.getDate().getYear() == (date.getYear()))
+						total += s.getSellingPrice();
+				}
+				System.out.printf("The total revenue for this year is $%.2f\n", total);
+				break;
+			default:
+				throw new ExInvalidInput();
+			}
+		} catch (ExInvalidInput e) {
+			System.out.println(e.getMessage());
+		}
 	}
-
 
 	public LocalDate getDate() {
 		return date;
 	}
 
-	public String getStrDate() {
-		DateTimeFormatter datestr = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-		return datestr.format(this.date);
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 
 	public Employee getEmployee() {
@@ -135,7 +165,7 @@ public class Sales {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
-	
+
 	public double getMarkedprice() {
 		return markedprice;
 	}
@@ -152,69 +182,72 @@ public class Sales {
 		this.sellingPrice = sellingPrice;
 	}
 
-//	public static void printList() 
-//	{
-//		System.out.printf("%-15s%-20s%-20s%-20s%-15s\n", "Product Name", "Selling Numbers",  "Selling Price($)", "Recent Date", "SalesPerson");
-//		for(Sales sale : salesList) 
-//		{
-//			System.out.printf("%-15s%-20s%-20s%-20s%-15s\n",  sale.getProductName(), sale.getSellNum(), sale.getPrice(), sale.getStrDate(), sale.getEmployee().getName());
-//		}
-//	}
-	
-	public static double getTotalRevenue(LocalDate date) 
-	{
-		double total = 0;
-		for(Sales s: salesList) 
-		{
-			if(s.getDate().isEqual(date))
-				total += s.getSellingPrice();
-		}
-		return total;
+	public String getProductName() {
+		return productName;
 	}
-	
-//	public static void markSales(ArrayList<Product> productList, ArrayList<Cart> trolleyList, Employee e) {
-//		for (Product p: productList) {
-//			int totalSellNum = 0;
-//			int totalPrice = 0;
-//
-//			LocalDate tempDate = null;
-//			LocalDate latestDate = null;
-//			
-//			for (Cart t: trolleyList) {
-//				if (p.getName().equals(t.getProductName())) {
-//					totalSellNum += t.getItemNum();
-//					totalPrice += t.getAllPrice();
-//					// check latest date of trolley
-//					if (latestDate == null || t.getDate().isAfter(latestDate)) {
-//						latestDate = t.getDate();
-//						tempDate = latestDate;
-//					}
-//					else if (t.getDate().isBefore(latestDate)) {
-//						latestDate = tempDate;
-//						tempDate = latestDate;
-//					}
-//				}
-//				
-//				// change sales latest date
-//				for (Sales s: salesList) {
-//					if (s.productName.equals(t.getProductName())) {
-//						if (t.getDate().isAfter(s.date)) {
-//							s.date = t.getDate();
-//							latestDate = s.date;
-//						}
-//					}
-//				}
-//			}
-//			
-//			if (totalSellNum > 0 && totalPrice > 0 && !Sales.checkSales(p.getName())) {
-//				User.createSales(p.getName(), totalSellNum, latestDate, e, totalPrice);
-//			}
-//			else if (totalSellNum > 0 && totalPrice > 0 && Sales.checkSales(p.getName())) {
-//				Sales s = Sales.searchSales(p.getName());
-//				s.addSellNum(totalSellNum);
-//				s.addPrice(totalPrice);
-//			}
-//		}
-//	}
-	
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(String productCode) {
+		this.productCode = productCode;
+	}
+
+	public String getSalesCode() {
+		return salesCode;
+	}
+
+	public void setSalesCode(String salesCode) {
+		this.salesCode = salesCode;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public void deductQuantity(int quantity) {
+		this.quantity -= quantity;
+	}
+
+	public static ArrayList<Sales> getSalesList() {
+		return salesList;
+	}
+
+	public static void setSalesList(ArrayList<Sales> salesList) {
+		Sales.salesList = salesList;
+	}
+
+	public static AtomicInteger getUniqueId() {
+		return uniqueId;
+	}
+
+	public static void setUniqueId(AtomicInteger uniqueId) {
+		Sales.uniqueId = uniqueId;
+	}
+
+	public String getOrderRefNo() {
+		return orderRefNo;
+	}
+
+	public void setOrderRefNo(String orderRefNo) {
+		this.orderRefNo = orderRefNo;
+	}
+
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+
 }

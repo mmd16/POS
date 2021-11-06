@@ -1,7 +1,6 @@
 package staff;
 
 import transactions.Sales;
-import user.Cart;
 import user.CompletedCart;
 import user.Member;
 
@@ -10,30 +9,55 @@ public class Manager extends Employee {
 	public Manager(String name, String sex, String email, String phonenum) {
 		super(name, sex, email, phonenum);
 	}
-
+/**
+ * refund function for members, only the manager hv the right to do it.
+ * @param c
+ * @param quantity
+ * @param member
+ */
 	public void refund(CompletedCart c, int quantity, Member member) {
 		int temp = 0;
 		double totalPrice = 0;
 		Sales s = Sales.searchSales(c.getSalesCode());
 		totalPrice = s.getMarkedprice();
 		temp = (totalPrice > 100) ? (int) totalPrice / 100 : 0;
-		member.getMembership().deductAccumulatedSpending(totalPrice);
+		member.deductAccumulatedSpending(totalPrice);
 		member.deductPoints(temp);
-		checkForDelSales(c, quantity, member, s);
+		checkForCart(c, quantity, member);
+		checkForSales(s, quantity);
 	}
 	
-	public void checkForDelSales(CompletedCart c, int quantity, Member member, Sales s) 
+	public void refund(Sales s, int quantity) 
+	{
+		checkForSales(s, quantity);
+	}
+/**
+ * used to handle the completed cart and the sales if the customers choose to refund.
+ * @param c
+ * @param quantity
+ * @param member
+ * @param s
+ */
+	public void checkForCart(CompletedCart c, int quantity, Member member) 
 	{
 		if(c.getCart().getQuantity() == quantity) 
 		{
 			member.removePurchaseHistory(c);
+		}
+		else 
+		{
+			c.getCart().deductQuantity(quantity);
+		}
+	}
+	public void checkForSales(Sales s, int quantity) 
+	{
+		if(s.getQuantity() == quantity) 
+		{
 			Sales.removeSales(s);
 		}
 		else 
 		{
-			int temp = c.getCart().getQuantity();
-			c.getCart().setQuantity(temp - quantity);
-			s.setQuantity(temp - quantity);
+			s.deductQuantity(quantity);
 		}
 	}
 }
