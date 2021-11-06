@@ -34,7 +34,6 @@ public class TestMain {
 			temp = Tools.sc.next();
 		} while (!Tools.idValidator("Employee", temp));
 		employee = Employee.searchEmployee(temp);
-		System.out.println(employee.getName());
 		// Search of Employee//
 
 		// --- Test of creating Product ---// By Karina
@@ -54,7 +53,7 @@ public class TestMain {
 		// Search of Member//
 		String uid;
 		do {
-			System.out.println("Please input your Worker ID for logging in the system...");
+			System.out.println("Please input your Member ID for logging in the system...");
 			uid = Tools.sc.next();
 		} while (!Tools.idValidator("Member", uid));
 		member = Member.getMember(uid);
