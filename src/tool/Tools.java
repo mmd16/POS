@@ -27,12 +27,6 @@ public class Tools {
 		}
 		return maxIndex;
 	}
-
-	public static LocalDate localDateFormatter(String date) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-		return LocalDate.parse(date, formatter);
-	}
-
 	public static boolean inputValidator(int min, int max, int input) {
 		try {
 			if (input > max || input < min)
@@ -48,14 +42,12 @@ public class Tools {
 		try {
 			switch (type) {
 			case "Employee":
-				if (Employee.searchEmployee(uid) == null) 
-				{
+				if (Employee.searchEmployee(uid) == null) {
 					throw new ExEmployeeIdNotExists();
 				}
 				return true;
 			case "Member":
-				if (Member.getMember(uid) == null)
-				{
+				if (Member.getMember(uid) == null) {
 					throw new ExMemberIdNotExists();
 				}
 				return true;
@@ -70,17 +62,39 @@ public class Tools {
 			return false;
 		}
 	}
+
+	public static boolean continuationValidator(int digit) {
+		if (digit == 0)
+			return true;
+		return false;
+	}
 	
-	public static boolean checkCartisEmpty(ArrayList<Cart> cart) 
-	{
-		try 
-		{
-			if(cart.isEmpty()) 
-			{
+	public static String returnStrforMoments(int digit) {
+		try {
+
+			switch (digit) {
+			case 0:
+				return "Today";
+			case 1:
+				return "This Month";
+			case 2:
+				return "This Year";
+			default:
+				throw new ExInvalidInput();
+			}
+		} catch (ExInvalidInput e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public static boolean checkCartisEmpty(ArrayList<Cart> cart) {
+		try {
+			if (cart.isEmpty()) {
 				throw new ExCartIsEmpty();
 			}
 			return false;
-		}catch (ExCartIsEmpty e) {
+		} catch (ExCartIsEmpty e) {
 			System.out.println(e.getMessage());
 			return true;
 		}

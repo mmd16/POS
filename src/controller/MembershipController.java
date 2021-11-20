@@ -1,24 +1,25 @@
 package controller;
 
 
+import System.MembershipSystem;
 import staff.Employee;
 import tool.Tools;
 import user.Member;
 
-public class MembershipSystem implements Controller {
+public class MembershipController implements Controller {
 	
-	private static MembershipSystem instance;
+	private static MembershipController instance;
 	private Member member;
 	private Employee employee;
 	
 	
 	// private function because it is singleton
-	private MembershipSystem() {
+	private MembershipController() {
 	}
 	
-	public static MembershipSystem getInstance() {
+	public static MembershipController getInstance() {
 		if (instance == null) {
-			instance = new MembershipSystem();
+			instance = new MembershipController();
 			return instance;
 		} else {
 			return instance;
@@ -29,7 +30,8 @@ public class MembershipSystem implements Controller {
 	public void execute() {
 		boolean end = false;
 		do {
-			System.out.printf("Hi %s, To check %s's membership details, please proceed your actions\n", employee.getName(), member.getUserName());
+			System.out.printf("---Hi %s, To check %s's membership details, please proceed your actions---\n", employee.getName(), member.getUserName());
+			System.out.println("---Input commands for further management---");
 			System.out.println("Input (1) for checking the Customer Membership Status");
 			System.out.println("Input (2) for checking the Customer's points");
 			System.out.println("Input (3) for checking the status to another level of Membership");
@@ -39,13 +41,13 @@ public class MembershipSystem implements Controller {
 				continue;
 			switch (cmd) {
 			case 1:
-				System.out.printf("The customer owns a %s Membership.\n", member.getMembership().getMembershipLevel());
+				System.out.printf("The customer owns a %s Membership.\n", MembershipSystem.getMembershipLevel(member));
 				break;
 			case 2:
-				System.out.printf("The customer owns %s points.\n", member.getPoints());
+				System.out.printf("The customer owns %d points.\n", MembershipSystem.getPoints(member));
 				break;
 			case 3:
-				System.out.printf("The customer still needs to spend $%.2f to upgrade.\n", member.checkRemainingProgress());
+				System.out.printf("The customer still needs to spend $%.2f to upgrade.\n", MembershipSystem.checkRemainingProgress(member));
 				break;
 			case 4:
 				System.out.println("Exiting....");

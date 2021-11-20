@@ -24,6 +24,14 @@ public class Cart {
 		this.unitPrice = product.getPrice();
 	}
 
+	public static double countTotal(ArrayList<Cart> cartList) {
+		double rslt = 0;
+		for (Cart cart : cartList) {
+			rslt += cart.getAllPrice();
+		}
+		return rslt;
+	}
+	
 	public double getUnitPrice() {
 		return unitPrice;
 	}
@@ -82,14 +90,6 @@ public class Cart {
 
 	public void setDate(LocalDate date) {
 		Date = date;
-	}
-
-	public static double countTotal(ArrayList<Cart> cartList) {
-		double rslt = 0;
-		for (Cart cart : cartList) {
-			rslt += cart.getAllPrice();
-		}
-		return rslt;
 	}
 
 }

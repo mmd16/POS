@@ -11,6 +11,7 @@ import ageGroup.AgeGroup;
 import ageGroup.AgeGroupFactory;
 import membership.Membership;
 import membership.NonMembership;
+import membership.PlatinumMembership;
 import membership.SilverMembership;
 import product.Product;
 import random.ProductCodeGenerator;
@@ -68,12 +69,71 @@ public class Member {
 		this.membership = new NonMembership();
 		this.orderList = new ArrayList<Order>();
 		this.userid = "0";
+		this.cart = new ArrayList<Cart>();
 		addMember(userid, this);
 	}
 
 	/**
 	 * @author noah
 	 */
+
+	public void checkout(Employee employee) {
+		String temp = ProductCodeGenerator.generateOrderRefNo(LocalDate.now());
+		for (Cart c : this.getCart()) {
+			employee.confirmSales(c, this, temp);
+		}
+		this.upgradeMembership();
+		removeCartAfterTransaction();
+	}
+
+	public int countPoints(double total) {
+		int temp = 0;
+		if (total > 100)
+			temp += (int) (total / 100);
+		return temp;
+	}
+
+	public void removeCartAfterTransaction() {
+		if (checkMembership()) {
+			for (CompletedCart c : this.getCompletedCart()) {
+				this.removeProductInCart(c.getCart());
+			}
+		}
+
+	}
+
+	public double countFinalPrice() {
+		double total = applyDiscount(Cart.countTotal(cart));
+		int pointsTobeAdded = countPoints(total);
+		addPoints(pointsTobeAdded);
+		return total;
+	}
+
+	public boolean checkMembership() {
+		if (this.getMembership() instanceof NonMembership)
+			return false;
+		return true;
+	}
+
+	public void upgradeMembership() {
+		if (checkMembership()) {
+			while (this.checkRemainingProgress() < 0 && this.getMembership() instanceof PlatinumMembership) {
+				setMembership(this.getMembership().upgradeMembership());
+			}
+		}
+	}
+
+	public double applyDiscount(double total) {
+		return total * getDiscountRate();
+	}
+
+	public double getDiscountRate() {
+		return this.getMembership().getDiscountRate();
+	}
+
+	public double checkRemainingProgress() {
+		return this.getMembership().getUpgradeRequirement() - this.accumulatedSpending;
+	}
 
 	public static Map<String, Member> getMembers() {
 		return members;
@@ -96,17 +156,11 @@ public class Member {
 	}
 
 	public void addAccumulatedSpending(double spding) {
-		if (checkMembership())
-			this.accumulatedSpending += spding;
-	}
-
-	public double checkRemainingProgress() {
-		return this.getMembership().getUpgradeRequirement() - this.accumulatedSpending;
+		this.accumulatedSpending += spding;
 	}
 
 	public void deductAccumulatedSpending(double spding) {
-		if (checkMembership())
-			this.accumulatedSpending -= spding;
+		this.accumulatedSpending -= spding;
 	}
 
 	public String getBirthOfYear() {
@@ -129,51 +183,28 @@ public class Member {
 		this.points = points;
 	}
 
-	public static void addMember(String userId, Member member) {
-		members.put(userId, member);
+	public int getPoints() {
+		return points;
+	}
+
+	public void addPoints(int pointsTobeAdded) {
+		this.points += pointsTobeAdded;
+	}
+
+	public void deductPoints(int pointsTobeDeduct) {
+		this.points -= pointsTobeDeduct;
 	}
 
 	public static Member getMember(String userId) {
 		return members.get(userId);
 	}
 
+	public static void addMember(String userId, Member member) {
+		members.put(userId, member);
+	}
+
 	public static void removeMember(String userId) {
 		members.remove(userId);
-	}
-
-	public void checkout(Employee employee) {
-		String temp = ProductCodeGenerator.generateOrderRefNo(LocalDate.now());
-		for (Cart c : this.getCart()) {
-			employee.confirmSales(c, this, temp);
-		}
-	}
-
-	public void countFinalPrice() {
-		double total = applyDiscount(Cart.countTotal(cart));
-		countPoints(total);
-		removeCartAfterTransaction();
-		System.out.printf("The total payment is $%.2f, Thank you for your buying!\n", total);
-	}
-
-	public void removeCartAfterTransaction() {
-		for (CompletedCart c : this.getCompletedCart()) {
-			this.removeProductInCart(c.getCart());
-		}
-	}
-
-	public boolean checkMembership() {
-		if (this.getMembership() instanceof NonMembership)
-			return false;
-		;
-		return true;
-	}
-
-	public double applyDiscount(double total) {
-		return total * getDiscountRate();
-	}
-
-	public double getDiscountRate() {
-		return this.getMembership().getDiscountRate();
 	}
 
 	public void listCart() {
@@ -221,33 +252,12 @@ public class Member {
 		this.userid = userid;
 	}
 
-	public int getPoints() {
-		return points;
-	}
-
-	public void countPoints(double total) {
-		if (total > 100)
-			points += (int) (total / 100);
-	}
-
-	public void deductPoints(int input) {
-		points -= input;
-	}
-
 	public Membership getMembership() {
 		return membership;
 	}
 
 	public void setMembership(Membership membership) {
 		this.membership = membership;
-	}
-
-	public void upgradeMembership() {
-		if (checkMembership()) {
-			while (this.checkRemainingProgress() < 0) {
-				setMembership(this.getMembership().upgradeMembership());
-			}
-		}
 	}
 
 	public ArrayList<Order> getOrderList() {
@@ -286,21 +296,35 @@ public class Member {
 		return cart.get(digit).getProduct();
 	}
 
-	public void updateCart(int digit, int quantity) {
+	public Cart updateCart(int digit, int quantity) {
 		double unitPrice = cart.get(digit).getUnitPrice();
 		cart.get(digit).setQuantity(quantity);
 		cart.get(digit).setAllPrice(quantity * unitPrice);
+		return cart.get(digit);
 	}
 
 	public void addProductToCompletedCart(Cart c, String orderRefNo, String salesNo) {
 		completedCart.add(new CompletedCart(c, orderRefNo, salesNo));
 	}
 
-	public void refund(String orderRefNo, String productName, String productType, int quantity, Manager manager) {
+	public CompletedCart searchHistoryForrefund(String orderRefNo, String productName, String productType,
+			int quantity) {
 		for (CompletedCart c : completedCart) {
 			if (c.getCart().getProduct().getType().equals(productType)
 					&& c.getCart().getProductName().equals(productName))
-				manager.refund(c, quantity, this);
+				return c;
+		}
+		return null;
+	}
+
+	public void refund(CompletedCart c, int quantity, Manager manager) {
+		if (this.getMembership() instanceof NonMembership) {
+			Sales s = Sales.searchSales(c.getSalesCode());
+			manager.checkForSales(s, quantity);
+		} else {
+			Sales s = Sales.searchSales(c.getSalesCode());
+			manager.checkForCart(c, quantity, this);
+			manager.checkForSales(s, quantity);
 		}
 	}
 

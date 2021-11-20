@@ -13,13 +13,15 @@ import staff.Employee;
 public class Sales {
 	private LocalDate date;
 	private Employee employee;
-	private double markedprice;
+	private double markedPrice;
 	private double sellingPrice;
+	private double unitPrice;
 	private String productName;
 	private String productCode;
 	private String productType;
 	private String salesCode;
 	private String orderRefNo;
+	private Product product;
 	private int quantity;
 	protected static ArrayList<Sales> salesList = new ArrayList<>();
 	private static AtomicInteger uniqueId = new AtomicInteger();
@@ -28,15 +30,58 @@ public class Sales {
 			String orderRefNo) {
 		this.date = date;
 		this.employee = employee;
+		this.product = p;
 		this.productName = p.getName();
 		this.productCode = p.getProductCode();
 		this.productType = p.getType();
 		this.quantity = quantity;
-		this.markedprice = markedprice;
+		this.unitPrice = p.getPrice();
+		this.markedPrice = markedprice;
 		this.sellingPrice = sellingPrice;
 		this.orderRefNo = orderRefNo;
 		this.salesCode = String.valueOf(uniqueId.getAndIncrement());
 		salesList.add(this);
+	}
+
+	/**
+	 * 
+	 * @param date
+	 * @return total revenue
+	 * @throws ExInvalidInput
+	 */
+
+	public static boolean checkSalesIsEmpty() {
+		return salesList.isEmpty();
+	}
+
+	public static double getTotalRevenue(LocalDate date, int digit) {
+		double total = 0;
+		switch (digit) {
+		case 0:
+			total = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().isEqual(date))
+					total += s.getSellingPrice();
+			}
+			return total;
+		case 1:
+			total = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().getMonthValue() == (date.getMonthValue()))
+					total += s.getSellingPrice();
+			}
+			return total;
+		case 2:
+			total = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().getYear() == (date.getYear()))
+					total += s.getSellingPrice();
+			}
+			return total;
+		}
+
+		return 0;
+
 	}
 
 	/**
@@ -55,6 +100,7 @@ public class Sales {
 	 */
 	public static void removeSales(Sales s) {
 		salesList.remove(s);
+		sortSales();
 	}
 
 	public static Sales getSalesByOrderRefNo(String orderRefNo) {
@@ -73,8 +119,7 @@ public class Sales {
 	public static Sales searchSales(String salesCode) {
 		for (Sales s : salesList) {
 			if (salesCode.equals(s.getSalesCode()))
-				;
-			return s;
+				return s;
 		}
 		return null;
 	}
@@ -89,12 +134,13 @@ public class Sales {
 	public static void listSales() {
 		sortSales();
 		int index = 1;
-		System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", "No.", "Product Code", "Product Name", "Quantity",
-				"Marked Price($)", "Selling Price($)", "Employee");
+		System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", "No.", "Product Code", "Product Name",
+				"Quantity", "Marked Price($)", "Selling Price($)", "Employee", "Sales Code");
 		for (Sales s : salesList) {
-			System.out.printf("%-20d%-20s%-20s%-20s%-20.2f%-20.2f%-20s\n", index, s.getProductCode(),
-					s.getProductName(), s.getQuantity(), s.getMarkedprice(), s.getSellingPrice(),
-					s.getEmployee().getName());
+			System.out.printf("%-20d%-20s%-20s%-20s%-20.2f%-20.2f%-20s%-20s\n", index, s.getProductCode(),
+					s.getProductName(), s.getQuantity(), s.getMarkedPrice(), s.getSellingPrice(),
+					s.getEmployee().getName(), s.getSalesCode());
+			index++;
 		}
 	}
 
@@ -105,49 +151,6 @@ public class Sales {
 	public String getStrDate() {
 		DateTimeFormatter datestr = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 		return datestr.format(this.date);
-	}
-
-	/**
-	 * 
-	 * @param date
-	 * @return total revenue
-	 * @throws ExInvalidInput
-	 */
-
-	public static void getTotalRevenue(LocalDate date, int digit) {
-		try {
-			double total = 0;
-			switch (digit) {
-			case 1:
-				total = 0;
-				for (Sales s : salesList) {
-					if (s.getDate().isEqual(date))
-						total += s.getSellingPrice();
-				}
-				System.out.printf("The total revenue for today is $%.2f\n", total);
-				break;
-			case 2:
-				total = 0;
-				for (Sales s : salesList) {
-					if (s.getDate().getMonthValue() == (date.getMonthValue()))
-						total += s.getSellingPrice();
-				}
-				System.out.printf("The total revenue for this month is $%.2f\n", total);
-				break;
-			case 3:
-				total = 0;
-				for (Sales s : salesList) {
-					if (s.getDate().getYear() == (date.getYear()))
-						total += s.getSellingPrice();
-				}
-				System.out.printf("The total revenue for this year is $%.2f\n", total);
-				break;
-			default:
-				throw new ExInvalidInput();
-			}
-		} catch (ExInvalidInput e) {
-			System.out.println(e.getMessage());
-		}
 	}
 
 	public LocalDate getDate() {
@@ -166,12 +169,22 @@ public class Sales {
 		this.employee = employee;
 	}
 
-	public double getMarkedprice() {
-		return markedprice;
+	public double getMarkedPrice() {
+		return markedPrice;
 	}
 
-	public void setMarkedprice(double markedprice) {
-		this.markedprice = markedprice;
+	public void setMarkedPrice(double markedprice) {
+		this.markedPrice = markedprice;
+	}
+
+	public void adjustMarkedPrice() {
+		this.markedPrice = this.unitPrice * this.getQuantity();
+	}
+
+	public double getSellingUnitPrice() 
+	{
+		double unitPrice = this.getSellingPrice() / this.getQuantity();
+		return unitPrice;
 	}
 
 	public double getSellingPrice() {
@@ -180,6 +193,10 @@ public class Sales {
 
 	public void setSellingPrice(double sellingPrice) {
 		this.sellingPrice = sellingPrice;
+	}
+
+	public void adjustSellingPrice(double price) {
+		this.sellingPrice = price * this.getQuantity();
 	}
 
 	public String getProductName() {
@@ -248,6 +265,22 @@ public class Sales {
 
 	public void setProductType(String productType) {
 		this.productType = productType;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
+	public double getUnitPrice() {
+		return unitPrice;
+	}
+
+	public void setUnitPrice(double unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 
 }

@@ -5,10 +5,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import System.SalesSystem;
+import ageGroup.AgeGroupFactory;
+import exception.ExInvalidDate;
 import exception.ExInvalidInput;
+import exception.ExNoSalesExists;
 import exception.ExProductNameNotExists;
 import exception.ExProductTypeNotExists;
 import exception.ExZeroOrNegative;
+import transactions.Sales;
 
 public class ProductFactory {
 	public static ProductFactory instance = new ProductFactory();
@@ -24,8 +29,8 @@ public class ProductFactory {
 
 	}
 
-	public Product createProduct(String name, String type, double price, int inventory,
-			LocalDate expireDate, String brand) throws ParseException {
+	public Product createProduct(String name, String type, double price, int inventory, LocalDate expireDate,
+			String brand) throws ParseException {
 		try {
 			// -- exception -- //
 			// 1. check if the date is valid and after today
@@ -35,8 +40,8 @@ public class ProductFactory {
 			// 5. product name exists (done)
 
 			// 1.
-			LocalDate d = LocalDate.now();// change the Date object to LocalDate object
-
+			if (expireDate.isBefore(LocalDate.now()))
+				throw new ExInvalidDate();
 			// 2.
 			if (price <= 0)
 				throw new ExZeroOrNegative();
@@ -50,62 +55,60 @@ public class ProductFactory {
 			case "Food":
 			case "food":
 				if (searchProduct(name) == null) {
-					Product f = new Food(name, type, price, inventory, expireDate, brand);
+					Product f = new Food(name, "Food", price, inventory, expireDate, brand);
 					productList.add(f);
 					copyList.add(f);
-					f.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+					f.addProductToQueue(new Food(name, "Food", price, inventory, expireDate, brand));
 					return f;
-				} else 
-				{
-					Product product = searchProductCodeByNameAndType(name, type);
-					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+				} else {
+					Product product = searchProductCodeByNameAndType(name, "Food");
+					product.addProductToQueue(new Food(name, "Food", price, inventory, expireDate, brand));
 					product.addInventory(inventory);
-					break;
+					return product;
 				}
 			case "CookingIngredients":
 			case "cookingIngredients":
 				if (searchProduct(name) == null) {
-					Product f = new CookingIngredients(name, type, price, inventory, expireDate, brand);
+					Product f = new CookingIngredients(name, "CookingIngredients", price, inventory, expireDate, brand);
 					productList.add(f);
 					copyList.add(f);
-					f.addProductToQueue(new CookingIngredients(name, type, price, inventory, expireDate, brand));
+					f.addProductToQueue(
+							new CookingIngredients(name, "CookingIngredients", price, inventory, expireDate, brand));
 					return f;
-				} else 
-				{
-					Product product = searchProductCodeByNameAndType(name, type);
-					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+				} else {
+					Product product = searchProductCodeByNameAndType(name, "CookingIngredients");
+					product.addProductToQueue(
+							new Food(name, "CookingIngredients", price, inventory, expireDate, brand));
 					product.addInventory(inventory);
-					break;
+					return product;
 				}
 			case "Drinks":
 			case "drinks":
 				if (searchProduct(name) == null) {
-					Product f = new Drinks(name, type, price, inventory, expireDate, brand);
+					Product f = new Drinks(name, "Drinks", price, inventory, expireDate, brand);
 					productList.add(f);
 					copyList.add(f);
-					f.addProductToQueue(new Drinks(name, type, price, inventory, expireDate, brand));
+					f.addProductToQueue(new Drinks(name, "Drinks", price, inventory, expireDate, brand));
 					return f;
-				} else 
-				{
-					Product product = searchProductCodeByNameAndType(name, type);
-					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+				} else {
+					Product product = searchProductCodeByNameAndType(name, "Drinks");
+					product.addProductToQueue(new Food(name, "Drinks", price, inventory, expireDate, brand));
 					product.addInventory(inventory);
-					break;
+					return product;
 				}
 			case "Pharamacy":
 			case "pharamacy":
 				if (searchProduct(name) == null) {
-					Product f = new Pharamacy(name, type, price, inventory, expireDate, brand);
+					Product f = new Pharamacy(name, "Pharamacy", price, inventory, expireDate, brand);
 					productList.add(f);
 					copyList.add(f);
-					f.addProductToQueue(new Pharamacy(name, type, price, inventory, expireDate, brand));
+					f.addProductToQueue(new Pharamacy(name, "Pharamacy", price, inventory, expireDate, brand));
 					return f;
-				} else 
-				{
-					Product product = searchProductCodeByNameAndType(name, type);
-					product.addProductToQueue(new Food(name, type, price, inventory, expireDate, brand));
+				} else {
+					Product product = searchProductCodeByNameAndType(name, "Pharamacy");
+					product.addProductToQueue(new Food(name, "Pharamacy", price, inventory, expireDate, brand));
 					product.addInventory(inventory);
-					break;
+					return product;
 				}
 //					throw new ExProductNameExists(); // 5. product name exists
 
@@ -116,9 +119,10 @@ public class ProductFactory {
 			System.out.println(e.getMessage());
 		} catch (ExProductTypeNotExists e) {
 			System.out.println(e.getMessage());
+		} catch (ExInvalidDate e) {
+			System.out.println(e.getMessage());
 		}
 		return null;
-
 	}
 
 	public void removeProduct(String name) {
@@ -170,10 +174,11 @@ public class ProductFactory {
 
 	public void listInventory() {
 		sortProduct();
-		System.out.printf("%-10s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
+		System.out.printf("%-30s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
 		for (Product p : productList) {
-			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
-//			p.printElementsinQueue();  debug use
+//			System.out.println(p.getInventory());
+			System.out.printf("%-30s%-20s%-10d%-10.2f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
+//			p.printElementsinQueue();
 		}
 	}
 
@@ -196,54 +201,131 @@ public class ProductFactory {
 		return null; /// exception
 	}
 
-	public static void printHighestSalesProduct(int digit) 
-	{
-		try 
-		{
-			Product productTemp = null;
-			int temp = 0;
-			switch(digit) 
-			{
-			case 1:
-				temp = 0;
-				for (Product product : productList) {
-					if(temp < product.countSalesForToday(LocalDate.now())) 
-					{
-						temp = product.countSalesForToday(LocalDate.now());
-						productTemp = product;
-					}
-				}
-				System.out.printf("The most popular product is %s\n", productTemp.getName());
-				break;
-			case 2:
-				temp = 0;
-				for (Product product : productList) {
-					if(temp < product.countSalesForthisMonth(LocalDate.now())) 
-					{
-						temp = product.countSalesForthisMonth(LocalDate.now());
-						productTemp = product;
-					}
-				}
-				System.out.printf("The most popular product is %s\n", productTemp.getName());
-				break;
-			case 3:
-				temp = 0;
-				for (Product product : productList) {
-					if(temp < product.countSalesForthisYear(LocalDate.now())) 
-					{
-						temp = product.countSalesForthisYear(LocalDate.now());
-						productTemp = product;
-					}
-				}
-				System.out.printf("The most popular product is %s\n", productTemp.getName());
-				break;
-			default:
-				throw new ExInvalidInput();
+	public static int getTotalSalesNum() {
+		int temp = 0;
+		for (Product p : productList) {
+			for (Sales s : p.getSalesList()) {
+				temp += s.getQuantity();
 			}
-		}catch (ExInvalidInput e) {
+		}
+		return temp;
+	}
+
+	public static double getSalesPercentageForProduct(int digit, Product product, boolean ageFilter, int age) {
+		try {
+			if (SalesSystem.checkSalesIsEmpty()) {
+				throw new ExNoSalesExists();
+			} else {
+				digit += (ageFilter == true) ? 3 : 0;
+				int TotalSales = ProductFactory.getTotalSalesNum();
+				int salesForProduct = 0;
+				double percentage;
+				switch (digit) {
+				case 0:
+					salesForProduct = product.countSales(LocalDate.now(), 0);
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				case 1:
+					salesForProduct = product.countSales(LocalDate.now(), 1);
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				case 2:
+					salesForProduct = product.countSales(LocalDate.now(), 2);
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				case 3:
+					salesForProduct = product.countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age));
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				case 4:
+					salesForProduct = product.countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age));
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				case 5:
+					salesForProduct = product.countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age));
+					percentage = (salesForProduct * 100 / TotalSales);
+					return percentage;
+				}
+
+			}
+		} catch (ExNoSalesExists e) {
 			System.out.println(e.getMessage());
 		}
+		return 0;
+	};
+
+	public static Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
+		try {
+			if (SalesSystem.checkSalesIsEmpty()) {
+				throw new ExNoSalesExists();
+			} else {
+				digit += (ageFilter == true) ? 3 : 0;
+				Product productTemp = null;
+				int temp = 0;
+				switch (digit) {
+				case 0:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 0)) {
+							temp = product.countSales(LocalDate.now(), 0);
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				case 1:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 1)) {
+							temp = product.countSales(LocalDate.now(), 1);
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				case 2:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 2)) {
+							temp = product.countSales(LocalDate.now(), 2);
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				case 3:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age))) {
+							temp = product.countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age));
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				case 4:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age))) {
+							temp = product.countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age));
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				case 5:
+					temp = 0;
+					for (Product product : productList) {
+						if (temp < product.countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age))) {
+							temp = product.countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age));
+							productTemp = product;
+						}
+					}
+					return productTemp;
+				}
+			}
+
+		} catch (ExNoSalesExists e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
+
 	public int countProduct() {
 		return productList.size();
 	}

@@ -6,7 +6,7 @@ public class Drinks extends Product {
 	private String brand;
 
 	public Drinks(String name, String type, double price, int inventory, LocalDate expireDate, String brand)  {
-		super(name, "Drinks", price, inventory, expireDate);
+		super(name, type, price, inventory, expireDate);
 		this.brand = brand;
 	}
 	

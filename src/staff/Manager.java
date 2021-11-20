@@ -9,6 +9,9 @@ public class Manager extends Employee {
 	public Manager(String name, String sex, String email, String phonenum) {
 		super(name, sex, email, phonenum);
 	}
+	public Manager(String name, String sex, String email, String phonenum, String uid) {
+		super(name, sex, email, phonenum, uid);
+	}
 /**
  * refund function for members, only the manager hv the right to do it.
  * @param c
@@ -16,13 +19,7 @@ public class Manager extends Employee {
  * @param member
  */
 	public void refund(CompletedCart c, int quantity, Member member) {
-		int temp = 0;
-		double totalPrice = 0;
 		Sales s = Sales.searchSales(c.getSalesCode());
-		totalPrice = s.getMarkedprice();
-		temp = (totalPrice > 100) ? (int) totalPrice / 100 : 0;
-		member.deductAccumulatedSpending(totalPrice);
-		member.deductPoints(temp);
 		checkForCart(c, quantity, member);
 		checkForSales(s, quantity);
 	}
@@ -49,15 +46,21 @@ public class Manager extends Employee {
 			c.getCart().deductQuantity(quantity);
 		}
 	}
+	
 	public void checkForSales(Sales s, int quantity) 
 	{
+		double unitPrice = s.getSellingUnitPrice();
 		if(s.getQuantity() == quantity) 
 		{
 			Sales.removeSales(s);
+			s.getProduct().removeSales(s);
 		}
 		else 
 		{
 			s.deductQuantity(quantity);
+			s.adjustMarkedPrice();
+			s.adjustSellingPrice(unitPrice);
 		}
 	}
+
 }

@@ -6,7 +6,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 
+import ageGroup.AgeGroup;
 import random.ProductCodeGenerator;
+import transactions.MemberSale;
 import transactions.Sales;
 
 public class Product {
@@ -16,6 +18,7 @@ public class Product {
 	private double price;
 	private int inventory = 0;
 	private LocalDate expireDate;
+	private LocalDate importDate;
 	private ArrayList<Sales> salesList;
 	private PriorityQueue<Product> productQueue;
 
@@ -24,6 +27,7 @@ public class Product {
 		this.type = type;
 		this.price = price;
 		this.inventory = inventory;
+		this.importDate = LocalDate.now();
 		this.expireDate = expireDate;
 		this.productCode = ProductCodeGenerator.generateProductCode(name, type);
 		this.salesList = new ArrayList<>();
@@ -37,29 +41,66 @@ public class Product {
 		});
 	}
 
-	public int countSalesForToday(LocalDate date) {
+	public int countSales(LocalDate date, int digit) {
 		int temp = 0;
-		for (Sales s : salesList) {
-			if (s.getDate().isEqual(date))
-				temp++;
+		switch (digit) {
+		case 0:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().isEqual(date))
+					temp += s.getQuantity();
+			}
+			return temp;
+		case 1:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().getMonthValue() == date.getMonthValue())
+					temp += s.getQuantity();
+			}
+			return temp;
+		case 2:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s.getDate().getYear() == date.getYear())
+					temp += s.getQuantity();
+			}
+			return temp;
 		}
 		return temp;
 	}
 
-	public int countSalesForthisMonth(LocalDate date) {
+	public int countSales(LocalDate date, int digit, AgeGroup ageGroup) {
 		int temp = 0;
-		for (Sales s : salesList) {
-			if (s.getDate().getMonthValue() == date.getMonthValue())
-				temp++;
-		}
-		return temp;
-	}
-
-	public int countSalesForthisYear(LocalDate date) {
-		int temp = 0;
-		for (Sales s : salesList) {
-			if (s.getDate().getYear() == date.getYear())
-				temp++;
+		switch (digit) {
+		case 0:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s instanceof MemberSale) {
+					if (s.getDate().isEqual(date) && ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+						temp += s.getQuantity();
+				}
+			}
+			return temp;
+		case 1:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s instanceof MemberSale) {
+					if (s.getDate().getMonthValue() == date.getMonthValue()
+							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+						temp += s.getQuantity();
+				}
+			}
+			return temp;
+		case 2:
+			temp = 0;
+			for (Sales s : salesList) {
+				if (s instanceof MemberSale) {
+					if (s.getDate().getYear() == date.getYear()
+							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+						temp += s.getQuantity();
+				}
+			}
+			return temp;
 		}
 		return temp;
 	}
@@ -84,7 +125,7 @@ public class Product {
 		Iterator<Product> value = productQueue.iterator();
 		while (value.hasNext()) {
 			Product p = value.next();
-			System.out.printf("%-10s%-20s%-10d%-10f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
+			System.out.printf("%-10s%-20s%-10d%-10.2f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
 		}
 	}
 
@@ -147,15 +188,6 @@ public class Product {
 		this.removeInventory(inventory);
 	}
 
-	public int loopForDeductInventory(int inventory, PriorityQueue<Product> productQueue) {
-		int temp = 0;
-		if (inventory > this.productQueue.peek().getInventory()) {
-			temp = this.productQueue.poll().getInventory();
-		}
-
-		return temp;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -182,6 +214,14 @@ public class Product {
 
 	public void setProductCode(String productCode) {
 		this.productCode = productCode;
+	}
+
+	public LocalDate getImportDate() {
+		return importDate;
+	}
+
+	public void setImportDate(LocalDate importDate) {
+		this.importDate = importDate;
 	}
 
 }
