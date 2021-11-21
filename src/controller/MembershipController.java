@@ -11,8 +11,7 @@ public class MembershipController implements Controller {
 	private static MembershipController instance;
 	private Member member;
 	private Employee employee;
-	
-	
+	private MembershipSystem membership = MembershipSystem.getInstance();
 	// private function because it is singleton
 	private MembershipController() {
 	}
@@ -41,13 +40,13 @@ public class MembershipController implements Controller {
 				continue;
 			switch (cmd) {
 			case 1:
-				System.out.printf("The customer owns a %s Membership.\n", MembershipSystem.getMembershipLevel(member));
+				System.out.printf("The customer owns a %s Membership.\n", membership.getMembershipLevel(member));
 				break;
 			case 2:
-				System.out.printf("The customer owns %d points.\n", MembershipSystem.getPoints(member));
+				System.out.printf("The customer owns %d points.\n", membership.getPoints(member));
 				break;
 			case 3:
-				System.out.printf("The customer still needs to spend $%.2f to upgrade.\n", MembershipSystem.checkRemainingProgress(member));
+				System.out.printf("The customer still needs to spend $%.2f to upgrade.\n", membership.checkRemainingProgress(member));
 				break;
 			case 4:
 				System.out.println("Exiting....");

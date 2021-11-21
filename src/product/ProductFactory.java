@@ -213,7 +213,7 @@ public class ProductFactory {
 
 	public static double getSalesPercentageForProduct(int digit, Product product, boolean ageFilter, int age) {
 		try {
-			if (SalesSystem.checkSalesIsEmpty()) {
+			if (Sales.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
 				digit += (ageFilter == true) ? 3 : 0;
@@ -256,7 +256,7 @@ public class ProductFactory {
 
 	public static Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
 		try {
-			if (SalesSystem.checkSalesIsEmpty()) {
+			if (Sales.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
 				digit += (ageFilter == true) ? 3 : 0;

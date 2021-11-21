@@ -12,7 +12,7 @@ public class InventoryController implements Controller {
 	@SuppressWarnings("unused")
 	private Member member;
 	private static InventoryController instance;
-	
+	private InventorySystem inventory = InventorySystem.getInstance();
 
 	// private function because it is singleton
 	private InventoryController() {
@@ -43,13 +43,13 @@ public class InventoryController implements Controller {
 				continue;
 			switch (input) {
 			case 1:
-				InventorySystem.addProducts();
+				inventory.addProducts();
 				break;
 			case 2:
-				InventorySystem.deleteProduct();
+				inventory.deleteProduct();
 				break;
 			case 3:
-				InventorySystem.listInventory();
+				inventory.listInventory();
 				break;
 			case 4:
 				end = true;

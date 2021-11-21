@@ -7,9 +7,23 @@ import product.ProductFactory;
 import tool.Tools;
 
 public class InventorySystem {
-	private static ProductFactory productFactory = ProductFactory.getInstance();
+	private ProductFactory productFactory = ProductFactory.getInstance();
 
-	public static void addProducts() throws ParseException {
+	private static InventorySystem instance;
+
+	private InventorySystem() {
+	};
+
+	public static InventorySystem getInstance() {
+		if (instance == null) {
+			instance = new InventorySystem();
+			return instance;
+		} else {
+			return instance;
+		}
+	}
+
+	public void addProducts() throws ParseException {
 		boolean isFalse = false;
 		do {
 			try {
@@ -37,13 +51,13 @@ public class InventorySystem {
 		} while (isFalse == false);
 	}
 
-	public static void deleteProduct() {
+	public void deleteProduct() {
 		System.out.println("Please input the name for the product you want to delete:");
 		String productName = Tools.sc.next();
 		productFactory.removeProduct(productName);
 	}
 
-	public static void listInventory() {
+	public void listInventory() {
 		productFactory.listInventory();
 	}
 

@@ -10,19 +10,33 @@ import tool.Tools;
 import transactions.Sales;
 
 public class SalesSystem {
-	public static void listSales() {
+	private static SalesSystem instance;
+
+	private SalesSystem() {
+	};
+
+	public static SalesSystem getInstance() {
+		if (instance == null) {
+			instance = new SalesSystem();
+			return instance;
+		} else {
+			return instance;
+		}
+	}
+
+	public void listSales() {
 		Sales.listSales();
 	}
 
-	public static void checkForTotalIncome() {
+	public void checkForTotalIncome() {
 		int daysUnit = getCheckIncomeDaysUnit();
 		double total = Sales.getTotalRevenue(LocalDate.now(), daysUnit);
 		System.out.printf("The Total Revenue for %s is %.2f\n", Tools.returnStrforMoments(daysUnit), total);
 	}
 
-	public static void checkForHighestSalesProductAndPercentage() {
+	public void checkForHighestSalesProductAndPercentage() {
 		try {
-			if (checkSalesIsEmpty()) {
+			if (Sales.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
 				int daysUnit = getCheckSalesDaysUnit();
@@ -48,7 +62,7 @@ public class SalesSystem {
 
 	}
 
-	public static int getCheckSalesDaysUnit() {
+	public int getCheckSalesDaysUnit() {
 		boolean isEnd = false;
 		int input4 = 0;
 		do {
@@ -62,7 +76,7 @@ public class SalesSystem {
 
 	}
 
-	public static int getCheckIncomeDaysUnit() {
+	public int getCheckIncomeDaysUnit() {
 		boolean isEnd = false;
 		int input4 = 0;
 		do {
@@ -73,10 +87,9 @@ public class SalesSystem {
 			isEnd = Tools.inputValidator(0, 2, input4);
 		} while (isEnd == false);
 		return input4;
-
 	}
 
-	public static int getCheckAgeGroupDigit() {
+	public int getCheckAgeGroupDigit() {
 		boolean isEnd = false;
 		int input3 = 0;
 		do {
@@ -91,7 +104,4 @@ public class SalesSystem {
 
 	}
 
-	public static boolean checkSalesIsEmpty() {
-		return Sales.checkSalesIsEmpty();
-	}
 }

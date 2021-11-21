@@ -19,17 +19,18 @@ import user.Member;
 
 public class TestCheckoutSystem {
 
+	private CheckoutSystem checkout = CheckoutSystem.getInstance();
 	@Test
 	public void testValidator_1() {
 		Manager a = new Manager("ON9", "M", "null", "123123123", "1");
-		boolean rslt = CheckoutSystem.validator(a);
+		boolean rslt = checkout.validator(a);
 		assertEquals(true, rslt);
 	}
 
 	@Test
 	public void testValidator_2() {
 		Employee b = new Employee("ON9", "M", "null", "123123123", "1");
-		boolean rslt = CheckoutSystem.validator(b);
+		boolean rslt = checkout.validator(b);
 		assertEquals(false, rslt);
 	}
 
@@ -41,7 +42,7 @@ public class TestCheckoutSystem {
 		Cart c = new Cart(p, 10, LocalDate.now());
 		CompletedCart cf = new CompletedCart(c, "0", "s123");
 		aero.addProductToCompletedCart(c, "0", "s123");
-		CompletedCart complete = CheckoutSystem.searchHistoryForRefund("0", "candies", "Food", 1, aero);
+		CompletedCart complete = checkout.searchHistoryForRefund("0", "candies", "Food", 1, aero);
 		assertEquals(cf.getOrderRefNo(), complete.getOrderRefNo());
 	}
 
@@ -53,7 +54,7 @@ public class TestCheckoutSystem {
 		Cart c = new Cart(p, 10, LocalDate.now());
 		new CompletedCart(c, "0", "s123");
 		aero.addProductToCompletedCart(c, "0", "s123");
-		CompletedCart complete = CheckoutSystem.searchHistoryForRefund("0", "candies", "pp", 1, aero);
+		CompletedCart complete = checkout.searchHistoryForRefund("0", "candies", "pp", 1, aero);
 		assertEquals(null, complete);
 	}
 
@@ -65,7 +66,7 @@ public class TestCheckoutSystem {
 		Cart c = new Cart(p, 10, LocalDate.now());
 		new CompletedCart(c, "0", "s123");
 		aero.addProductToCompletedCart(c, "0", "s123");
-		CompletedCart complete = CheckoutSystem.searchHistoryForRefund("0", "candie", "Food", 1, aero);
+		CompletedCart complete = checkout.searchHistoryForRefund("0", "candie", "Food", 1, aero);
 		assertEquals(null, complete);
 	}
 
@@ -77,14 +78,14 @@ public class TestCheckoutSystem {
 		Cart c = new Cart(p, 10, LocalDate.now());
 		new CompletedCart(c, "0", "s123");
 		aero.addProductToCompletedCart(c, "0", "s123");
-		CompletedCart complete = CheckoutSystem.searchHistoryForRefund("1", "candies", "Food", 1, aero);
+		CompletedCart complete = checkout.searchHistoryForRefund("1", "candies", "Food", 1, aero);
 		assertEquals(null, complete);
 	}
 
 	@Test
 	public void testSearchHistoryForRefund_6() throws ParseException {
 		Member aero = new Member("aero", "2001", "M", "7HEAD", "123");
-		CompletedCart complete = CheckoutSystem.searchHistoryForRefund("0", "candies", "Food", 1, aero);
+		CompletedCart complete = checkout.searchHistoryForRefund("0", "candies", "Food", 1, aero);
 		assertEquals(null, complete);
 	}
 
@@ -168,6 +169,7 @@ public class TestCheckoutSystem {
 		boolean rslt = p.checkSalesIsEmpty();
 		assertEquals(true, rslt);
 	}
+	
 //	@Test
 //	public void testRefund() throws ParseException {
 //		Member aero = new Member("aero", "2001", "M", "7HEAD", "123");

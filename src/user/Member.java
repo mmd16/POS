@@ -99,7 +99,6 @@ public class Member {
 				this.removeProductInCart(c.getCart());
 			}
 		}
-
 	}
 
 	public double countFinalPrice() {

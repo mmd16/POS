@@ -15,7 +15,7 @@ public class SalesController implements Controller {
 	@SuppressWarnings("unused")
 	private Member member;
 	private static SalesController instance;
-
+	private SalesSystem sales = SalesSystem.getInstance();
 	// private function because it is singleton
 	private SalesController() {
 
@@ -46,13 +46,13 @@ public class SalesController implements Controller {
 				continue;
 			switch (input) {
 			case 1:
-				SalesSystem.listSales();
+				sales.listSales();
 				break;
 			case 2:
-				SalesSystem.checkForTotalIncome();
+				sales.checkForTotalIncome();
 				break;
 			case 3:
-				SalesSystem.checkForHighestSalesProductAndPercentage();
+				sales.checkForHighestSalesProductAndPercentage();
 				break;
 			case 4:
 				System.out.println("Exiting...");

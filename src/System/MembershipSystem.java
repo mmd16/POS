@@ -1,17 +1,42 @@
 package System;
 
+import membership.PlatinumMembership;
 import user.Member;
 
 public class MembershipSystem {
-	public static String getMembershipLevel(Member member) {
+
+	private static MembershipSystem instance;
+
+	private MembershipSystem() {
+	};
+
+	public static MembershipSystem getInstance() {
+		if (instance == null) {
+			instance = new MembershipSystem();
+			return instance;
+		} else {
+			return instance;
+		}
+	}
+
+	public String getMembershipLevel(Member member) {
 		return member.getMembership().getMembershipLevel();
 	}
 
-	public static int getPoints(Member member) {
+	public int getPoints(Member member) {
 		return member.getPoints();
 	}
 
-	public static double checkRemainingProgress(Member member) {
-		return member.checkRemainingProgress();
+	public double checkRemainingProgress(Member member) {
+		if(member.getMembership() instanceof PlatinumMembership) 
+		{
+			System.out.println("You already had the highest level of membership! We are glad to be with you!");
+			return 0;
+		}
+		else 
+		{
+			return member.checkRemainingProgress();
+		}
+		
 	}
 }

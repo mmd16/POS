@@ -9,6 +9,7 @@ public class CheckoutController implements Controller {
 	private Employee employee;
 	private Member member;
 	private static CheckoutController instance;
+	private CheckoutSystem checkout = CheckoutSystem.getInstance();
 
 	// private function because it is singleton
 	private CheckoutController() {
@@ -38,10 +39,10 @@ public class CheckoutController implements Controller {
 				continue;
 			switch (input) {
 			case 1:
-				CheckoutSystem.checkoutProcedure(member, employee);
+				checkout.checkoutProcedure(member, employee);
 				break;
 			case 2:
-				CheckoutSystem.refund(member, employee);
+				checkout.refund(member, employee);
 				break;
 			case 3:
 				System.out.println("Exiting...");

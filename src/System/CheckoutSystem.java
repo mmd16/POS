@@ -9,8 +9,20 @@ import user.CompletedCart;
 import user.Member;
 
 public class CheckoutSystem {
+	private static CheckoutSystem instance;
+	private CheckoutSystem() {
+	};
 
-	public static void refund(Member member, Employee employee) {
+	public static CheckoutSystem getInstance() {
+		if (instance == null) {
+			instance = new CheckoutSystem();
+			return instance;
+		} else {
+			return instance;
+		}
+	}
+
+	public void refund(Member member, Employee employee) {
 		try {
 			if (validator(employee)) {
 				boolean isTrue = false;
@@ -44,16 +56,16 @@ public class CheckoutSystem {
 		}
 	}
 
-	public static void refund(CompletedCart c, int quantity, Manager manager, Member member) {
+	public void refund(CompletedCart c, int quantity, Manager manager, Member member) {
 		member.refund(c, quantity, manager);
 	}
 
-	public static CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType,
+	public CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType,
 			int quantity, Member member) {
 		return member.searchHistoryForRefund(orderRefNo, productName, productType, quantity);
 	}
 
-	public static void checkoutProcedure(Member member, Employee employee) {
+	public void checkoutProcedure(Member member, Employee employee) {
 		boolean isCompleted = false;
 		do {
 			member.listCart();
@@ -82,7 +94,7 @@ public class CheckoutSystem {
 
 	}
 
-	public static void modifyProductInCart(Member member) {
+	public void modifyProductInCart(Member member) {
 		if (member.isEmpty() == false) {
 			boolean complete = false;
 			do {
@@ -102,14 +114,14 @@ public class CheckoutSystem {
 		}
 	}
 
-	public static boolean validator(Employee employee) {
+	public boolean validator(Employee employee) {
 		if (employee instanceof Manager) {
 			return true;
 		}
 		return false;
 	}
 
-	public static void removeProductInCart(Member member) {
+	public void removeProductInCart(Member member) {
 		boolean complete = false;
 		do {
 			System.out.println("Please input which products customers would like to remove from their cart.");
@@ -123,7 +135,7 @@ public class CheckoutSystem {
 		} while (complete == false);
 	}
 
-	public static void checkout(Member member, Employee employee) {
+	public void checkout(Member member, Employee employee) {
 		try {
 			double total = 0;
 			total = member.countFinalPrice();
@@ -142,7 +154,7 @@ public class CheckoutSystem {
 
 	}
 
-	public static boolean changeForthePayment(double total, double cash) {
+	public boolean changeForthePayment(double total, double cash) {
 		boolean enough = true;
 		enough = (cash >= total) ? true : false;
 		return enough;
