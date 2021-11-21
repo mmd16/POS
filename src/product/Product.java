@@ -234,5 +234,7 @@ public class Product {
 		this.brand = brand;
 	}
 	
-	
+	public boolean checkSalesIsEmpty() {
+		return this.salesList.isEmpty();
+	}
 }

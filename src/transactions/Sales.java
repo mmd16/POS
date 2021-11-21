@@ -103,6 +103,10 @@ public class Sales {
 		sortSales();
 	}
 
+	public static void clearSales() {
+		salesList.clear();
+	}
+
 	public static Sales getSalesByOrderRefNo(String orderRefNo) {
 		for (Sales s : salesList) {
 			if (s.getOrderRefNo().equals(orderRefNo))
@@ -181,8 +185,7 @@ public class Sales {
 		this.markedPrice = this.unitPrice * this.getQuantity();
 	}
 
-	public double getSellingUnitPrice() 
-	{
+	public double getSellingUnitPrice() {
 		double unitPrice = this.getSellingPrice() / this.getQuantity();
 		return unitPrice;
 	}

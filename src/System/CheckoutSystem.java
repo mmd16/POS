@@ -23,7 +23,7 @@ public class CheckoutSystem {
 					String productType = Tools.sc.next();
 					System.out.println("Please input the quantity that the customers would like to return:");
 					int quantity = Tools.sc.nextInt();
-					CompletedCart completedCart = searchHistoryForrefund(orderRefNo, productName, productType, quantity,
+					CompletedCart completedCart = searchHistoryForRefund(orderRefNo, productName, productType, quantity,
 							member);
 					if (completedCart == null) {
 						throw new ExFailInRefund();
@@ -48,9 +48,9 @@ public class CheckoutSystem {
 		member.refund(c, quantity, manager);
 	}
 
-	public static CompletedCart searchHistoryForrefund(String orderRefNo, String productName, String productType,
+	public static CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType,
 			int quantity, Member member) {
-		return member.searchHistoryForrefund(orderRefNo, productName, productType, quantity);
+		return member.searchHistoryForRefund(orderRefNo, productName, productType, quantity);
 	}
 
 	public static void checkoutProcedure(Member member, Employee employee) {

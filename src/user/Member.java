@@ -312,11 +312,11 @@ public class Member {
 		completedCart.add(new CompletedCart(c, orderRefNo, salesNo));
 	}
 
-	public CompletedCart searchHistoryForrefund(String orderRefNo, String productName, String productType,
+	public CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType,
 			int quantity) {
 		for (CompletedCart c : completedCart) {
 			if (c.getCart().getProduct().getType().equals(productType)
-					&& c.getCart().getProductName().equals(productName))
+					&& c.getCart().getProductName().equals(productName) && c.getOrderRefNo().equals(orderRefNo))
 				return c;
 		}
 		return null;
