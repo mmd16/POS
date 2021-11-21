@@ -33,6 +33,12 @@ class TestAgeGroupFactory {
 	}
 	
 	@Test
+	void testAllocation_4a() {
+		int year = 1000;
+		assertEquals(null , AgeGroupFactory.Allocation(year));
+	}
+	
+	@Test
 	void testAllocation_5() {
 		int year = 0;
 		assertEquals(null , AgeGroupFactory.Allocation(year));

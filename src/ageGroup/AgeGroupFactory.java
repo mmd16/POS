@@ -12,7 +12,7 @@ public class AgeGroupFactory {
 			return new Teenagers();
 		else if (age < 50)
 			return new Adult();
-		else if (age > 49 && age < 150)
+		else if (age < 150)
 			return new Elderly();
 		else
 			return null;

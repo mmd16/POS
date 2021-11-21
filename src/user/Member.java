@@ -117,8 +117,13 @@ public class Member {
 
 	public void upgradeMembership() {
 		if (checkMembership()) {
-			while (this.checkRemainingProgress() < 0 && this.getMembership() instanceof PlatinumMembership) {
-				setMembership(this.getMembership().upgradeMembership());
+			while (this.checkRemainingProgress() < 0) {
+				if (this.getMembership() instanceof PlatinumMembership) {
+					break;
+				} else {
+					setMembership(this.getMembership().upgradeMembership());
+				}
+
 			}
 		}
 	}

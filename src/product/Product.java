@@ -15,6 +15,7 @@ public class Product {
 	private String name;
 	private String type;
 	private String productCode;
+	private String brand;
 	private double price;
 	private int inventory = 0;
 	private LocalDate expireDate;
@@ -22,10 +23,11 @@ public class Product {
 	private ArrayList<Sales> salesList;
 	private PriorityQueue<Product> productQueue;
 
-	public Product(String name, String type, double price, int inventory, LocalDate expireDate) {
+	public Product(String name, String type, double price, int inventory, LocalDate expireDate, String brand) {
 		this.name = name;
 		this.type = type;
 		this.price = price;
+		this.brand = brand;
 		this.inventory = inventory;
 		this.importDate = LocalDate.now();
 		this.expireDate = expireDate;
@@ -224,4 +226,13 @@ public class Product {
 		this.importDate = importDate;
 	}
 
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+	
+	
 }
