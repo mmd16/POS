@@ -1,16 +1,15 @@
 package testing;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
-import System.MembershipSystem;
+import function.MembershipFunctions;
 import user.Member;
 
 class TestMembershipSystem {
-	private MembershipSystem membership = MembershipSystem.getInstance();
+	private MembershipFunctions membership = new MembershipFunctions();
 
 	@Test
 	void testGetMembershipLevel() {

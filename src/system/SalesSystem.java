@@ -1,17 +1,19 @@
-package System;
+package system;
 
 import java.time.LocalDate;
 
+import db.InventoryDataBase;
+import db.SalesDataBase;
 import exception.ExNoSalesExists;
 import exception.ExNoSalesInSelectedAge;
+import function.SalesFunction;
 import product.Product;
-import product.ProductFactory;
 import tool.Tools;
-import transactions.Sales;
 
 public class SalesSystem {
 	private static SalesSystem instance;
-
+	private SalesFunction salesFunction = new SalesFunction();
+	private Tools tools = Tools.getInstance();
 	private SalesSystem() {
 	};
 
@@ -25,33 +27,33 @@ public class SalesSystem {
 	}
 
 	public void listSales() {
-		Sales.listSales();
+		salesFunction.listSales();
 	}
 
 	public void checkForTotalIncome() {
 		int daysUnit = getCheckIncomeDaysUnit();
-		double total = Sales.getTotalRevenue(LocalDate.now(), daysUnit);
-		System.out.printf("The Total Revenue for %s is %.2f\n", Tools.returnStrforMoments(daysUnit), total);
+		double total = salesFunction.getTotalRevenue(LocalDate.now(), daysUnit);
+		System.out.printf("The Total Revenue for %s is %.2f\n", tools.returnStrforMoments(daysUnit), total);
 	}
 
 	public void checkForHighestSalesProductAndPercentage() {
 		try {
-			if (Sales.checkSalesIsEmpty()) {
+			if (salesFunction.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
 				int daysUnit = getCheckSalesDaysUnit();
 				int ageGroupUnit = getCheckAgeGroupDigit();
 				boolean ageFilter = (ageGroupUnit == 0) ? false : true;
-				Product product = ProductFactory.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
+				Product product = salesFunction.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
 				if (product == null) {
 					throw new ExNoSalesInSelectedAge();
 				} else {
-					double percentage = ProductFactory.getSalesPercentageForProduct(daysUnit, product, ageFilter,
-							ageGroupUnit);
-					System.out.printf("The highest sales product for %s is %s\n", Tools.returnStrforMoments(daysUnit),
+					double percentage = salesFunction.getSalesPercentageForProduct(daysUnit, product, ageFilter,
+							ageGroupUnit, salesFunction.getTotalSalesNum());
+					System.out.printf("The highest sales product for %s is %s\n", tools.returnStrforMoments(daysUnit),
 							product.getName());
-					System.out.printf("The Sales Percentage for %s in %s is %.2f\n", product.getName(),
-							Tools.returnStrforMoments(daysUnit), percentage);
+					System.out.printf("The Sales Percentage for %s in %s is %.2f %%\n", product.getName(),
+							tools.returnStrforMoments(daysUnit), percentage);
 				}
 			}
 		} catch (ExNoSalesExists e) {
@@ -70,7 +72,7 @@ public class SalesSystem {
 			System.out.println("Input (1) for checking highest sales Product month");
 			System.out.println("Input (2) for checking highest sales Product year");
 			input4 = Tools.sc.nextInt();
-			isEnd = Tools.inputValidator(0, 2, input4);
+			isEnd = tools.inputValidator(0, 2, input4);
 		} while (isEnd == false);
 		return input4;
 
@@ -84,7 +86,7 @@ public class SalesSystem {
 			System.out.println("Input (1) for checking Total income this month");
 			System.out.println("Input (2) for checking Total income this year");
 			input4 = Tools.sc.nextInt();
-			isEnd = Tools.inputValidator(0, 2, input4);
+			isEnd = tools.inputValidator(0, 2, input4);
 		} while (isEnd == false);
 		return input4;
 	}
@@ -98,7 +100,7 @@ public class SalesSystem {
 			System.out.println("Input (2) for highest sales Product for Adult");
 			System.out.println("Input (3) for highest sales Product for Elderly");
 			input3 = Tools.sc.nextInt();
-			isEnd = Tools.inputValidator(0, 3, input3);
+			isEnd = tools.inputValidator(0, 3, input3);
 		} while (isEnd == false);
 		return input3;
 

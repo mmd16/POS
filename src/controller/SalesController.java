@@ -2,10 +2,10 @@ package controller;
 
 import java.time.LocalDate;
 
-import System.SalesSystem;
 import product.Product;
 import product.ProductFactory;
 import staff.Employee;
+import system.SalesSystem;
 import tool.Tools;
 import transactions.Sales;
 import user.Member;
@@ -16,6 +16,7 @@ public class SalesController implements Controller {
 	private Member member;
 	private static SalesController instance;
 	private SalesSystem sales = SalesSystem.getInstance();
+	private Tools tools = Tools.getInstance();
 	// private function because it is singleton
 	private SalesController() {
 
@@ -42,7 +43,7 @@ public class SalesController implements Controller {
 			// highest sales category among different age group will be implemented later
 			System.out.println("Input (4) for exit");
 			int input = Tools.sc.nextInt();
-			if (!Tools.inputValidator(1, 4, input))
+			if (!tools.inputValidator(1, 4, input))
 				continue;
 			switch (input) {
 			case 1:

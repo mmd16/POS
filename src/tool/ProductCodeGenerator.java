@@ -1,20 +1,28 @@
-package random;
+package tool;
 
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import db.InventoryDataBase;
 import product.ProductFactory;
 
 public class ProductCodeGenerator {
 
+	public static ProductCodeGenerator instance = new ProductCodeGenerator();
+
+	public static ProductCodeGenerator getInstance() {
+		return instance;
+	}
+
 	public ProductCodeGenerator() {
 	};
 
+	private InventoryDataBase invenDB = InventoryDataBase.getInstance();
 	private static AtomicInteger uniqueId = new AtomicInteger();
 
-	public static String generateProductCode(String name, String type) {
-		if (ProductFactory.checkExistingProduct(name, type)) {
-			return ProductFactory.searchProductCodeByNameAndType(name, type).getProductCode();
+	public String generateProductCode(String name, String type) {
+		if (invenDB.searchProduct(name, type) != null) {
+			return invenDB.searchProduct(name, type).getProductCode();
 		} else {
 			int temp = 0;
 			String rslt = "";
@@ -25,7 +33,7 @@ public class ProductCodeGenerator {
 
 	}
 
-	public static String generateOrderRefNo(LocalDate date) {
+	public String generateOrderRefNo(LocalDate date) {
 		int temp = 0;
 		String rslt = "";
 		String datestr = date.toString();

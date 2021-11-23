@@ -2,8 +2,8 @@ package controller;
 
 import java.text.ParseException;
 
-import System.InventorySystem;
 import staff.Employee;
+import system.InventorySystem;
 import tool.Tools;
 import user.Member;
 
@@ -13,6 +13,7 @@ public class InventoryController implements Controller {
 	private Member member;
 	private static InventoryController instance;
 	private InventorySystem inventory = InventorySystem.getInstance();
+	private Tools tools = Tools.getInstance();
 
 	// private function because it is singleton
 	private InventoryController() {
@@ -39,7 +40,7 @@ public class InventoryController implements Controller {
 			System.out.println("Input (3) for check inventory");
 			System.out.println("Input (4) for exit");
 			int input = Tools.sc.nextInt();
-			if(!Tools.inputValidator(1, 4, input))
+			if(!tools.inputValidator(1, 4, input))
 				continue;
 			switch (input) {
 			case 1:

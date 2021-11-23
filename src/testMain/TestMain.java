@@ -6,6 +6,8 @@ import controller.CheckoutController;
 import controller.InventoryController;
 import controller.MembershipController;
 import controller.SalesController;
+import db.UserDataBase;
+import db.UserDataBase;
 import staff.Employee;
 import tool.InsertData;
 import tool.Tools;
@@ -20,14 +22,17 @@ public class TestMain {
 	static int digit = 0;
 
 	public static void main(String[] args) throws ParseException {
-		InsertData.loadData();
+		InsertData insertData = InsertData.getInstance();
+		Tools tools = Tools.getInstance();
+		UserDataBase userDB = UserDataBase.getInstance();
+		insertData.loadData();
 		// Search of Employee//
 		String temp;
 		do {
 			System.out.println("Please input your Worker ID for logging in the system...");
 			temp = Tools.sc.next();
-		} while (!Tools.idValidator("Employee", temp));
-		employee = Employee.searchEmployee(temp);
+		} while (!tools.idValidator("Employee", temp));
+		employee = userDB.getEmployee(temp);
 		// Search of Employee//
 
 		// Search of Member//
@@ -35,8 +40,8 @@ public class TestMain {
 		do {
 			System.out.println("Please input your Member ID for logging in the system...");
 			uid = Tools.sc.next();
-		} while (!Tools.idValidator("Member", uid));
-		member = Member.getMember(uid);
+		} while (!tools.idValidator("Member", uid));
+		member = userDB.getMember(uid);
 		// Search of Member//
 
 		System.out.println("---Welcome to Morx Supermarket---");
@@ -49,7 +54,7 @@ public class TestMain {
 			System.out.println("Input (5) for switching member"); // Bad Eng, can be changed.
 			System.out.println("Input (6) to exit");
 			digit = Tools.sc.nextInt();
-			if (!Tools.inputValidator(1, 6, digit))
+			if (!tools.inputValidator(1, 6, digit))
 				continue;
 			switch (digit) {
 			case 1:
@@ -76,8 +81,8 @@ public class TestMain {
 				do {
 					System.out.println("---Please input your Member ID for logging in the system...---");
 					uid = Tools.sc.next();
-				} while (!Tools.idValidator("Member", uid));
-				member = Member.getMember(uid);
+				} while (!tools.idValidator("Member", uid));
+				member = userDB.getMember(uid);
 				break;
 			case 6:
 				Tools.sc.close();

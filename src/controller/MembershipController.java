@@ -1,8 +1,8 @@
 package controller;
 
 
-import System.MembershipSystem;
 import staff.Employee;
+import system.MembershipSystem;
 import tool.Tools;
 import user.Member;
 
@@ -12,6 +12,7 @@ public class MembershipController implements Controller {
 	private Member member;
 	private Employee employee;
 	private MembershipSystem membership = MembershipSystem.getInstance();
+	private Tools tools = Tools.getInstance();
 	// private function because it is singleton
 	private MembershipController() {
 	}
@@ -36,17 +37,17 @@ public class MembershipController implements Controller {
 			System.out.println("Input (3) for checking the status to another level of Membership");
 			System.out.println("Input (4) for exit");
 			int cmd = Tools.sc.nextInt();
-			if(!Tools.inputValidator(1, 4, cmd))
+			if(!tools.inputValidator(1, 4, cmd))
 				continue;
 			switch (cmd) {
 			case 1:
-				System.out.printf("The customer owns a %s Membership.\n", membership.getMembershipLevel(member));
+				membership.getMembershipLevel(member);
 				break;
 			case 2:
-				System.out.printf("The customer owns %d points.\n", membership.getPoints(member));
+				membership.getPoints(member);
 				break;
 			case 3:
-				System.out.printf("The customer still needs to spend $%.2f to upgrade.\n", membership.checkRemainingProgress(member));
+				membership.checkRemainingProgress(member);
 				break;
 			case 4:
 				System.out.println("Exiting....");

@@ -1,7 +1,7 @@
 package controller;
 
-import System.CheckoutSystem;
 import staff.Employee;
+import system.CheckoutSystem;
 import tool.Tools;
 import user.Member;
 
@@ -10,7 +10,7 @@ public class CheckoutController implements Controller {
 	private Member member;
 	private static CheckoutController instance;
 	private CheckoutSystem checkout = CheckoutSystem.getInstance();
-
+	private Tools tools = Tools.getInstance();
 	// private function because it is singleton
 	private CheckoutController() {
 
@@ -35,7 +35,7 @@ public class CheckoutController implements Controller {
 			System.out.println("Input (2) for refund");
 			System.out.println("Input (3) for exit");
 			int input = Tools.sc.nextInt();
-			if (!Tools.inputValidator(1, 4, input))
+			if (!tools.inputValidator(1, 4, input))
 				continue;
 			switch (input) {
 			case 1:

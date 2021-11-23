@@ -1,10 +1,9 @@
 package tool;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import db.UserDataBase;
 import exception.ExCartIsEmpty;
 import exception.ExEmployeeIdNotExists;
 import exception.ExInvalidInput;
@@ -14,9 +13,19 @@ import user.Cart;
 import user.Member;
 
 public class Tools {
-	public final static Scanner sc = new Scanner(System.in);
+	public static Tools instance = new Tools();
 
-	public static int findMax(int[] array) {
+	public static Tools getInstance() {
+		return instance;
+	}
+
+	public Tools() {
+	};
+
+	public final static Scanner sc = new Scanner(System.in);
+	private UserDataBase userDB = UserDataBase.getInstance();
+
+	public int findMax(int[] array) {
 		int maxIndex = 0;
 		int temp = 0;
 		for (int i = 0; i < array.length; i++) {
@@ -27,7 +36,8 @@ public class Tools {
 		}
 		return maxIndex;
 	}
-	public static boolean inputValidator(int min, int max, int input) {
+
+	public boolean inputValidator(int min, int max, int input) {
 		try {
 			if (input > max || input < min)
 				throw new ExInvalidInput();
@@ -38,16 +48,16 @@ public class Tools {
 		}
 	}
 
-	public static boolean idValidator(String type, String uid) {
+	public boolean idValidator(String type, String uid) {
 		try {
 			switch (type) {
 			case "Employee":
-				if (Employee.searchEmployee(uid) == null) {
+				if (userDB.getEmployee(uid) == null) {
 					throw new ExEmployeeIdNotExists();
 				}
 				return true;
 			case "Member":
-				if (Member.getMember(uid) == null) {
+				if (userDB.getMember(uid) == null) {
 					throw new ExMemberIdNotExists();
 				}
 				return true;
@@ -63,13 +73,13 @@ public class Tools {
 		}
 	}
 
-	public static boolean continuationValidator(int digit) {
+	public boolean continuationValidator(int digit) {
 		if (digit == 0)
 			return true;
 		return false;
 	}
-	
-	public static String returnStrforMoments(int digit) {
+
+	public String returnStrforMoments(int digit) {
 		try {
 
 			switch (digit) {
@@ -88,7 +98,7 @@ public class Tools {
 		return null;
 	}
 
-	public static boolean checkCartisEmpty(ArrayList<Cart> cart) {
+	public boolean checkCartisEmpty(ArrayList<Cart> cart) {
 		try {
 			if (cart.isEmpty()) {
 				throw new ExCartIsEmpty();

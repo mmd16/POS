@@ -1,15 +1,21 @@
-package System;
+package system;
 
 import exception.ExFailInRefund;
 import exception.ExInsufficientPayment;
+import function.CheckoutFunctions;
+import function.MembershipFunctions;
 import staff.Employee;
 import staff.Manager;
 import tool.Tools;
+import user.Cart;
 import user.CompletedCart;
 import user.Member;
 
 public class CheckoutSystem {
 	private static CheckoutSystem instance;
+	private CheckoutFunctions checkoutFunction = new CheckoutFunctions();
+	private MembershipFunctions membershipFunction = new MembershipFunctions();
+	private Tools tools = Tools.getInstance();
 	private CheckoutSystem() {
 	};
 
@@ -24,7 +30,7 @@ public class CheckoutSystem {
 
 	public void refund(Member member, Employee employee) {
 		try {
-			if (validator(employee)) {
+			if (checkoutFunction.validator(employee)) {
 				boolean isTrue = false;
 				do {
 					System.out.println("Please input the Order Reference Number:");
@@ -35,17 +41,17 @@ public class CheckoutSystem {
 					String productType = Tools.sc.next();
 					System.out.println("Please input the quantity that the customers would like to return:");
 					int quantity = Tools.sc.nextInt();
-					CompletedCart completedCart = searchHistoryForRefund(orderRefNo, productName, productType, quantity,
+					CompletedCart completedCart = checkoutFunction.searchHistoryForRefund(orderRefNo, productName, productType, quantity,
 							member);
 					if (completedCart == null) {
 						throw new ExFailInRefund();
 					} else {
-						refund(completedCart, quantity, (Manager) employee, member);
+						checkoutFunction.refund(completedCart, quantity, (Manager) employee, member);
 						System.out.println("---Task Completed.---");
 						System.out.println("Do you have any other actions to continue ?");
 						System.out.println("Please input (0) to exit");
 						System.out.println("Please input (1) to continue");
-						isTrue = Tools.continuationValidator(Tools.sc.nextInt());
+						isTrue = tools.continuationValidator(Tools.sc.nextInt());
 					}
 				} while (isTrue == false);
 			} else {
@@ -56,19 +62,11 @@ public class CheckoutSystem {
 		}
 	}
 
-	public void refund(CompletedCart c, int quantity, Manager manager, Member member) {
-		member.refund(c, quantity, manager);
-	}
-
-	public CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType,
-			int quantity, Member member) {
-		return member.searchHistoryForRefund(orderRefNo, productName, productType, quantity);
-	}
 
 	public void checkoutProcedure(Member member, Employee employee) {
 		boolean isCompleted = false;
 		do {
-			member.listCart();
+			listCart(member);
 			System.out.print("\nPlease input (0) for proceed to checkout\n");
 			System.out.print("Please input (1) for remove products\n");
 			System.out.print("Please input (2) for modify quantities of products\n");
@@ -95,68 +93,69 @@ public class CheckoutSystem {
 	}
 
 	public void modifyProductInCart(Member member) {
-		if (member.isEmpty() == false) {
+		if (member.isCartEmpty() == false) {
 			boolean complete = false;
 			do {
 				System.out.println("Please input which products customers would like to modify from their cart.");
 				int input2 = Tools.sc.nextInt() - 1;
 				System.out.println("Please input the quantity that they would like to change.");
 				int input3 = Tools.sc.nextInt();
-				member.updateCart(input2, input3);
+				checkoutFunction.updateCart(input2, input3, member);
 				System.out.println("Task Completed.");
 				System.out.println("Do you have any other actions to continue ?");
 				System.out.println("Please input (0) to exit");
 				System.out.println("Please input (1) to continue");
-				complete = Tools.continuationValidator(Tools.sc.nextInt());
+				complete = tools.continuationValidator(Tools.sc.nextInt());
 			} while (complete == false);
 		} else {
 			System.out.println("Sorry, there is no products in cart");
 		}
 	}
 
-	public boolean validator(Employee employee) {
-		if (employee instanceof Manager) {
-			return true;
-		}
-		return false;
-	}
 
 	public void removeProductInCart(Member member) {
 		boolean complete = false;
 		do {
 			System.out.println("Please input which products customers would like to remove from their cart.");
 			int input2 = Tools.sc.nextInt() - 1;
-			member.removeProductInCart(input2);
+			checkoutFunction.removeProductInCart(member, input2);
 			System.out.println("Task Completed.");
 			System.out.println("Do you have any other actions to continue ?");
 			System.out.println("Please input (0) to exit");
 			System.out.println("Please input (1) to continue");
-			complete = Tools.continuationValidator(Tools.sc.nextInt());
+			complete = tools.continuationValidator(Tools.sc.nextInt());
 		} while (complete == false);
 	}
 
 	public void checkout(Member member, Employee employee) {
 		try {
 			double total = 0;
-			total = member.countFinalPrice();
+			total = checkoutFunction.countFinalPrice(member);
 			System.out.printf("The total amount is: $%.2f\n", total);
 			System.out.println("Please Input the amount of dollars that the customers paid");
 			double cash = Tools.sc.nextDouble();
-			if (changeForthePayment(total, cash)) {
+			if (checkoutFunction.changeForthePayment(total, cash)) {
 				System.out.printf("Total changes is $%.2f\n", cash - total);
-				member.checkout(employee);
+				checkoutFunction.checkout(member, employee);
+				membershipFunction.upgradeMembership(member);
 			} else {
 				throw new ExInsufficientPayment();
 			}
 		} catch (ExInsufficientPayment e) {
 			System.out.println(e.getMessage());
 		}
-
 	}
-
-	public boolean changeForthePayment(double total, double cash) {
-		boolean enough = true;
-		enough = (cash >= total) ? true : false;
-		return enough;
+	
+	public void confirmSales() {
+		
 	}
+	public void listCart(Member member) {
+		int temp = 1;
+		System.out.printf("%-20s%-20s%-20s%-20s", "No", "Description", "Quantity", "Price($)");
+		for (Cart c : member.getCart()) {
+			System.out.printf("\n%-20d%-20s%-20s%-20s", temp, c.getProductName(), c.getQuantity(), c.getAllPrice());
+			temp++;
+		}
+	}
+	
 }

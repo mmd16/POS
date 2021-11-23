@@ -1,16 +1,18 @@
-package System;
+package system;
 
 import java.text.ParseException;
 import java.time.LocalDate;
 
+import db.InventoryDataBase;
+import function.InventoryFunctions;
 import product.ProductFactory;
 import tool.Tools;
 
 public class InventorySystem {
-	private ProductFactory productFactory = ProductFactory.getInstance();
-
+	private InventoryFunctions inventoryFunction = new InventoryFunctions();
+	private Tools tools = Tools.getInstance();
 	private static InventorySystem instance;
-
+	
 	private InventorySystem() {
 	};
 
@@ -40,11 +42,11 @@ public class InventorySystem {
 				double markedPrice = Tools.sc.nextDouble();
 				System.out.println("Please input the quantity of the new product:");
 				int quantity = Tools.sc.nextInt();
-				productFactory.createProduct(productName, productType, markedPrice, quantity,
-						LocalDate.parse(productDate), productBrand);
+				inventoryFunction.createProduct(productName, productType, markedPrice, quantity,
+						productDate, productBrand);
 				System.out.println("Do you have any other actions to continue ?");
 				System.out.print("Please input (1) to continue \nPlease input (0) to exit\n");
-				isFalse = Tools.continuationValidator(Tools.sc.nextInt());
+				isFalse = tools.continuationValidator(Tools.sc.nextInt());
 			} catch (Exception e) {
 				System.out.println("*** Input Error! ***"); // for example, int field cannot input as string
 			}
@@ -54,11 +56,13 @@ public class InventorySystem {
 	public void deleteProduct() {
 		System.out.println("Please input the name for the product you want to delete:");
 		String productName = Tools.sc.next();
-		productFactory.removeProduct(productName);
+		System.out.println("Please input the Type for the product you want to delete:");
+		String productType = Tools.sc.next();
+		inventoryFunction.removeProduct(productName, productType);
 	}
 
 	public void listInventory() {
-		productFactory.listInventory();
+		inventoryFunction.listInventory();
 	}
 
 }

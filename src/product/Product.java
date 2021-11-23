@@ -1,5 +1,6 @@
 package product;
 
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,7 +8,7 @@ import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import ageGroup.AgeGroup;
-import random.ProductCodeGenerator;
+import tool.ProductCodeGenerator;
 import transactions.MemberSale;
 import transactions.Sales;
 
@@ -22,7 +23,7 @@ public class Product {
 	private LocalDate importDate;
 	private ArrayList<Sales> salesList;
 	private PriorityQueue<Product> productQueue;
-
+	private ProductCodeGenerator codeGen = ProductCodeGenerator.getInstance();
 	public Product(String name, String type, double price, int inventory, LocalDate expireDate, String brand) {
 		this.name = name;
 		this.type = type;
@@ -31,7 +32,7 @@ public class Product {
 		this.inventory = inventory;
 		this.importDate = LocalDate.now();
 		this.expireDate = expireDate;
-		this.productCode = ProductCodeGenerator.generateProductCode(name, type);
+		this.productCode = codeGen.generateProductCode(name, type);
 		this.salesList = new ArrayList<>();
 		this.productQueue = new PriorityQueue<Product>(new Comparator<Product>() {
 			@Override
@@ -43,69 +44,6 @@ public class Product {
 		});
 	}
 
-	public int countSales(LocalDate date, int digit) {
-		int temp = 0;
-		switch (digit) {
-		case 0:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s.getDate().isEqual(date))
-					temp += s.getQuantity();
-			}
-			return temp;
-		case 1:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s.getDate().getMonthValue() == date.getMonthValue())
-					temp += s.getQuantity();
-			}
-			return temp;
-		case 2:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s.getDate().getYear() == date.getYear())
-					temp += s.getQuantity();
-			}
-			return temp;
-		}
-		return temp;
-	}
-
-	public int countSales(LocalDate date, int digit, AgeGroup ageGroup) {
-		int temp = 0;
-		switch (digit) {
-		case 0:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s instanceof MemberSale) {
-					if (s.getDate().isEqual(date) && ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
-						temp += s.getQuantity();
-				}
-			}
-			return temp;
-		case 1:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s instanceof MemberSale) {
-					if (s.getDate().getMonthValue() == date.getMonthValue()
-							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
-						temp += s.getQuantity();
-				}
-			}
-			return temp;
-		case 2:
-			temp = 0;
-			for (Sales s : salesList) {
-				if (s instanceof MemberSale) {
-					if (s.getDate().getYear() == date.getYear()
-							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
-						temp += s.getQuantity();
-				}
-			}
-			return temp;
-		}
-		return temp;
-	}
 
 	public ArrayList<Sales> getSalesList() {
 		return salesList;
@@ -121,14 +59,6 @@ public class Product {
 
 	public void removeSales(Sales s) {
 		this.salesList.remove(s);
-	}
-
-	public void printElementsinQueue() {
-		Iterator<Product> value = productQueue.iterator();
-		while (value.hasNext()) {
-			Product p = value.next();
-			System.out.printf("%-10s%-20s%-10d%-10.2f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
-		}
 	}
 
 	public void addProductToQueue(Product p) {
@@ -169,25 +99,6 @@ public class Product {
 
 	public void removeInventory(int inventory) {
 		this.inventory -= inventory;
-	}
-
-	public void deductInventoryofProductsFromQueue(int inventory) {
-		int inventoryForCompareUse = inventory;
-
-		while (inventoryForCompareUse > 0) {
-			Product p = productQueue.element();
-			if (p.getInventory() > inventoryForCompareUse) {
-				p.removeInventory(inventoryForCompareUse);
-				inventoryForCompareUse = 0;
-			} else if (p.getInventory() == inventoryForCompareUse) {
-				productQueue.poll();
-				inventoryForCompareUse = 0;
-			} else if (p.getInventory() < inventoryForCompareUse) {
-				Product gar = productQueue.poll();
-				inventoryForCompareUse -= gar.getInventory();
-			}
-		}
-		this.removeInventory(inventory);
 	}
 
 	public void setName(String name) {
