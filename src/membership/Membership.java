@@ -13,13 +13,6 @@ public abstract class Membership
 		this.upgradeRequirement = upgradeRequirement;
 	}
 	
-	public Membership()
-	{
-		membershipLevel = "bronze";
-		discountRate = 1;
-		upgradeRequirement = 2000;
-	}
-	
 	public String getMembershipLevel() {
 		return membershipLevel;
 	}
@@ -48,7 +41,5 @@ public abstract class Membership
 		return upgradeRequirement - accumulatedSpending;
 	}
 
-	public Membership upgradeMembership() {
-		return this;
-	}
+	public abstract Membership upgradeMembership();
 }

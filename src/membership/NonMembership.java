@@ -6,4 +6,9 @@ public class NonMembership extends Membership {
 		super(1.0, 0, "Non-member");
 	}
 
+	@Override
+	public Membership upgradeMembership() {
+		return this;
+	}
+
 }

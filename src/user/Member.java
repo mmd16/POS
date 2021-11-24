@@ -174,8 +174,10 @@ public class Member {
 		return cart;
 	}
 
-	public void addProductToCart(Product product, int quantity, LocalDate Date) {
-		cart.add(new Cart(product, quantity, Date));
+	public Cart addProductToCart(Product product, int quantity, LocalDate Date) {
+		Cart c = new Cart(product, quantity, Date);
+		cart.add(c);
+		return c;
 	}
 
 	public void setCart(ArrayList<Cart> cart) {
@@ -198,8 +200,10 @@ public class Member {
 		return cart.get(digit).getProduct();
 	}
 
-	public void addProductToCompletedCart(Cart c, String orderRefNo, String salesNo) {
-		completedCart.add(new CompletedCart(c, orderRefNo, salesNo));
+	public CompletedCart addProductToCompletedCart(Cart c, String orderRefNo, String salesNo) {
+		CompletedCart complete = new CompletedCart(c, orderRefNo, salesNo);
+		completedCart.add(complete);
+		return complete;
 	}
 
 	public boolean isCartEmpty() {
