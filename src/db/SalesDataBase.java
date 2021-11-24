@@ -37,6 +37,11 @@ public class SalesDataBase implements Database {
 	public <T> void remove(T s) {
 		this.salesList.remove((Sales) s);
 	}
+	
+	@Override
+	public <T> void clear() {
+		this.salesList.clear();
+	}
 
 	public int getTotalSalesNum() {
 		int temp = 0;

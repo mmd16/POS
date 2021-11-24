@@ -3,6 +3,7 @@ package testing;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,110 +12,6 @@ import staff.Employee;
 import transactions.Sales;
 
 class TestSales {
-	
-//	@Test
-//	void testGetSalesByOrderRefNo_1() {
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0003");
-//		assertEquals(sale ,Sales.getSalesByOrderRefNo("0003"));
-//	}
-//	
-//	@Test
-//	void testGetSalesByOrderRefNo_2() {
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		assertEquals(null ,Sales.getSalesByOrderRefNo("0002"));
-//	}
-//	
-//	@Test
-//	void testCheckSalesIsEmpty() {
-//		Sales.clearSales();
-//		assertEquals(true, Sales.checkSalesIsEmpty());
-//	}
-//	
-//	@Test
-//	void testGetTotalRevenue_0() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-21"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-22"), emp, 40.0, 40.0, "0003");
-//		assertEquals(60.0 ,Sales.getTotalRevenue(LocalDate.parse("2021-12-21"), 0), 0.001);
-//	}
-//	
-//	@Test
-//	void testGetTotalRevenue_1() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-31"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-01"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-12"), emp, 40.0, 40.0, "0003");
-//		Sales sale4 = new Sales(prod, 3, LocalDate.parse("2021-11-30"), emp, 60.0, 60.0, "0004");
-//		assertEquals(100.0 ,Sales.getTotalRevenue(LocalDate.parse("2021-12-21"), 1), 0.001);
-//	}
-//	
-//	@Test
-//	void testGetTotalRevenue_2() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-31"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-01"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-12"), emp, 40.0, 40.0, "0003");
-//		Sales sale4 = new Sales(prod, 3, LocalDate.parse("2021-11-30"), emp, 60.0, 60.0, "0004");
-//		Sales sale5 = new Sales(prod, 5, LocalDate.parse("2022-01-01"), emp, 100.0, 100.0, "0005");
-//		assertEquals(160.0 ,Sales.getTotalRevenue(LocalDate.parse("2021-12-21"), 2), 0.001);
-//	}
-//	
-//	@Test
-//	void testGetTotalRevenue_3() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-31"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-01"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-12"), emp, 40.0, 40.0, "0003");
-//		Sales sale4 = new Sales(prod, 3, LocalDate.parse("2021-11-30"), emp, 60.0, 60.0, "0004");
-//		Sales sale5 = new Sales(prod, 5, LocalDate.parse("2022-01-01"), emp, 100.0, 100.0, "0005");
-//		assertEquals(0 ,Sales.getTotalRevenue(LocalDate.parse("2021-12-21"), -1), 0.001);
-//	}
-//	
-//	@Test
-//	void testSearchSales_1() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-01"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-12"), emp, 40.0, 40.0, "0003");
-//		Sales sale4 = new Sales(prod, 3, LocalDate.parse("2021-11-30"), emp, 60.0, 60.0, "0004");
-//		Sales sale5 = new Sales(prod, 5, LocalDate.parse("2022-01-01"), emp, 100.0, 100.0, "0005");
-//		sale.setSalesCode("0121");
-//		assertEquals(sale ,Sales.searchSales("0121"));
-//	}
-//	
-//	@Test
-//	void testSearchSales_2() {
-//		Sales.clearSales();
-//		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-//		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-//		Sales sale2 = new Sales(prod, 2, LocalDate.parse("2021-12-01"), emp, 40.0, 40.0, "0002");
-//		Sales sale3 = new Sales(prod, 2, LocalDate.parse("2021-12-12"), emp, 40.0, 40.0, "0003");
-//		Sales sale4 = new Sales(prod, 3, LocalDate.parse("2021-11-30"), emp, 60.0, 60.0, "0004");
-//		Sales sale5 = new Sales(prod, 5, LocalDate.parse("2022-01-01"), emp, 100.0, 100.0, "0005");
-//		sale.setSalesCode("0121");
-//		sale2.setSalesCode("0122");
-//		sale3.setSalesCode("0123");
-//		sale4.setSalesCode("0124");
-//		sale5.setSalesCode("0125");
-//		assertEquals(null ,Sales.searchSales("0126"));
-//	}
-//	
 	@Test
 	void testGetStrDate() {
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
@@ -162,17 +59,34 @@ class TestSales {
 	void testGetMarkedPrice() {
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
-		assertEquals(20.0 ,sale.getMarkedPrice(),0.001);
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 40.0, 20.0, "0001");
+		assertEquals(40.0 ,sale.getMarkedPrice(),0.001);
 	}
 	
 	@Test
 	void testSetMarkedPrice() {
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 20.0, "0001");
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 40.0, 20.0, "0001");
 		sale.setMarkedPrice(60.0);
 		assertEquals(60.0 ,sale.getMarkedPrice(),0.001);
+	}
+	
+	@Test
+	void testGetSellingPrice() {
+		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
+		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 40.0, "0001");
+		assertEquals(40.0 ,sale.getSellingPrice(),0.001);
+	}
+	
+	@Test
+	void testSetSellingPrice() {
+		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
+		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-12-21"), emp, 20.0, 40.0, "0001");
+		sale.setSellingPrice(50.0);
+		assertEquals(50.0 ,sale.getSellingPrice(),0.001);
 	}
 	
 	@Test
@@ -234,6 +148,13 @@ class TestSales {
 		Sales sale = new Sales(prod, 3, LocalDate.parse("2021-12-21"), emp, 20.00, 20.00, "0001");
 		sale.deductQuantity(2);
 		assertEquals(1 ,sale.getQuantity());
+	}
+	
+	@Test
+	void testUniqueId() {
+		AtomicInteger uniqueId = new AtomicInteger(1132);
+		Sales.setUniqueId(uniqueId);
+		assertEquals( 1132,Sales.getUniqueId().intValue());
 	}
 	
 	@Test

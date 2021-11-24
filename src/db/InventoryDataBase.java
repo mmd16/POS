@@ -37,6 +37,11 @@ public class InventoryDataBase implements Database {
 	public <T> void remove(T p) {
 		this.productList.remove((Product) p);
 	}
+	
+	@Override
+	public <T> void clear() {
+		this.productList.clear();
+	}
 
 	public void sortProduct() {
 		Collections.sort(productList, (x, y) -> x.getType().compareTo(y.getType()));
