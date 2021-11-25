@@ -38,22 +38,28 @@ public class SalesSystem {
 
 	public void checkForHighestSalesProductAndPercentage() {
 		try {
+			String str = "";
+			String str2 = "";
 			if (salesFunction.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
 				int daysUnit = getCheckSalesDaysUnit();
 				int ageGroupUnit = getCheckAgeGroupDigit();
 				boolean ageFilter = (ageGroupUnit == 0) ? false : true;
-				Product product = salesFunction.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
-				if (product == null) {
+				salesFunction.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
+				if (salesFunction.getHighestProductListSize() == 0) {
 					throw new ExNoSalesInSelectedAge();
 				} else {
-					double percentage = salesFunction.getSalesPercentageForProduct(daysUnit, product, ageFilter,
-							ageGroupUnit, salesFunction.getTotalSalesNum());
-					System.out.printf("The highest sales product for %s is %s\n", tools.returnStrforMoments(daysUnit),
-							product.getName());
-					System.out.printf("The Sales Percentage for %s in %s is %.2f %%\n", product.getName(),
-							tools.returnStrforMoments(daysUnit), percentage);
+					for(Product p: salesFunction.getHighestSalesProductList()) {
+						double percentage = salesFunction.getSalesPercentageForProduct(daysUnit, p, ageFilter,
+								ageGroupUnit, salesFunction.getTotalSalesNum());
+						str += p.getName()+", ";
+						str2 += percentage + "%, ";
+					}
+					System.out.printf("The highest sales product for %s : %s\n", tools.returnStrforMoments(daysUnit),
+							str.substring(0, str.length()-2));
+					System.out.printf("The Sales Percentage for %s in %s is %s \n", str.substring(0, str.length()-2),
+							tools.returnStrforMoments(daysUnit), str2.substring(0, str2.length()-2));
 				}
 			}
 		} catch (ExNoSalesExists e) {

@@ -1,6 +1,7 @@
 package function;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import db.InventoryDataBase;
 import db.SalesDataBase;
@@ -21,13 +22,14 @@ public class SalesFunction {
 		return salesDB.getTotalSalesNum();
 	};
 
-
 	public double getTotalRevenue(LocalDate date, int daysUnit) {
 		return salesDB.getTotalRevenue(date, daysUnit);
 	}
+
 	public boolean checkSalesIsEmpty() {
 		return salesDB.checkSalesIsEmpty();
 	}
+
 	public double getSalesPercentageForProduct(int digit, Product product, boolean ageFilter, int age, int TotalSales) {
 		try {
 			double percentage = 0;
@@ -64,4 +66,11 @@ public class SalesFunction {
 		salesDB.listSales();
 	}
 
+	public int getHighestProductListSize() {
+		return invenDB.getHighestProductListSize();
+	}
+	
+	public ArrayList<Product> getHighestSalesProductList() {
+		return invenDB.getHighestSalesProductList();
+	}
 }

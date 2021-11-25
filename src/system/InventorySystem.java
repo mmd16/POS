@@ -31,11 +31,11 @@ public class InventorySystem {
 			try {
 
 				System.out.println("Please input the name for the new product:");
-				String productName = Tools.sc.next();
+				String productName = Tools.sc.nextLine();
 				System.out.println("Please input the category of the new product:");
 				String productType = Tools.sc.next();
 				System.out.println("Please input the brand of the new product:");
-				String productBrand = Tools.sc.next();
+				String productBrand = Tools.sc.nextLine();
 				System.out.println("Please input the food expire date / equipment warranty date in yyyy-mm-dd format");
 				String productDate = Tools.sc.next();
 				System.out.println("Please input the Marked Price for the new product:");

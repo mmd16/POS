@@ -1,9 +1,10 @@
 package function;
 
-import db.InventoryDataBase;
-import db.SalesDataBase;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import db.InventoryDataBase;
+import db.SalesDataBase;
 import product.Product;
 import staff.Employee;
 import staff.Manager;
@@ -21,11 +22,13 @@ public class CheckoutFunctions {
 
 	private ProductCodeGenerator codeGen = ProductCodeGenerator.getInstance();
 
-	public void checkout(Member member, Employee employee) {
+	public Sales checkout(Member member, Employee employee) {
 		String temp = this.codeGen.generateOrderRefNo(LocalDate.now());
+		Sales s = null;
 		for (Cart c : member.getCart())
-			confirmSales(c, member, temp, employee);
+			 s = confirmSales(c, member, temp, employee);
 		removeCartAfterTransaction(member);
+		return s;
 	}
 
 	public void refund(CompletedCart c, int quantity, Manager manager, Member member) {

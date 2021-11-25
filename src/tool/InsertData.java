@@ -61,7 +61,6 @@ public class InsertData {
 		aero.addProductToCart(salt, 60, LocalDate.now());
 		karina.addProductToCart(candies, 100, LocalDate.now());
 		karina.addProductToCart(medicine, 100, LocalDate.now());
-		karina.addProductToCart(coke, 560, LocalDate.now());
 		user2.addProductToCart(coke, 200, LocalDate.now());
 		user2.addProductToCart(salt, 50, LocalDate.now());
 		// End

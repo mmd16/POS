@@ -7,6 +7,7 @@ import function.MembershipFunctions;
 import staff.Employee;
 import staff.Manager;
 import tool.Tools;
+import transactions.Sales;
 import user.Cart;
 import user.CompletedCart;
 import user.Member;
@@ -136,8 +137,9 @@ public class CheckoutSystem {
 			double cash = Tools.sc.nextDouble();
 			if (checkoutFunction.changeForthePayment(total, cash)) {
 				System.out.printf("Total changes is $%.2f\n", cash - total);
-				checkoutFunction.checkout(member, employee);
+				Sales s = checkoutFunction.checkout(member, employee);
 				membershipFunction.upgradeMembership(member);
+				System.out.printf("The Order Reference Number is %s\n", s.getOrderRefNo());
 			} else {
 				throw new ExInsufficientPayment();
 			}
