@@ -98,6 +98,10 @@ public class SalesDataBase implements Database {
 
 	}
 
+	public Sales getSalesbyPosition(int digit) {
+		return salesList.get(digit);
+	}
+
 	public Sales searchSales(String salesCode) {
 		for (Sales s : salesList) {
 			if (salesCode.equals(s.getSalesCode()))
@@ -122,4 +126,3 @@ public class SalesDataBase implements Database {
 		salesList.clear();
 	}
 }
-
