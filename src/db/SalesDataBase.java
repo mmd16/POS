@@ -37,11 +37,6 @@ public class SalesDataBase implements Database {
 	public <T> void remove(T s) {
 		this.salesList.remove((Sales) s);
 	}
-	
-	@Override
-	public <T> void clear() {
-		this.salesList.clear();
-	}
 
 	public int getTotalSalesNum() {
 		int temp = 0;
@@ -68,7 +63,7 @@ public class SalesDataBase implements Database {
 		case 1:
 			total = 0;
 			for (Sales s : salesList) {
-				if (s.getDate().getMonthValue() == (date.getMonthValue()))
+				if (s.getDate().getMonthValue() == (date.getMonthValue()) && s.getDate().getYear() == (date.getYear()))
 					total += s.getSellingPrice();
 			}
 			return total;
@@ -86,16 +81,21 @@ public class SalesDataBase implements Database {
 	}
 
 	public void listSales() {
-		sortSales();
-		int index = 1;
-		System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", "No.", "Product Code", "Product Name",
-				"Quantity", "Marked Price($)", "Selling Price($)", "Employee", "Sales Code");
-		for (Sales s : salesList) {
-			System.out.printf("%-20d%-20s%-20s%-20s%-20.2f%-20.2f%-20s%-20s\n", index, s.getProductCode(),
-					s.getProductName(), s.getQuantity(), s.getMarkedPrice(), s.getSellingPrice(),
-					s.getEmployee().getName(), s.getSalesCode());
-			index++;
+		if (checkSalesIsEmpty()) {
+			System.out.print("There is no sales yet.\n");
+		} else {
+			sortSales();
+			int index = 1;
+			System.out.printf("%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-20s\n", "No.", "Product Code", "Product Name",
+					"Quantity", "Marked Price($)", "Selling Price($)", "Employee", "Sales Code", "Order Ref No");
+			for (Sales s : salesList) {
+				System.out.printf("%-20d%-20s%-20s%-20s%-20.2f%-20.2f%-20s%-20s%-20s\n", index, s.getProductCode(),
+						s.getProductName(), s.getQuantity(), s.getMarkedPrice(), s.getSellingPrice(),
+						s.getEmployee().getName(), s.getSalesCode(), s.getOrderRefNo());
+				index++;
+			}
 		}
+
 	}
 
 	public Sales searchSales(String salesCode) {
@@ -118,4 +118,8 @@ public class SalesDataBase implements Database {
 		return salesList.isEmpty();
 	}
 
+	public void clearSalesList() {
+		salesList.clear();
+	}
 }
+

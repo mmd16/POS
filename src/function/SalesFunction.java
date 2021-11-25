@@ -21,9 +21,6 @@ public class SalesFunction {
 		return salesDB.getTotalSalesNum();
 	};
 
-	public double checkForTotalIncome(int daysUnit) {
-		return salesDB.getTotalRevenue(LocalDate.now(), daysUnit);
-	}
 
 	public double getTotalRevenue(LocalDate date, int daysUnit) {
 		return salesDB.getTotalRevenue(date, daysUnit);
@@ -42,7 +39,7 @@ public class SalesFunction {
 			return percentage;
 
 		} catch (ExNoSalesExists e) {
-			System.out.println(e.getMessage());
+			System.out.print(e.getMessage());
 		}
 		return 0;
 	};
@@ -58,7 +55,7 @@ public class SalesFunction {
 			}
 			return productTemp;
 		} catch (ExNoSalesExists e) {
-			System.out.println(e.getMessage());
+			System.out.print(e.getMessage());
 		}
 		return null;
 	}

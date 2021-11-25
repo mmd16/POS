@@ -47,11 +47,6 @@ public class UserDataBase implements Database{
 		}
 	}
 	
-	@Override
-	public <T> void clear() {
-		this.clear();
-	}
-	
 	public Member getMember(String userId) {
 		return members.get(userId);
 	}

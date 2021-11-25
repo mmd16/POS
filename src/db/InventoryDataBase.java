@@ -37,21 +37,20 @@ public class InventoryDataBase implements Database {
 	public <T> void remove(T p) {
 		this.productList.remove((Product) p);
 	}
-	
-	@Override
-	public <T> void clear() {
-		this.productList.clear();
-	}
 
 	public void sortProduct() {
 		Collections.sort(productList, (x, y) -> x.getType().compareTo(y.getType()));
 	}
 
 	public void listInventory() {
-		sortProduct();
-		System.out.printf("%-30s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
-		for (Product p : productList) {
-			System.out.printf("%-30s%-20s%-10d%-10.2f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
+		if (checkInventoryIsEmpty()) {
+			System.out.print("The inventory is empty.\n");
+		} else {
+			sortProduct();
+			System.out.printf("%-30s%-20s%-10s%-10s\n", "Type", "Product Name", "Quantity", "Marked Price($)/unit");
+			for (Product p : productList) {
+				System.out.printf("%-30s%-20s%-10d%-10.2f\n", p.getType(), p.getName(), p.getInventory(), p.getPrice());
+			}
 		}
 	}
 
@@ -65,6 +64,14 @@ public class InventoryDataBase implements Database {
 				return p;
 		}
 		return null;
+	}
+
+	public Product searchProductByPosition(int digit) {
+		return productList.get(digit);
+	}
+
+	public boolean checkInventoryIsEmpty() {
+		return productList.isEmpty();
 	}
 
 	public Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
@@ -143,7 +150,7 @@ public class InventoryDataBase implements Database {
 		case 1:
 			temp = 0;
 			for (Sales s : p.getSalesList()) {
-				if (s.getDate().getMonthValue() == date.getMonthValue())
+				if (s.getDate().getMonthValue() == date.getMonthValue() && s.getDate().getYear() == date.getYear())
 					temp += s.getQuantity();
 			}
 			break;
@@ -175,7 +182,7 @@ public class InventoryDataBase implements Database {
 			temp = 0;
 			for (Sales s : p.getSalesList()) {
 				if (s instanceof MemberSale) {
-					if (s.getDate().getMonthValue() == date.getMonthValue()
+					if (s.getDate().getMonthValue() == date.getMonthValue() && s.getDate().getYear() == date.getYear()
 							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
 						temp += s.getQuantity();
 				}
@@ -228,7 +235,7 @@ public class InventoryDataBase implements Database {
 		}
 		return percentage;
 	};
-	
+
 	public void deductInventoryofProductsFromQueue(int inventory, Product product) {
 		int inventoryForCompareUse = inventory;
 		while (inventoryForCompareUse > 0) {
@@ -239,11 +246,15 @@ public class InventoryDataBase implements Database {
 			} else if (p.getInventory() == inventoryForCompareUse) {
 				product.getProductQueue().poll();
 				inventoryForCompareUse = 0;
-			} else if (p.getInventory() < inventoryForCompareUse) {
+			} else {
 				Product gar = product.getProductQueue().poll();
 				inventoryForCompareUse -= gar.getInventory();
 			}
 		}
 		product.removeInventory(inventory);
+	}
+
+	public void clear() {
+		productList.clear();
 	}
 }

@@ -1,11 +1,9 @@
 package function;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-
 import db.InventoryDataBase;
 import db.SalesDataBase;
-import membership.NonMembership;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import product.Product;
 import staff.Employee;
 import staff.Manager;
@@ -17,31 +15,28 @@ import user.CompletedCart;
 import user.Member;
 
 public class CheckoutFunctions {
-
-	public CheckoutFunctions() {
-	};
-
 	private SalesDataBase salesDB = SalesDataBase.getInstance();
+
 	private InventoryDataBase invenDB = InventoryDataBase.getInstance();
+
 	private ProductCodeGenerator codeGen = ProductCodeGenerator.getInstance();
 
 	public void checkout(Member member, Employee employee) {
-		String temp = codeGen.generateOrderRefNo(LocalDate.now());
-		for (Cart c : member.getCart()) {
+		String temp = this.codeGen.generateOrderRefNo(LocalDate.now());
+		for (Cart c : member.getCart())
 			confirmSales(c, member, temp, employee);
-		}
 		removeCartAfterTransaction(member);
 	}
 
 	public void refund(CompletedCart c, int quantity, Manager manager, Member member) {
-		if (member.getMembership() instanceof NonMembership) {
-			Sales s = salesDB.searchSales(c.getSalesCode());
-			checkForSales(s, quantity);
-		} else {
-			Sales s = salesDB.searchSales(c.getSalesCode());
-			checkForCart(c, quantity, member);
-			checkForSales(s, quantity);
-		}
+		Sales s = this.salesDB.searchSales(c.getSalesCode());
+		checkForCart(c, quantity, member);
+		checkForSales(s, quantity);
+	}
+
+	public void refund(String orderRefNo, int quantity, Manager manager) {
+		Sales s = this.salesDB.getSalesByOrderRefNo(orderRefNo);
+		checkForSales(s, quantity);
 	}
 
 	public CompletedCart searchHistoryForRefund(String orderRefNo, String productName, String productType, int quantity,
@@ -55,16 +50,15 @@ public class CheckoutFunctions {
 	}
 
 	public Cart updateCart(int position, int quantity, Member member) {
-		double unitPrice = member.getCart().get(position).getUnitPrice();
-		member.getCart().get(position).setQuantity(quantity);
-		member.getCart().get(position).setAllPrice(quantity * unitPrice);
+		double unitPrice = ((Cart) member.getCart().get(position)).getUnitPrice();
+		((Cart) member.getCart().get(position)).setQuantity(quantity);
+		((Cart) member.getCart().get(position)).setAllPrice(quantity * unitPrice);
 		return member.getCart().get(position);
 	}
 
 	public boolean validator(Employee employee) {
-		if (employee instanceof Manager) {
+		if (employee instanceof Manager)
 			return true;
-		}
 		return false;
 	}
 
@@ -74,7 +68,7 @@ public class CheckoutFunctions {
 
 	public boolean changeForthePayment(double total, double cash) {
 		boolean enough = true;
-		enough = (cash >= total) ? true : false;
+		enough = (cash >= total);
 		return enough;
 	}
 
@@ -85,11 +79,10 @@ public class CheckoutFunctions {
 		return total;
 	}
 
-	public static double countTotalPrice(ArrayList<Cart> cartList) {
-		double rslt = 0;
-		for (Cart cart : cartList) {
+	public double countTotalPrice(ArrayList<Cart> cartList) {
+		double rslt = 0.0D;
+		for (Cart cart : cartList)
 			rslt += cart.getAllPrice();
-		}
 		return rslt;
 	}
 
@@ -98,38 +91,34 @@ public class CheckoutFunctions {
 	}
 
 	public int countPoints(double total, Member member) {
-		if (member.getMembership() instanceof NonMembership) {
+		if (member.getMembership() instanceof membership.NonMembership)
 			return 0;
-		} else {
-			int temp = 0;
-			if (total > 100)
-				temp += (int) (total / 100);
-			return temp;
-		}
-
+		int temp = 0;
+		if (total >= 100.0D)
+			temp += (int) (total / 100.0D);
+		return temp;
 	}
 
 	public Sales confirmSales(Cart c, Member member, String orderRefNo, Employee employee) {
 		double sellingPrice = applyDiscount(c.getAllPrice(), member);
-		if (member.getMembership() instanceof NonMembership) {
-			Sales s = new Sales(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
+		if (member.getMembership() instanceof membership.NonMembership) {
+			Sales sales = new Sales(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
 					sellingPrice, orderRefNo);
-			Product p = c.getProduct();
-			invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), p);
-			salesDB.add(s);
-			p.addSales(s);
-			return s;
-		} else {
-			MemberSale s = new MemberSale(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
-					applyDiscount(c.getAllPrice(), member), orderRefNo, member);
-			member.addAccumulatedSpending(sellingPrice);
-			member.addProductToCompletedCart(c, orderRefNo, s.getSalesCode());
-			Product p = c.getProduct();
-			invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), p);
-			salesDB.add(s);
-			p.addSales(s);
-			return s;
+			Product product = c.getProduct();
+			this.invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), product);
+			this.salesDB.add(sales);
+			product.addSales(sales);
+			return sales;
 		}
+		MemberSale s = new MemberSale(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
+				applyDiscount(c.getAllPrice(), member), orderRefNo, member);
+		member.addAccumulatedSpending(sellingPrice);
+		member.addProductToCompletedCart(c, orderRefNo, s.getSalesCode());
+		Product p = c.getProduct();
+		this.invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), p);
+		this.salesDB.add(s);
+		p.addSales((Sales) s);
+		return (Sales) s;
 	}
 
 	public void removeCartAfterTransaction(Member member) {
@@ -139,7 +128,7 @@ public class CheckoutFunctions {
 	public void checkForSales(Sales s, int quantity) {
 		double unitPrice = getSellingUnitPrice(s);
 		if (s.getQuantity() == quantity) {
-			salesDB.remove(s);
+			this.salesDB.remove(s);
 			s.getProduct().removeSales(s);
 		} else {
 			s.deductQuantity(quantity);
@@ -149,7 +138,6 @@ public class CheckoutFunctions {
 	}
 
 	public void checkForCart(CompletedCart c, int quantity, Member member) {
-
 		if (c.getCart().getQuantity() == quantity) {
 			member.removePurchaseHistory(c);
 		} else {
