@@ -97,7 +97,7 @@ public class CheckoutSystem {
 		if (member.isCartEmpty() == false) {
 			boolean complete = false;
 			do {
-				System.out.println("Please input which products customers would like to modify from their cart.");
+				System.out.println("Please input which number of products customers would like to modify from their cart.");
 				int input2 = Tools.sc.nextInt() - 1;
 				System.out.println("Please input the quantity that they would like to change.");
 				int input3 = Tools.sc.nextInt();
@@ -117,7 +117,7 @@ public class CheckoutSystem {
 	public void removeProductInCart(Member member) {
 		boolean complete = false;
 		do {
-			System.out.println("Please input which products customers would like to remove from their cart.");
+			System.out.println("Please input which number of products customers would like to remove from their cart.");
 			int input2 = Tools.sc.nextInt() - 1;
 			checkoutFunction.removeProductInCart(member, input2);
 			System.out.println("Task Completed.");

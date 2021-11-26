@@ -308,129 +308,129 @@ public class TestInventoryDataBase {
 		Assertions.assertEquals(Boolean.valueOf(true), Boolean.valueOf(this.invenDB.checkInventoryIsEmpty()));
 	}
 
-	@Test
-	void TestPrintHighestSalesProduct_0() {
-		setup();
-		Product product = this.invenDB.printHighestSalesProduct(-1, false, 0);
-		Assertions.assertEquals(null, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_1() {
-		setup();
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(Coke, 1, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
-		Coke.addSales(sale);
-		Product product = this.invenDB.printHighestSalesProduct(0, false, 0);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_2() {
-		setup();
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
-		Coke.addSales(sale);
-		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
-		Cokeb.addSales(sale2);
-		Product product = this.invenDB.printHighestSalesProduct(0, false, 0);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_3() {
-		setup();
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
-		Coke.addSales(sale);
-		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
-		Cokeb.addSales(sale2);
-		Product product = this.invenDB.printHighestSalesProduct(1, false, 0);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_4() {
-		setup();
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
-		Coke.addSales(sale);
-		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
-		Cokeb.addSales(sale2);
-		Product product = this.invenDB.printHighestSalesProduct(2, false, 0);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_5() {
-		setup();
-		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
-		Coke.addSales((Sales) sale);
-		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
-		Cokeb.addSales((Sales) sale2);
-		Product product = this.invenDB.printHighestSalesProduct(0, true, 1);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_7() {
-		setup();
-		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
-		Coke.addSales((Sales) sale);
-		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
-		Cokeb.addSales((Sales) sale2);
-		Product product = this.invenDB.printHighestSalesProduct(1, true, 1);
-		Assertions.assertEquals(Coke, product);
-	}
-
-	@Test
-	void TestPrintHighestSalesProduct_8() {
-		setup();
-		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
-		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
-		this.invenDB.add(Coke);
-		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
-				"Coca Cola");
-		this.invenDB.add(Cokeb);
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
-		Coke.addSales((Sales) sale);
-		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
-		Cokeb.addSales((Sales) sale2);
-		Product product = this.invenDB.printHighestSalesProduct(2, true, 1);
-		Assertions.assertEquals(Coke, product);
-	}
+//	@Test
+//	void TestPrintHighestSalesProduct_0() {
+//		setup();
+//		Product product = this.invenDB.printHighestSalesProduct(-1, false, 0);
+//		Assertions.assertEquals(null, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_1() {
+//		setup();
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		Sales sale = new Sales(Coke, 1, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
+//		Coke.addSales(sale);
+//		Product product = this.invenDB.printHighestSalesProduct(0, false, 0);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_2() {
+//		setup();
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
+//		Coke.addSales(sale);
+//		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
+//		Cokeb.addSales(sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(0, false, 0);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_3() {
+//		setup();
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
+//		Coke.addSales(sale);
+//		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
+//		Cokeb.addSales(sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(1, false, 0);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_4() {
+//		setup();
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		Sales sale = new Sales(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001");
+//		Coke.addSales(sale);
+//		Sales sale2 = new Sales(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002");
+//		Cokeb.addSales(sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(2, false, 0);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_5() {
+//		setup();
+//		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
+//		Coke.addSales((Sales) sale);
+//		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
+//		Cokeb.addSales((Sales) sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(0, true, 1);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_7() {
+//		setup();
+//		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
+//		Coke.addSales((Sales) sale);
+//		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
+//		Cokeb.addSales((Sales) sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(1, true, 1);
+//		Assertions.assertEquals(Coke, product);
+//	}
+//
+//	@Test
+//	void TestPrintHighestSalesProduct_8() {
+//		setup();
+//		Member mem = new Member("John", "2003", "M", "JohnDoe@gmail.com");
+//		Product Coke = new Product("Coca Cola", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"), "Coca Cola");
+//		this.invenDB.add(Coke);
+//		Product Cokeb = new Product("Coca Cola (without sugar)", "Drinks", 7.5D, 100, LocalDate.parse("2021-12-20"),
+//				"Coca Cola");
+//		this.invenDB.add(Cokeb);
+//		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+//		MemberSale sale = new MemberSale(Coke, 3, LocalDate.now(), emp, 20.0D, 20.0D, "0001", mem);
+//		Coke.addSales((Sales) sale);
+//		MemberSale sale2 = new MemberSale(Cokeb, 2, LocalDate.now(), emp, 20.0D, 20.0D, "0002", mem);
+//		Cokeb.addSales((Sales) sale2);
+//		Product product = this.invenDB.printHighestSalesProduct(2, true, 1);
+//		Assertions.assertEquals(Coke, product);
+//	}
 
 	@Test
 	void TestgetSalesPercentageForProduct_0() {

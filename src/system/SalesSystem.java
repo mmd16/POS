@@ -46,8 +46,8 @@ public class SalesSystem {
 				int daysUnit = getCheckSalesDaysUnit();
 				int ageGroupUnit = getCheckAgeGroupDigit();
 				boolean ageFilter = (ageGroupUnit == 0) ? false : true;
-				salesFunction.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
-				if (salesFunction.getHighestProductListSize() == 0) {
+				Product product = salesFunction.printHighestSalesProduct(daysUnit, ageFilter, ageGroupUnit);
+				if (product == null) {
 					throw new ExNoSalesInSelectedAge();
 				} else {
 					for(Product p: salesFunction.getHighestSalesProductList()) {

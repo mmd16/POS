@@ -76,9 +76,63 @@ public class InventoryDataBase implements Database {
 		return productList.isEmpty();
 	}
 
-	public Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
+	public Product printHighestSalesProductForDifferentAgeGroups(int digit, int age) {
+		highestSalesProductList.clear();
 		Product productTemp = null;
-		digit += (ageFilter == true) ? 3 : 0;
+		int temp = 0;
+		switch (digit) {
+		case 0:
+			temp = 0;
+			for (Product product : productList) {
+				if (temp < countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
+					productTemp = product;
+				}
+			}
+			highestSalesProductList.add(productTemp);
+			for (Product product2 : productList) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+					highestSalesProductList.add(product2);
+				}
+			}
+			break;
+		case 1:
+			temp = 0;
+			for (Product product : productList) {
+				if (temp < countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
+					productTemp = product;
+				}
+			}
+			highestSalesProductList.add(productTemp);
+			for (Product product2 : productList) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+					highestSalesProductList.add(product2);
+				}
+			}
+			break;
+		case 2:
+			temp = 0;
+			for (Product product : productList) {
+				if (temp < countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
+					productTemp = product;
+				}
+			}
+			highestSalesProductList.add(productTemp);
+			for (Product product2 : productList) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+					highestSalesProductList.add(product2);
+				}
+			}
+			break;
+		}
+		return productTemp;
+	}
+
+	public Product printHighestSalesProduct(int digit) {
+		highestSalesProductList.clear();
+		Product productTemp = null;
 		int temp = 0;
 		switch (digit) {
 		case 0:
@@ -95,7 +149,6 @@ public class InventoryDataBase implements Database {
 					highestSalesProductList.add(product2);
 				}
 			}
-
 			break;
 		case 1:
 			temp = 0;
@@ -127,54 +180,109 @@ public class InventoryDataBase implements Database {
 				}
 			}
 			break;
-		case 3:
-			temp = 0;
-			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
-					productTemp = product;
-				}
-			}
-			highestSalesProductList.add(productTemp);
-			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-					highestSalesProductList.add(product2);
-				}
-			}
-			break;
-		case 4:
-			temp = 0;
-			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
-					productTemp = product;
-				}
-			}
-			highestSalesProductList.add(productTemp);
-			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-					highestSalesProductList.add(product2);
-				}
-			}
-			break;
-		case 5:
-			temp = 0;
-			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
-					productTemp = product;
-				}
-			}
-			highestSalesProductList.add(productTemp);
-			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-					highestSalesProductList.add(product2);
-				}
-			}
-			break;
 		}
 		return productTemp;
 	}
+//	public Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
+//		highestSalesProductList.clear();
+//		Product productTemp = null;
+//		digit += (ageFilter == true) ? 3 : 0;
+//		int temp = 0;
+//		switch (digit) {
+//		case 0:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 0, product)) {
+//					temp = countSales(LocalDate.now(), 0, product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//
+//			break;
+//		case 1:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 1, product)) {
+//					temp = countSales(LocalDate.now(), 1, product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//			break;
+//		case 2:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 2, product)) {
+//					temp = countSales(LocalDate.now(), 2, product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//			break;
+//		case 3:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product)) {
+//					temp = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//			break;
+//		case 4:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product)) {
+//					temp = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//			break;
+//		case 5:
+//			temp = 0;
+//			for (Product product : productList) {
+//				if (temp < countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product)) {
+//					temp = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
+//					productTemp = product;
+//				}
+//			}
+//			highestSalesProductList.add(productTemp);
+//			for (Product product2 : productList) {
+//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+//					highestSalesProductList.add(product2);
+//				}
+//			}
+//			break;
+//		}
+//		return productTemp;
+//	}
 
 	public int getHighestProductListSize() {
 		return highestSalesProductList.size();

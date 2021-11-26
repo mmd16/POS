@@ -52,8 +52,12 @@ public class SalesFunction {
 			if (salesDB.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
-				productTemp = invenDB.printHighestSalesProduct(digit, ageFilter, age);
-
+				if(ageFilter == true) {
+					productTemp = invenDB.printHighestSalesProductForDifferentAgeGroups(digit, age);
+				}
+				else {
+					productTemp = invenDB.printHighestSalesProduct(digit);
+				}
 			}
 			return productTemp;
 		} catch (ExNoSalesExists e) {
