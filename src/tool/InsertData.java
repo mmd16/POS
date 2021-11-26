@@ -26,7 +26,7 @@ public class InsertData {
 
 	public void loadData() throws ParseException {
 		// User Creations
-		Manager e = new Manager("ON9", "M", "null", "123123123", "1");
+		Manager e = new Manager("aiden", "M", "null", "123123123", "1");
 		Member aero = new Member("aero", "2001", "M", "7HEAD", "123");
 		Member user2 = new Member("Customer", "Invalid");
 		Member karina = new Member("karina", "2000", "F", "7HEAD", "1234");
