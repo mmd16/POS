@@ -2,13 +2,10 @@ package transactions;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import exception.ExInvalidInput;
 import product.Product;
-import staff.Employee;
+import user.Employee;
 
 public class Sales {
 	private LocalDate date;

@@ -4,9 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ageGroup.AgeGroupFactory;
-import exception.ExNoSalesExists;
-import product.Product;
 import transactions.Sales;
 
 public class SalesDataBase implements Database {

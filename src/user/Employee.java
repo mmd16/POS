@@ -1,15 +1,6 @@
-package staff;
+package user;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import membership.NonMembership;
-import product.Product;
-import transactions.MemberSale;
-import transactions.Sales;
-import user.Cart;
-import user.Member;
 
 public class Employee {
 	private String name;
@@ -23,6 +14,7 @@ public class Employee {
 		this.name = name;
 		this.sex = sex;
 		this.phonenum = phonenum;
+		this.email = email;
 		this.workerid = String.valueOf(uniqueId.getAndIncrement());
 	}
 
@@ -31,6 +23,7 @@ public class Employee {
 		this.sex = sex;
 		this.phonenum = phonenum;
 		this.workerid = test;
+		this.email = email;
 	}
 
 	public String getName() {
@@ -71,14 +64,6 @@ public class Employee {
 
 	public void setWorkerid(String workerid) {
 		this.workerid = workerid;
-	}
-
-	public static AtomicInteger getUniqueId() {
-		return uniqueId;
-	}
-
-	public static void setUniqueId(AtomicInteger uniqueId) {
-		Employee.uniqueId = uniqueId;
 	}
 
 }

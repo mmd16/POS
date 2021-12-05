@@ -1,11 +1,21 @@
 package ageGroup;
 
-import tool.AgeCalculator;
+import tool.Tools;
 
 public class AgeGroupFactory {
+	private Tools tools = Tools.getInstance();
+	public static AgeGroupFactory instance = new AgeGroupFactory();
 
-	public static AgeGroup Allocation(int year) {
-		int age = AgeCalculator.getAge(year);
+	public static AgeGroupFactory getInstance() {
+		return instance;
+	}
+
+	private AgeGroupFactory() {
+
+	}
+
+	public AgeGroup Allocation(int year) {
+		int age = tools.getAge(year);
 		if (age < 0)
 			return null;
 		else if (age < 20)
@@ -17,11 +27,9 @@ public class AgeGroupFactory {
 		else
 			return null;
 	}
-	
-	public static AgeGroup integerToAgeGroup(int digit) 
-	{
-		switch(digit) 
-		{
+
+	public AgeGroup integerToAgeGroup(int digit) {
+		switch (digit) {
 		case 1:
 			return new Teenagers();
 		case 2:

@@ -1,12 +1,9 @@
 package ageGroup;
 
-public class AgeGroup {
+public abstract class AgeGroup {
 
 	public AgeGroup() {
 	};
 	
-	public String getAgeGroup()
-	{
-		return null;
-	}
+	public abstract String getAgeGroup();
 }

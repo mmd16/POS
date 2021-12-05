@@ -1,19 +1,24 @@
 package tool;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import db.InventoryDataBase;
 import db.UserDataBase;
 import exception.ExCartIsEmpty;
 import exception.ExEmployeeIdNotExists;
 import exception.ExInvalidInput;
 import exception.ExMemberIdNotExists;
-import staff.Employee;
+import membership.NonMembership;
 import user.Cart;
 import user.Member;
 
 public class Tools {
 	public static Tools instance = new Tools();
+	private InventoryDataBase invenDB = InventoryDataBase.getInstance();
+	private static AtomicInteger uniqueId = new AtomicInteger();
 
 	public static Tools getInstance() {
 		return instance;
@@ -54,15 +59,15 @@ public class Tools {
 			case "Employee":
 				if (userDB.getEmployee(uid) == null) {
 					throw new ExEmployeeIdNotExists();
+				} else {
+					return true;
 				}
-				return true;
+
 			case "Member":
 				if (userDB.getMember(uid) == null) {
 					throw new ExMemberIdNotExists();
 				}
 				return true;
-			default:
-				return false;
 			}
 		} catch (ExEmployeeIdNotExists e) {
 			System.out.println(e.getMessage());
@@ -71,6 +76,7 @@ public class Tools {
 			System.out.println(e.getMessage());
 			return false;
 		}
+		return false;
 	}
 
 	public boolean continuationValidator(int digit) {
@@ -109,4 +115,38 @@ public class Tools {
 			return true;
 		}
 	}
+
+	public int getAge(int birthYear) {
+		int year = LocalDate.now().getYear();
+		return year - birthYear;
+	}
+
+	public String generateProductCode(String name, String type) {
+		if (invenDB.searchProduct(name, type) != null) {
+			return invenDB.searchProduct(name, type).getProductCode();
+		} else {
+			int temp = 0;
+			String rslt = "";
+			temp = uniqueId.getAndIncrement();
+			rslt = type + String.valueOf(temp);
+			return rslt;
+		}
+
+	}
+
+	public String generateOrderRefNo(LocalDate date) {
+		int temp = 0;
+		String rslt = "";
+		String datestr = date.toString();
+		temp = uniqueId.getAndIncrement();
+		rslt = datestr + String.valueOf(temp);
+		return rslt;
+	}
+
+	public boolean checkMembership(Member member) {
+		if (member.getMembership() instanceof NonMembership)
+			return false;
+		return true;
+	}
+
 }

@@ -1,8 +1,6 @@
 package user;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-
 import product.Product;
 
 public class Cart {
@@ -23,14 +21,6 @@ public class Cart {
 		this.allPrice = product.getPrice() * quantity;
 		this.unitPrice = product.getPrice();
 	}
-
-//	public static double countTotal(ArrayList<Cart> cartList) {
-//		double rslt = 0;
-//		for (Cart cart : cartList) {
-//			rslt += cart.getAllPrice();
-//		}
-//		return rslt;
-//	}
 	
 	public double getUnitPrice() {
 		return unitPrice;

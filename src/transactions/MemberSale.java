@@ -3,7 +3,7 @@ package transactions;
 import java.time.LocalDate;
 
 import product.Product;
-import staff.Employee;
+import user.Employee;
 import user.Member;
 
 public class MemberSale extends Sales {

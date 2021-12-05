@@ -1,8 +1,4 @@
-package staff;
-
-import transactions.Sales;
-import user.CompletedCart;
-import user.Member;
+package user;
 
 public class Manager extends Employee {
 

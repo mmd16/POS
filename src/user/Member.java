@@ -1,23 +1,15 @@
 package user;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ageGroup.AgeGroup;
 import ageGroup.AgeGroupFactory;
 import membership.Membership;
 import membership.NonMembership;
-import membership.PlatinumMembership;
 import membership.SilverMembership;
 import product.Product;
-import staff.Employee;
-import staff.Manager;
-import tool.ProductCodeGenerator;
-import transactions.Sales;
 
 public class Member {
 	private String userName;
@@ -31,6 +23,7 @@ public class Member {
 	private AgeGroup ageGroup;
 	private ArrayList<Cart> cart;
 	private ArrayList<CompletedCart> completedCart;
+	private AgeGroupFactory ageGroupFactory = AgeGroupFactory.getInstance();
 	private static AtomicInteger uniqueId = new AtomicInteger();
 
 	public Member(String userName, String birthOfYear, String sex, String email) {
@@ -40,7 +33,7 @@ public class Member {
 		this.email = email;
 		this.userid = String.valueOf(uniqueId.getAndIncrement());
 		this.membership = new SilverMembership(0.95, 5000, "Silver");
-		this.ageGroup = AgeGroupFactory.Allocation(Integer.parseInt(birthOfYear));
+		this.ageGroup = ageGroupFactory.Allocation(Integer.parseInt(birthOfYear));
 		this.cart = new ArrayList<Cart>();
 		this.completedCart = new ArrayList<CompletedCart>();
 	}
@@ -51,7 +44,7 @@ public class Member {
 		this.sex = sex;
 		this.email = email;
 		this.userid = uid;
-		this.ageGroup = AgeGroupFactory.Allocation(Integer.parseInt(birthOfYear));
+		this.ageGroup = ageGroupFactory.Allocation(Integer.parseInt(birthOfYear));
 		this.membership = new SilverMembership(0.95, 5000, "Silver");
 		this.cart = new ArrayList<Cart>();
 		this.completedCart = new ArrayList<CompletedCart>();
@@ -126,10 +119,6 @@ public class Member {
 		this.points -= pointsTobeDeduct;
 	}
 
-	public static AtomicInteger getUniqueId() {
-		return uniqueId;
-	}
-
 	public String getUserName() {
 		return userName;
 	}
@@ -184,10 +173,6 @@ public class Member {
 		this.cart = cart;
 	}
 
-	public void removeProductInCart(int digit) {
-		cart.remove(digit);
-	}
-
 	public void removeProductInCart(Cart c) {
 		cart.remove(c);
 	}
@@ -205,9 +190,4 @@ public class Member {
 		completedCart.add(complete);
 		return complete;
 	}
-
-	public boolean isCartEmpty() {
-		return cart.isEmpty();
-	}
-
 }

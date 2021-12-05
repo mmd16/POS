@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import db.InventoryDataBase;
 import db.SalesDataBase;
 import product.Product;
-import staff.Employee;
-import staff.Manager;
-import tool.ProductCodeGenerator;
+import tool.Tools;
 import transactions.MemberSale;
 import transactions.Sales;
 import user.Cart;
 import user.CompletedCart;
+import user.Employee;
+import user.Manager;
 import user.Member;
 
 public class CheckoutFunctions {
@@ -20,13 +20,13 @@ public class CheckoutFunctions {
 
 	private InventoryDataBase invenDB = InventoryDataBase.getInstance();
 
-	private ProductCodeGenerator codeGen = ProductCodeGenerator.getInstance();
+	private Tools tools = Tools.getInstance();
 
 	public Sales checkout(Member member, Employee employee) {
-		String temp = this.codeGen.generateOrderRefNo(LocalDate.now());
+		String temp = this.tools.generateOrderRefNo(LocalDate.now());
 		Sales s = null;
 		for (Cart c : member.getCart())
-			 s = confirmSales(c, member, temp, employee);
+			s = confirmSales(c, member, temp, employee);
 		removeCartAfterTransaction(member);
 		return s;
 	}
@@ -52,21 +52,21 @@ public class CheckoutFunctions {
 		return null;
 	}
 
-	public Cart updateCart(int position, int quantity, Member member) {
-		double unitPrice = ((Cart) member.getCart().get(position)).getUnitPrice();
-		((Cart) member.getCart().get(position)).setQuantity(quantity);
-		((Cart) member.getCart().get(position)).setAllPrice(quantity * unitPrice);
-		return member.getCart().get(position);
+	public Cart updateCart(Cart c, int quantity) {
+		double unitPrice = c.getUnitPrice();
+		c.setQuantity(quantity);
+		c.setAllPrice(quantity * unitPrice);
+		return c;
 	}
-
+	
 	public boolean validator(Employee employee) {
 		if (employee instanceof Manager)
 			return true;
 		return false;
 	}
 
-	public void removeProductInCart(Member member, int position) {
-		member.removeProductInCart(position);
+	public void removeProductInCart(Member member, Cart c) {
+		member.removeProductInCart(c);
 	}
 
 	public boolean changeForthePayment(double total, double cash) {
@@ -83,7 +83,7 @@ public class CheckoutFunctions {
 	}
 
 	public double countTotalPrice(ArrayList<Cart> cartList) {
-		double rslt = 0.0D;
+		double rslt = 0;
 		for (Cart cart : cartList)
 			rslt += cart.getAllPrice();
 		return rslt;
@@ -94,12 +94,14 @@ public class CheckoutFunctions {
 	}
 
 	public int countPoints(double total, Member member) {
-		if (member.getMembership() instanceof membership.NonMembership)
+		if (!tools.checkMembership(member)) {
 			return 0;
-		int temp = 0;
-		if (total >= 100.0D)
-			temp += (int) (total / 100.0D);
-		return temp;
+		} else {
+			int temp = 0;
+			if (total >= 100.0)
+				temp += (int) (total / 100.0);
+			return temp;
+		}
 	}
 
 	public Sales confirmSales(Cart c, Member member, String orderRefNo, Employee employee) {
@@ -112,16 +114,17 @@ public class CheckoutFunctions {
 			this.salesDB.add(sales);
 			product.addSales(sales);
 			return sales;
+		} else {
+			MemberSale s = new MemberSale(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
+					applyDiscount(c.getAllPrice(), member), orderRefNo, member);
+			member.addAccumulatedSpending(sellingPrice);
+			member.addProductToCompletedCart(c, orderRefNo, s.getSalesCode());
+			Product p = c.getProduct();
+			this.invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), p);
+			this.salesDB.add(s);
+			p.addSales(s);
+			return s;
 		}
-		MemberSale s = new MemberSale(c.getProduct(), c.getQuantity(), LocalDate.now(), employee, c.getAllPrice(),
-				applyDiscount(c.getAllPrice(), member), orderRefNo, member);
-		member.addAccumulatedSpending(sellingPrice);
-		member.addProductToCompletedCart(c, orderRefNo, s.getSalesCode());
-		Product p = c.getProduct();
-		this.invenDB.deductInventoryofProductsFromQueue(c.getQuantity(), p);
-		this.salesDB.add(s);
-		p.addSales((Sales) s);
-		return (Sales) s;
 	}
 
 	public void removeCartAfterTransaction(Member member) {
@@ -159,5 +162,13 @@ public class CheckoutFunctions {
 
 	public void adjustSellingPrice(double price, Sales s) {
 		s.setSellingPrice(price * s.getQuantity());
+	}
+	
+	public Cart SearchCart(Member member, String ProductName) {
+		for (Cart c : member.getCart()) {
+			if(c.getProductName().equals(ProductName))
+				return c;
+		}
+		return null;
 	}
 }

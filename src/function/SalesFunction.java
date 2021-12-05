@@ -7,9 +7,6 @@ import db.InventoryDataBase;
 import db.SalesDataBase;
 import exception.ExNoSalesExists;
 import product.Product;
-import transactions.Sales;
-import user.CompletedCart;
-import user.Member;
 
 public class SalesFunction {
 	public SalesFunction() {
@@ -36,7 +33,12 @@ public class SalesFunction {
 			if (salesDB.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
-				percentage = invenDB.getSalesPercentageForProduct(digit, product, ageFilter, age, TotalSales);
+				if (ageFilter == true) {
+					percentage = invenDB.getSalesPercentageForProductForDifferentAgeGroup(digit, product, age,
+							TotalSales);
+				} else {
+					percentage = invenDB.getSalesPercentageForProduct(digit, product, TotalSales);
+				}
 			}
 			return percentage;
 
@@ -52,10 +54,9 @@ public class SalesFunction {
 			if (salesDB.checkSalesIsEmpty()) {
 				throw new ExNoSalesExists();
 			} else {
-				if(ageFilter == true) {
+				if (ageFilter == true) {
 					productTemp = invenDB.printHighestSalesProductForDifferentAgeGroups(digit, age);
-				}
-				else {
+				} else {
 					productTemp = invenDB.printHighestSalesProduct(digit);
 				}
 			}
@@ -70,10 +71,6 @@ public class SalesFunction {
 		salesDB.listSales();
 	}
 
-	public int getHighestProductListSize() {
-		return invenDB.getHighestProductListSize();
-	}
-	
 	public ArrayList<Product> getHighestSalesProductList() {
 		return invenDB.getHighestSalesProductList();
 	}

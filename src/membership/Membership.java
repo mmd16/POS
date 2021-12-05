@@ -37,9 +37,5 @@ public abstract class Membership
 		this.upgradeRequirement = upgradeRequirement;
 	}
 	
-	public double checkRemainProgress(double accumulatedSpending){
-		return upgradeRequirement - accumulatedSpending;
-	}
-
 	public abstract Membership upgradeMembership();
 }

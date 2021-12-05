@@ -11,9 +11,9 @@ import transactions.MemberSale;
 import transactions.Sales;
 
 public class InventoryDataBase implements Database {
-	public ArrayList<Product> productList;
-	public ArrayList<Product> highestSalesProductList;
-
+	private ArrayList<Product> productList;
+	private ArrayList<Product> highestSalesProductList;
+	
 	private InventoryDataBase() {
 		productList = new ArrayList<>();
 		highestSalesProductList = new ArrayList<>();
@@ -77,6 +77,7 @@ public class InventoryDataBase implements Database {
 	}
 
 	public Product printHighestSalesProductForDifferentAgeGroups(int digit, int age) {
+		AgeGroupFactory ageGroupFactory = AgeGroupFactory.getInstance();
 		highestSalesProductList.clear();
 		Product productTemp = null;
 		int temp = 0;
@@ -84,14 +85,14 @@ public class InventoryDataBase implements Database {
 		case 0:
 			temp = 0;
 			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
+				if (temp < countSales(LocalDate.now(), 0, ageGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 0, ageGroupFactory.integerToAgeGroup(age), product);
 					productTemp = product;
 				}
 			}
 			highestSalesProductList.add(productTemp);
 			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, ageGroupFactory.integerToAgeGroup(age), product2)) {
 					highestSalesProductList.add(product2);
 				}
 			}
@@ -99,14 +100,14 @@ public class InventoryDataBase implements Database {
 		case 1:
 			temp = 0;
 			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
+				if (temp < countSales(LocalDate.now(), 1, ageGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 1, ageGroupFactory.integerToAgeGroup(age), product);
 					productTemp = product;
 				}
 			}
 			highestSalesProductList.add(productTemp);
 			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 1, ageGroupFactory.integerToAgeGroup(age), product2)) {
 					highestSalesProductList.add(product2);
 				}
 			}
@@ -114,14 +115,14 @@ public class InventoryDataBase implements Database {
 		case 2:
 			temp = 0;
 			for (Product product : productList) {
-				if (temp < countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product)) {
-					temp = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
+				if (temp < countSales(LocalDate.now(), 2, ageGroupFactory.integerToAgeGroup(age), product)) {
+					temp = countSales(LocalDate.now(), 2, ageGroupFactory.integerToAgeGroup(age), product);
 					productTemp = product;
 				}
 			}
 			highestSalesProductList.add(productTemp);
 			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 2, ageGroupFactory.integerToAgeGroup(age), product2)) {
 					highestSalesProductList.add(product2);
 				}
 			}
@@ -160,7 +161,7 @@ public class InventoryDataBase implements Database {
 			}
 			highestSalesProductList.add(productTemp);
 			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 1, product2)) {
 					highestSalesProductList.add(product2);
 				}
 			}
@@ -175,7 +176,7 @@ public class InventoryDataBase implements Database {
 			}
 			highestSalesProductList.add(productTemp);
 			for (Product product2 : productList) {
-				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
+				if (product2 != productTemp && temp == countSales(LocalDate.now(), 2, product2)) {
 					highestSalesProductList.add(product2);
 				}
 			}
@@ -183,115 +184,15 @@ public class InventoryDataBase implements Database {
 		}
 		return productTemp;
 	}
-//	public Product printHighestSalesProduct(int digit, boolean ageFilter, int age) {
-//		highestSalesProductList.clear();
-//		Product productTemp = null;
-//		digit += (ageFilter == true) ? 3 : 0;
-//		int temp = 0;
-//		switch (digit) {
-//		case 0:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 0, product)) {
-//					temp = countSales(LocalDate.now(), 0, product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//
-//			break;
-//		case 1:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 1, product)) {
-//					temp = countSales(LocalDate.now(), 1, product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//			break;
-//		case 2:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 2, product)) {
-//					temp = countSales(LocalDate.now(), 2, product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//			break;
-//		case 3:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product)) {
-//					temp = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//			break;
-//		case 4:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product)) {
-//					temp = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//			break;
-//		case 5:
-//			temp = 0;
-//			for (Product product : productList) {
-//				if (temp < countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product)) {
-//					temp = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
-//					productTemp = product;
-//				}
-//			}
-//			highestSalesProductList.add(productTemp);
-//			for (Product product2 : productList) {
-//				if (product2 != productTemp && temp == countSales(LocalDate.now(), 0, product2)) {
-//					highestSalesProductList.add(product2);
-//				}
-//			}
-//			break;
-//		}
-//		return productTemp;
-//	}
-
-	public int getHighestProductListSize() {
-		return highestSalesProductList.size();
-	}
-
+	
 	public ArrayList<Product> getHighestSalesProductList() {
 		return highestSalesProductList;
 	}
 
+	public int checkHighestSalesListSize() {
+		return highestSalesProductList.size();
+	}
+	
 	public int countSales(LocalDate date, int digit, Product p) {
 		int temp = 0;
 		switch (digit) {
@@ -320,6 +221,7 @@ public class InventoryDataBase implements Database {
 		return temp;
 	}
 
+
 	public int countSales(LocalDate date, int digit, AgeGroup ageGroup, Product p) {
 		int temp = 0;
 		switch (digit) {
@@ -328,7 +230,7 @@ public class InventoryDataBase implements Database {
 			for (Sales s : p.getSalesList()) {
 				if (s instanceof MemberSale) {
 					if (s.getDate().isEqual(date)
-							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+							&& ((MemberSale) s).getMember().getAgeGroup().getAgeGroup().equals(ageGroup.getAgeGroup()))
 						temp += s.getQuantity();
 				}
 			}
@@ -338,7 +240,7 @@ public class InventoryDataBase implements Database {
 			for (Sales s : p.getSalesList()) {
 				if (s instanceof MemberSale) {
 					if (s.getDate().getMonthValue() == date.getMonthValue() && s.getDate().getYear() == date.getYear()
-							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+							&& ((MemberSale) s).getMember().getAgeGroup().getAgeGroup().equals(ageGroup.getAgeGroup()))
 						temp += s.getQuantity();
 				}
 			}
@@ -348,7 +250,7 @@ public class InventoryDataBase implements Database {
 			for (Sales s : p.getSalesList()) {
 				if (s instanceof MemberSale) {
 					if (s.getDate().getYear() == date.getYear()
-							&& ((MemberSale) s).getMember().getAgeGroup().getClass().equals(ageGroup.getClass()))
+							&& ((MemberSale) s).getMember().getAgeGroup().getAgeGroup().equals(ageGroup.getAgeGroup()))
 						temp += s.getQuantity();
 				}
 			}
@@ -357,10 +259,8 @@ public class InventoryDataBase implements Database {
 		return temp;
 	}
 
-	public double getSalesPercentageForProduct(int digit, Product product, boolean ageFilter, int age, int TotalSales) {
-
+	public double getSalesPercentageForProduct(int digit, Product product, int TotalSales) {
 		double percentage = 0;
-		digit += (ageFilter == true) ? 3 : 0;
 		int salesForProduct = 0;
 		switch (digit) {
 		case 0:
@@ -375,22 +275,31 @@ public class InventoryDataBase implements Database {
 			salesForProduct = countSales(LocalDate.now(), 2, product);
 			percentage = (salesForProduct * 100 / TotalSales);
 			break;
-		case 3:
-			salesForProduct = countSales(LocalDate.now(), 0, AgeGroupFactory.integerToAgeGroup(age), product);
+		}
+		return percentage;
+	};
+
+	public double getSalesPercentageForProductForDifferentAgeGroup(int digit, Product product, int age, int TotalSales) {
+		AgeGroupFactory ageGroupFactory = AgeGroupFactory.getInstance();
+		double percentage = 0;
+		int salesForProduct = 0;
+		switch (digit) {
+		case 0:
+			salesForProduct = countSales(LocalDate.now(), 0, ageGroupFactory.integerToAgeGroup(age), product);
 			percentage = (salesForProduct * 100 / TotalSales);
 			break;
-		case 4:
-			salesForProduct = countSales(LocalDate.now(), 1, AgeGroupFactory.integerToAgeGroup(age), product);
+		case 1:
+			salesForProduct = countSales(LocalDate.now(), 1, ageGroupFactory.integerToAgeGroup(age), product);
 			percentage = (salesForProduct * 100 / TotalSales);
 			break;
-		case 5:
-			salesForProduct = countSales(LocalDate.now(), 2, AgeGroupFactory.integerToAgeGroup(age), product);
+		case 2:
+			salesForProduct = countSales(LocalDate.now(), 2, ageGroupFactory.integerToAgeGroup(age), product);
 			percentage = (salesForProduct * 100 / TotalSales);
 			break;
 		}
 		return percentage;
 	};
-
+	
 	public void deductInventoryofProductsFromQueue(int inventory, Product product) {
 		int inventoryForCompareUse = inventory;
 		while (inventoryForCompareUse > 0) {
@@ -408,8 +317,10 @@ public class InventoryDataBase implements Database {
 		}
 		product.removeInventory(inventory);
 	}
-
+	
 	public void clear() {
 		productList.clear();
+		highestSalesProductList.clear();
 	}
+
 }

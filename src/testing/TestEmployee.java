@@ -4,19 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import staff.Employee;
+import user.Employee;
 
 public class TestEmployee {
-
-	@Test
-	void TestSetEmployee() {
-		Employee e = new Employee("John", "M", "JohnDoe@gmail.com", "99999999");
-		String id = e.getWorkerid();
-		Employee e2 = new Employee("Johnny", "M", "JohnDoe@gmail.com", "99999999", "1");
-		e2.setWorkerid(e.getWorkerid());
-		assertEquals(id, e2.getWorkerid());
-	}
-
 	@Test
 	void testGetName() {
 		Employee e = new Employee("John", "M", "JohnDoe@gmail.com", "99999999", "0");
@@ -51,7 +41,7 @@ public class TestEmployee {
 
 	@Test
 	void testSetEmail() {
-		Employee e = new Employee("John", "M", "JohnDoe@gmail.com", "99999999", "0");
+		Employee e = new Employee("John", "M", "JohnDoe@gmail.com", "99999999");
 		e.setEmail("JonnyDoe@gmail.com");
 		assertEquals("JonnyDoe@gmail.com", e.getEmail());
 	}

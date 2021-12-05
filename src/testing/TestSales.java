@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 
 import product.Product;
-import staff.Employee;
 import transactions.Sales;
+import user.Employee;
 
 class TestSales {
 	@Test

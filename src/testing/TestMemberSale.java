@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import product.Product;
-import staff.Employee;
 import transactions.MemberSale;
+import user.Employee;
 import user.Member;
 
 public class TestMemberSale {

@@ -4,12 +4,9 @@ package product;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 
-import ageGroup.AgeGroup;
-import tool.ProductCodeGenerator;
-import transactions.MemberSale;
+import tool.Tools;
 import transactions.Sales;
 
 public class Product {
@@ -23,7 +20,7 @@ public class Product {
 	private LocalDate importDate;
 	private ArrayList<Sales> salesList;
 	private PriorityQueue<Product> productQueue;
-	private ProductCodeGenerator codeGen = ProductCodeGenerator.getInstance();
+	private Tools tools = Tools.getInstance();
 	public Product(String name, String type, double price, int inventory, LocalDate expireDate, String brand) {
 		this.name = name;
 		this.type = type;
@@ -32,7 +29,7 @@ public class Product {
 		this.inventory = inventory;
 		this.importDate = LocalDate.now();
 		this.expireDate = expireDate;
-		this.productCode = codeGen.generateProductCode(name, type);
+		this.productCode = tools.generateProductCode(name, type);
 		this.salesList = new ArrayList<>();
 		this.productQueue = new PriorityQueue<Product>(new Comparator<Product>() {
 			@Override

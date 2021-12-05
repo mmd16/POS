@@ -2,9 +2,11 @@ package function;
 
 import membership.NonMembership;
 import membership.PlatinumMembership;
+import tool.Tools;
 import user.Member;
 
 public class MembershipFunctions {
+	private Tools tools = Tools.getInstance();
 	public MembershipFunctions() {
 	};
 
@@ -17,8 +19,7 @@ public class MembershipFunctions {
 	}
 
 	public double checkRemainingProgress(Member member) {
-		if (member.getMembership() instanceof PlatinumMembership && member.getMembership() instanceof NonMembership) {
-//			System.out.println("You already had the highest level of membership! We are glad to be with you!");
+		if (member.getMembership() instanceof PlatinumMembership || member.getMembership() instanceof NonMembership) {
 			return 0;
 		} else {
 			return member.getMembership().getUpgradeRequirement() - member.getAccumulatedSpending();
@@ -27,8 +28,8 @@ public class MembershipFunctions {
 	}
 
 	public void upgradeMembership(Member member) {
-		if (checkMembership(member)) {
-			while (checkRemainingProgress(member) < 0) {
+		if (tools.checkMembership(member)) {
+			while (checkRemainingProgress(member) <= 0) {
 				if (member.getMembership() instanceof PlatinumMembership) {
 					break;
 				} else {
@@ -39,9 +40,4 @@ public class MembershipFunctions {
 		}
 	}
 
-	public boolean checkMembership(Member member) {
-		if (member.getMembership() instanceof NonMembership)
-			return false;
-		return true;
-	}
 }

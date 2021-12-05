@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import db.SalesDataBase;
 import product.Product;
-import staff.Employee;
 import transactions.Sales;
+import user.Employee;
 
 public class TestSalesDataBase {
 
@@ -99,7 +99,7 @@ public class TestSalesDataBase {
 	}
 
 	@Test
-	public void testGetTotalRevenue_1() {
+	public void testGetTotalRevenue_0a() {
 		setup();
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
@@ -109,37 +109,17 @@ public class TestSalesDataBase {
 	}
 
 	@Test
-	public void testGetTotalRevenue_2() {
+	public void testGetTotalRevenue_1() {
 		setup();
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-11-30"), emp, 40.0, 20.0, "0001");
+		Sales sale = new Sales(prod, 1, LocalDate.now(), emp, 40.0, 20.0, "0001");
 		salesDB.add(sale);
 		assertEquals(20, salesDB.getTotalRevenue(LocalDate.now(), 1));
 	}
 
 	@Test
-	public void testGetTotalRevenue_3() {
-		setup();
-		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-11-30"), emp, 40.0, 20.0, "0001");
-		salesDB.add(sale);
-		assertEquals(20, salesDB.getTotalRevenue(LocalDate.now(), 2));
-	}
-
-	@Test
-	public void testGetTotalRevenue_4() {
-		setup();
-		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
-		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
-		Sales sale = new Sales(prod, 1, LocalDate.parse("2023-11-30"), emp, 40.0, 20.0, "0001");
-		salesDB.add(sale);
-		assertEquals(0, salesDB.getTotalRevenue(LocalDate.parse("2021-11-30"), 2));
-	}
-	
-	@Test
-	public void testGetTotalRevenue_5() {
+	public void testGetTotalRevenue_1a() {
 		setup();
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
@@ -149,7 +129,7 @@ public class TestSalesDataBase {
 	}
 	
 	@Test
-	public void testGetTotalRevenue_6() {
+	public void testGetTotalRevenue_1b() {
 		setup();
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
@@ -159,7 +139,29 @@ public class TestSalesDataBase {
 	}
 	
 	@Test
-	public void testGetTotalRevenue_7() {
+	public void testGetTotalRevenue_2() {
+		setup();
+		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
+		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2021-11-30"), emp, 40.0, 20.0, "0001");
+		salesDB.add(sale);
+		assertEquals(20, salesDB.getTotalRevenue(LocalDate.now(), 2));
+	}
+
+	@Test
+	public void testGetTotalRevenue_2a() {
+		setup();
+		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
+		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
+		Sales sale = new Sales(prod, 1, LocalDate.parse("2023-11-30"), emp, 40.0, 20.0, "0001");
+		salesDB.add(sale);
+		assertEquals(0, salesDB.getTotalRevenue(LocalDate.parse("2021-11-30"), 2));
+	}
+	
+
+	
+	@Test
+	public void testGetTotalRevenue_2b() {
 		setup();
 		Product prod = new Product("Chips", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Employee emp = new Employee("Tom", "M", "Tom@email.com", "12345678", "1234");
@@ -169,7 +171,7 @@ public class TestSalesDataBase {
 	}
 	
 	@Test
-	public void testGetTotalRevenue_8() {
+	public void testGetTotalRevenue_3() {
 		setup();
 		assertEquals(0, salesDB.getTotalRevenue(LocalDate.parse("2022-11-30"), -1));
 	}

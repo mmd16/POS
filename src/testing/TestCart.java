@@ -71,8 +71,8 @@ public class TestCart {
 	public void testSetProductCode() {
 		Product prod = new Product("Minons", "Food", 20, 50, LocalDate.parse("2021-12-12"), "Lais");
 		Cart c = new Cart(prod, 20, LocalDate.now());
-		c.setProductCode("123");
-		assertEquals("123", c.getProductCode());
+		c.setProductCode("1234");
+		assertEquals("1234", c.getProductCode());
 	}
 
 	@Test
