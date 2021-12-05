@@ -6,6 +6,7 @@ import exception.ExInsufficientPayment;
 import exception.ExProductNotExist;
 import function.CheckoutFunctions;
 import function.MembershipFunctions;
+import membership.NonMembership;
 import tool.Tools;
 import transactions.Sales;
 import user.Cart;
@@ -98,17 +99,21 @@ public class CheckoutController implements Controller {
 						Tools.sc.next();
 					}
 					int quantity = Tools.sc.nextInt();
-					CompletedCart completedCart = checkoutFunction.searchHistoryForRefund(orderRefNo, productName,
-							productType, quantity, member);
-					if (completedCart == null) {
-						throw new ExFailInRefund();
+					if (member.getMembership() instanceof NonMembership) {
+						checkoutFunction.refund(orderRefNo, quantity, (Manager) employee);
 					} else {
-						checkoutFunction.refund(completedCart, quantity, (Manager) employee, member);
-						System.out.println("*** Task Completed ***");
-						System.out.println("Do you have any other actions to continue ?");
-						System.out.println("Please input (0) to exit");
-						System.out.println("Please input (1) to continue");
-						isTrue = tools.continuationValidator(Tools.sc.nextInt());
+						CompletedCart completedCart = checkoutFunction.searchHistoryForRefund(orderRefNo, productName,
+								productType, quantity, member);
+						if (completedCart == null) {
+							throw new ExFailInRefund();
+						} else {
+							checkoutFunction.refund(completedCart, quantity, (Manager) employee, member);
+							System.out.println("*** Task Completed ***");
+							System.out.println("Do you have any other actions to continue ?");
+							System.out.println("Please input (0) to exit");
+							System.out.println("Please input (1) to continue");
+							isTrue = tools.continuationValidator(Tools.sc.nextInt());
+						}
 					}
 				} catch (ExFailInRefund e) {
 					System.out.print(e.getMessage());
